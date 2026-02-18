@@ -1,0 +1,288 @@
+\documentclass[letterpaper]{article} 
+\usepackage[utf8]{inputenc}
+\linespread{0.85}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[version=4]{mhchem}
+\usepackage{stmaryrd}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{lipsum}
+\usepackage{fancyvrb}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage[export]{adjustbox}
+\graphicspath{ {./images/} }
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{float}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{tcolorbox}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{hyperref} 
+\usepackage{xcolor} % For custom colors
+\lstset{
+	language=Python,                % Choose the language (e.g., Python, C, R)
+	basicstyle=\ttfamily\small, % Font size and type
+	keywordstyle=\color{blue},  % Keywords color
+	commentstyle=\color{gray},  % Comments color
+	stringstyle=\color{red},    % String color
+	numbers=left,               % Line numbers
+	numberstyle=\tiny\color{gray}, % Line number style
+	stepnumber=1,               % Numbering step
+	breaklines=true,            % Auto line break
+	backgroundcolor=\color{black!5}, % Light gray background
+	frame=single,               % Frame around the code
+}
+\usepackage{float}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+	\usepackage[]{amssymb} %gives us the character \varnothing
+	
+	\title{Homework 1, STAT 5291}
+	\author{Zongyi Liu}
+	\date{Mon, Feb 16, 2026}
+	\begin{document}
+		\maketitle
+		
+		\section{Question 1}
+		
+		\emph{Perform the following task:}
+		
+		Present the following tasks in a meaningful order so that you can start including sections in your write-up. Note that creativity will be rewarded in the project.
+		
+		
+		\begin{enumerate}
+			\item[i.] List out your project teammates (names and UNIs).
+			
+			\item[ii.] Describe your collected data. This is similar to the project description.
+			
+			\item[iii.] Provide insightful descriptive statistics related to your project.
+			
+			\item[iv.] Provide some graphics related to your project. Include at least 4 plots that you or your team believe to be insightful. For one graphic, try to visualize at least three dimensions in a single plot.
+			
+			\item[v.] Comment on the descriptive statistics and graphics in relation to your project.
+		\end{enumerate}
+		
+		\textbf{Answer}
+		
+		\clearpage
+		
+	\section{Question 2}
+	
+	M estimates are obtained as minimizers of the quantity
+	
+	
+	\begin{equation*}
+		Q=\sum_{i=1}^{n} \rho\left(\frac{x_{i}-\mu}{\sigma}\right) . \tag{1}
+	\end{equation*}
+	
+	
+	A common choice for the loss function $\rho$ is the absolute loss function,
+	
+	$$
+	\rho(u)=|u| .
+	$$
+	
+	\emph{Perform the following task:}
+	
+	Consider the M estimator objective and absolute loss function $\rho(u)$. Show that minimizing $Q$ with respect to $\mu$ yields the sample median $\tilde{x}$.
+	
+	
+		\textbf{Answer}
+
+		\clearpage
+		
+		\section{Question 3}
+		
+		Let $X$ be a random variable from some distribution with mean $\mu$ and variance $\sigma^{2}$. Let $x_{1}, x_{2}, \ldots x_{n}$ be a sample and let $c$ and $d$ be real numbers.
+		
+		\emph{Prove the following identities:}
+		
+		
+
+		
+	\begin{enumerate}
+		
+		\item[i.] 
+		Let $Y = aX + b$, then $E[Y] = a\mu + b$ and 
+		$\operatorname{Var}(Y) = a^{2}\sigma^{2}$.
+		
+		\item[ii.] 
+		Let $Z = \frac{X - \mu}{\sigma}$, then $E[Z] = 0$ and 
+		$\operatorname{Var}(Z) = 1$.
+		
+		\item[iii.] 
+		$E[(X - \mu)^2] = E[X^2] - \mu^2$.
+
+		
+		\item[iv.] 
+		Let $y_i = c x_i + d$ for $i = 1,2,\ldots,n$, then 
+		$\bar{y} = c\bar{x} + d$ and $s_y^{2} = c^{2} s_x^{2}$.
+		
+		\item[v.] 
+		Let $t_i = (x_i - \bar{x}) / s_x$ for $i = 1,2,\ldots,n$, then 
+		$\bar{t} = 0$ and $s_t^{2} = 1$.
+		
+		\item[vi.] 
+		$S_{xx} = \sum_{i=1}^{n} (x_i - \bar{x})^{2}
+		= \sum_{i=1}^{n} x_i^{2}
+		- \frac{1}{n}\left(\sum_{i=1}^{n} x_i\right)^{2}$.
+		
+	\end{enumerate}
+	
+				\textbf{Answer}
+		
+		
+		\clearpage
+		
+		\section{Question 4}
+		
+		Let $X_{1}, X_{2}, \ldots, X_{n}$ be a random sample from an exponential distribution each having common probability density function:
+		
+		$$
+		f\left(x_{i} \mid \lambda\right)= \begin{cases}\lambda \exp \left(-\lambda x_{i}\right), & x_{i} \geq 0 \\ 0, & \text { otherwise }\end{cases}
+		$$
+		
+		\begin{enumerate}
+			
+			\item[i.] Find the method of moments estimator of $\lambda$.
+			
+			\item[ii.] Find the maximum likelihood estimator of $\lambda$.
+			
+			\item[iii.] Use the delta method to derive the asymptotic distribution of $\hat{\lambda}_{\textsc{mle}}$.
+			
+			\item[iv.] Derive the large sample $(1-\alpha)\times 100\%$ confidence interval for the true rate parameter $\lambda$.
+			
+			\item[v.] Find the maximum likelihood estimator of $p=P(X>1)$, i.e., find $\hat{p}_{\textsc{mle}}$.
+			
+			\item[vi.] Use the delta method to derive the asymptotic distribution of $p=P(X>1)$.
+			
+			\item[vii.] Derive the large sample $(1-\alpha)\times 100\%$ confidence interval for $p=P(X>1)$.
+			
+		\end{enumerate}
+		
+		
+		\textbf{Answer}
+		
+		\clearpage
+		
+		\section{Question 5}
+		Let $X_{1}, X_{2}, \ldots, X_{n}$ be a random sample from $\operatorname{Unif}(0, \theta)$, each having common probability density function
+		
+		$$
+		f\left(x_{i} \mid \theta\right)= \begin{cases}\frac{1}{\theta}, & 0 \leq x_{i} \leq \theta \\ 0 & \text { otherwise }\end{cases}
+		$$
+		
+		Consider estimating the true maximum $\theta$ using the sample maximum
+		
+		$$
+		\hat{\theta}=T_{n}=\max \left\{X_{i}\right\}
+		$$
+		
+		Perform the following tasks:
+		
+		\begin{enumerate}
+			
+			\item[i.] Derive the probability density function of the sample max $T_{n}$.
+			
+			\item[ii.] Derive the expected value of $T_{n}$, i.e., derive $E\left[T_{n}\right]$.
+			
+			\item[iii.] Compute the bias of $T_{n}=\max\{X_{i}\}$.
+			
+			\item[iv.] Based on the dataset \texttt{BiasEst.csv}, estimate the bias of $T_{n}$ using both a jackknife procedure and the bootstrap procedure.
+			
+			\item[v.] Run a Monte Carlo simulation study to assess how well the jackknife procedure and the bootstrap procedure estimate the bias of $T_{n}$. Compare the results with the true bias assuming $n=30$ and $\theta=2$. To run the Monte Carlo simulation, follow the recommended loop below:
+			
+		\end{enumerate}
+		
+		\noindent for $k=1,2,\ldots,10000$:
+		
+		
+		
+		\begin{itemize}
+			\item In iteration $k$, simulate a sample from the uniform distribution with $\theta=2$, i.e.,
+		\end{itemize}
+		
+		$$
+		X_{1}, X_{2}, \ldots, X_{30} \sim \operatorname{Unif}(0,2)
+		$$
+		
+		\begin{itemize}
+			\item In iteration $k$, compute $\hat{\theta}=\max \left\{X_{i}\right\}$ using the simulated data from the previous step. Store this value in a vector or a list \texttt{theta\_vec}, i.e.,
+		\end{itemize}
+		
+		$$
+		\texttt { theta\_vec}[k]=\hat{\theta}
+		$$
+		
+		\begin{itemize}
+			\item In iteration $k$, run a jackknife procedure and compute the estimated bias $B_{\text {jack }}$ based on the simulated data from the first step. Store this value in a vector or a list \texttt{bias\_jack}, i.e.,
+		\end{itemize}
+		
+		$$
+		\texttt{ bias\_jack}[k]=B_{j a c k}
+		$$
+		
+		\begin{itemize}
+			\item In iteration $k$, run a bootstrap procedure and and compute the estimated bias $B_{\text {boot }}$ based on the simulated data from the first step. Store this value in a vector or a list \texttt{bias\_boot}, i.e.,
+		\end{itemize}
+		
+		$$
+		\texttt{ bias\_boot}[k]=B_{\text {boot }}
+		$$
+		
+		Use the vectors \texttt{theta\_vec}, \texttt{bias\_boot}, \texttt{bias\_jack} to explore the performance of both methods.
+		
+		
+		
+		
+		\textbf{Answer}
+		
+		
+		\clearpage
+		
+		
+		\section{Question 6}
+		
+		Let $X_{1}, \ldots, X_{n}$ be i.i.d. from $\operatorname{Poisson}(\lambda)$, where $\lambda>0$ is an unknown parameter, and denote $\mathbf{X}= \left(X_{1}, \ldots, X_{n}\right)$. Consider the estimation of
+		
+		$$
+		\theta=g(\lambda)=e^{-\lambda} .
+		$$
+		
+		\begin{enumerate}
+			
+			\item[i.] Calculate the Cramér-Rao lower bound corresponding to $g(\lambda)$.
+			
+			\item[ii.] Derive the MLE of $\lambda$, and use this result to identify the asymptotic distribution of $\hat{\theta}=g(\hat{\lambda})$.
+			
+			\item[iii.] Does the asymptotic variance attain the Cramér-Rao lower bound? What does this imply about the efficiency of $\hat{\theta}$?
+			
+		\end{enumerate}
+		
+		
+		
+		
+		\textbf{Answer}
+		
+		
+		\clearpage
+		
+		
+	\end{document}
