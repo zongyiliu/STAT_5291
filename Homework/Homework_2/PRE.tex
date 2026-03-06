@@ -1,0 +1,623 @@
+\documentclass[letterpaper]{article} 
+\usepackage[utf8]{inputenc}
+\linespread{0.85}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{fontspec}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[version=4]{mhchem}
+\usepackage{stmaryrd}
+\usepackage[dvipsnames]{xcolor}
+\colorlet{LightRubineRed}{RubineRed!70}
+\colorlet{Mycolor1}{green!10!orange}
+\definecolor{Mycolor2}{HTML}{00F9DE}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{lipsum}
+\usepackage{fancyvrb}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage[export]{adjustbox}
+\graphicspath{ {./images/} }
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{float}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{tcolorbox}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\definecolor{deepred}{RGB}{139,0,0}
+\usepackage{hyperref} 
+\usepackage{xcolor} % For custom colors
+\lstset{
+	language=Python,                % Choose the language (e.g., Python, C, R)
+	basicstyle=\ttfamily\small, % Font size and type
+	keywordstyle=\color{blue},  % Keywords color
+	commentstyle=\color{gray},  % Comments color
+	stringstyle=\color{red},    % String color
+	numbers=left,               % Line numbers
+	numberstyle=\tiny\color{gray}, % Line number style
+	stepnumber=1,               % Numbering step
+	breaklines=true,            % Auto line break
+	backgroundcolor=\color{black!5}, % Light gray background
+	frame=single,               % Frame around the code
+}
+\usepackage{float}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+	\usepackage[]{amssymb} %gives us the character \varnothing
+	
+
+	\title{Homework 2, STAT 5291}
+	\author{Zongyi Liu}
+	\date{Mon, Mar 2, 2026}
+	\begin{document}
+		\maketitle
+		
+		\section{Question 1}
+		
+		{\color{deepred}\fontspec{Georgia} Literature Review for the Final Project}
+		
+		
+		\emph{Perform the following task}
+		
+		Present the following tasks in a meaningful order so that you can start including sections in your write-up. Students must review one paper for every group member. For example, if students are working in a group of three members, then students must review three papers and consequently submit three one-page write-ups. If students are working in a group of five members, then students must review five papers and consequently submit five one-page write-ups.
+		
+		\begin{enumerate}
+			\item[i] List out your project teammates (names and UNIs).
+			
+			\item[ii] Find a relevant research paper related to your project topic.
+			
+			\item[iii] Write up a one page document summarizing the paper.
+			
+			\item[iv] Write a bibliography including your chosen papers.
+			
+			\item[v] Write an introduction section in your paper that ties in the relevant papers with your project goals and/or research question(s). This introduction can be used in your paper and will likely be edited a few times before final submission.
+		\end{enumerate}
+		
+		\textbf{Answer}
+		
+		\clearpage
+		
+	\section{Question 2}
+	{\color{deepred}\fontspec{Georgia} Wilcoxon Sum-Rank Test}
+	
+	\medskip
+	
+	Recall the Wilcoxon Sum-Rank Test Procedure:
+	
+	\medskip
+	
+	\emph{Assumptions}
+	
+	\medskip
+	
+	Assume that $\{X_1,\dots,X_m\}$ and $\{Y_1,\dots,Y_n\}$ are independent samples from different distributions with respective means $\mu_1$ and $\mu_2$. The distributions of $X$ and $Y$ have the same shape and differ only in location, i.e., by means $\mu_1$ and $\mu_2$. Note that the distributions do not have to be symmetric.
+	
+	\medskip
+	
+	\underline{Construction of the Wilcoxon Sum-Rank test statistic}
+	
+	\begin{enumerate}
+		\item[a] Combine the two samples, and rank the observations.
+		
+		\item[b] Let $T_1$ be the sum of the ranks for observations in the first group, and $T_2$ be the sum of the ranks for observations in the second group.
+	\end{enumerate}
+	
+	\medskip
+	
+	\textbf{Perform the following tasks}
+	
+	\begin{enumerate}
+		\item[i] Suppose that $m=n=2$. Derive the sampling distribution of $T_1$ under $H_0$. Also compute $E[T_1]$ and $Var[T_1]$ based on the derived sampling distribution.
+		
+		\item[ii] Suppose that $m=3$ and $n=4$. Derive the sampling distribution of $T_1$ under $H_0$. Also compute $E[T_1]$ and $Var[T_1]$ based on the derived sampling distribution.
+		
+		\item[iii] Now for any $m,n>0$, show that under $H_0$,
+		\[
+		E[T_1]=\frac{m(m+n+1)}{2}
+		\]
+		
+		and
+		
+		\[
+		Var[T_1]=\frac{mn(m+n+1)}{12}.
+		\]
+		
+		\textbf{Hint} Under $H_0$, the rank $R_i$ of $X_i$ is equally likely to be any one of the possible values $1,2,\dots,m+n$.
+		
+		\item[iv] Consider the following toy dataset which consists of a continuous response variable split by the respective groups. Equivalently, each group represents a realization from a continuous population. We are interested in the one-tailed test:
+		
+		\[
+		H_0:\ \mu_1-\mu_2=0
+		\qquad \text{versus} \qquad
+		H_A:\ \mu_1-\mu_2<0.
+		\]
+		
+		\begin{center}
+			\begin{tabular}{lcccccccc}
+				Group1 & 1.9168 & 3.5102 & 3.4567 & 2.7052 & 1.3366 & 2.7654 & 2.9780 & 2.8394 \\
+				& 2.1455 & 1.7992 \\
+				\hline
+				Group2 & 2.9204 & 3.1500 & 3.3405 & 2.7374 & 4.0499 & 3.8547 & 4.1359 & 4.0159 \\
+				& 3.4328 & 2.0894 & 3.7789 & 4.2853 & 2.8724 & 3.0208 & 3.1968
+			\end{tabular}
+		\end{center}
+		
+		Manually code up a function called \texttt{my\_wilcoxon()} which computes $T_1$ based on generic datasets \texttt{data\_1} and \texttt{data\_2}. Test your function on the above dataset, i.e.,
+		
+		\[
+		\texttt{my\_wilcoxon(Group1,Group2)}.
+		\]
+		
+		\textbf{Note} To check if your function is returning the correct value, the R function
+		
+		\[
+		\texttt{wilcox.test(Group1,Group2)}
+		\]
+		
+		is technically computing the Mann-Whitney $U$ statistic.
+		
+		\item[v] Simulate the sampling distribution of $T_1$ under $H_0$ using
+		
+		\[
+		X_1,\dots,X_m \sim f
+		\qquad
+		(\text{Some Continuous Distribution})
+		\]
+		
+		and
+		
+		\[
+		Y_1,\dots,Y_n \sim f
+		\qquad
+		(\text{Some Continuous Distribution})
+		\]
+		
+		and computing each $T_1$ based on your function
+		
+		\[
+		T_1=\texttt{my\_wilcoxon(Group1,Group2)}.
+		\]
+		
+		You can choose any continuous distribution $f$ for Group1 or Group2 as long as they are the same under $H_0$. Simulate 10,000 draws from the sampling distribution of $T_1$ and plot a histogram of your results.
+		
+
+	\item[vi] Run the Wilcoxon sum-rank procedure to test the one-tailed hypothesis
+	
+	\[
+	H_0 : \mu_1 - \mu_2 = 0 
+	\qquad \text{versus} \qquad
+	H_A : \mu_1 - \mu_2 < 0.
+	\]
+	
+	Compute the p-value using the Monte Carlo sampling distribution from Part 2.v. Also compute the large sample p-value and compare the results. Note that the large sample test statistic is:
+	
+	\[
+	z_{calc}=
+	\frac{
+		T_1-\dfrac{m(m+n+1)}{2}
+	}{
+		\sqrt{\dfrac{mn(m+n+1)}{12}}
+	}.
+	\]
+		\end{enumerate}
+	
+		\textbf{Answer}
+
+		\clearpage
+		
+		\section{Question 3}
+		
+		{\color{deepred}\fontspec{Georgia} Parametric and Nonparametric Two-sample Procedures}
+		
+		\medskip
+		
+		Consider the toy dataset from Problem 2, which consists of a continuous response variable split by the respective groups. Equivalently, each group represents a realization from a continuous population. We are interested in the two-tailed test:
+		
+		\[
+		H_0 : \mu_1 - \mu_2 = 0
+		\qquad \text{versus} \qquad
+		H_A : \mu_1 - \mu_2 \ne 0.
+		\]
+		
+		\begin{center}
+			\begin{tabular}{lcccccccc}
+				\hline
+				Group1 & 1.9168 & 3.5102 & 3.4567 & 2.7052 & 1.3366 & 2.7654 & 2.9780 & 2.8394 \\
+				& 2.1455 & 1.7992\\
+				\hline
+				Group2 & 2.9204 & 3.1500 & 3.3405 & 2.7374 & 4.0499 & 3.8547 & 4.1359 & 4.0159 \\
+				& 3.4328 & 2.0894 & 3.7789 & 4.2853 & 2.8724 & 3.0208 & 3.1968
+			\end{tabular}
+		\end{center}
+		
+		\medskip
+		
+		\emph{Perform the following tasks}
+		
+		\begin{enumerate}
+			
+			\item[i] Construct a multiple box-plot to investigate the research question of interest. Also construct qqplots of each dataset and comment on the respective distributions.
+			
+			\item[ii] Run the relevant test to check if the population variances differ per group, i.e.,
+			
+			\[
+			H_0 : \sigma_1^2 = \sigma_2^2
+			\qquad \text{versus} \qquad
+			H_A : \sigma_1^2 \ne \sigma_2^2.
+			\]
+			
+			Use $\alpha = .10$ for this test.
+			
+			\item[iii] Based on Problem 3.ii, run a two-sample t-test or pooled two-sample t-test on the null alternative pair
+			
+			\[
+			H_0 : \mu_1 - \mu_2 = 0
+			\qquad \text{versus} \qquad
+			H_A : \mu_1 - \mu_2 \ne 0.
+			\]
+			
+			Use $\alpha = .05$ for this test. Make sure to include all relevant steps in the testing procedure for full credit.
+			
+			\item[iv] Run a bootstrap procedure to test the hypothesis
+			
+			\[
+			H_0 : \mu_1 - \mu_2 = 0
+			\qquad \text{versus} \qquad
+			H_A : \mu_1 - \mu_2 \ne 0.
+			\]
+			
+			Make sure to include all relevant steps in the testing procedure for full credit.
+			
+			\item[v] Run a permutation test procedure to test the hypothesis
+			
+			\[
+			H_0 : \mu_1 - \mu_2 = 0
+			\qquad \text{versus} \qquad
+			H_A : \mu_1 - \mu_2 \ne 0.
+			\]
+			
+			Make sure to include all relevant steps in the testing procedure for full credit.
+			
+		\end{enumerate}
+	
+				\textbf{Answer}
+		
+		
+		\clearpage
+		
+		\section{Question 4}
+		
+		{\color{deepred}\fontspec{Georgia} Power and Sample Size Determination}
+		
+		\medskip
+		
+		Consider the two-sample pooled t-procedure for testing the upper tailed hypothesis:
+		
+		\[
+		H_0 : \mu_1 - \mu_2 = \Delta_0
+		\qquad \text{versus} \qquad
+		H_A : \mu_1 - \mu_2 > \Delta_0.
+		\]
+		
+		\medskip
+		
+		\emph{Perform the following tasks}
+		
+		\begin{enumerate}
+			
+			\item[i] Derive an expression for the power of the upper tailed test as a function of the non-centrality parameter $\delta$. The power derivation should be similar to the class example for the one-sample t-test. Students should also identify the correct expression for $\delta$.
+			
+			\item[ii] Suppose that the experimenter would like to determine the minimal sample size required of the pooled two-sample t-test in order to achieve a pre-specified power $1-\beta$. More specifically, the experimenter uses a pilot study to estimate the effect size
+			
+			\[
+			d=\frac{\mu_2-\mu_1}{\sigma},
+			\]
+			
+			and the non-centrality parameter $\delta$ from Problem 4.i. For simplicity, we also assume a balanced design $(m=n)$.
+			
+		\end{enumerate}
+		
+		\medskip
+		
+		\emph{Required task}
+		
+		\medskip
+		
+		For fixed $\alpha$ and fixed effect size $d$ (or fixed non-centrality parameter $\delta$), compute the power curve as a function of the sample size $n$, i.e., construct the curve
+		
+		\[
+		\text{power}(n), \qquad \text{for } n=2,3,\dots,200,
+		\]
+		
+		where $\alpha$ and $d$ are fixed.
+		
+		Students are required to compute power curves related to three different pilot studies provided in the files \texttt{HW2\_P4\_data1.csv}, \texttt{HW2\_P4\_data2.csv} and \texttt{HW2\_P4\_data3.csv}. Further, students should compute the power curves for two significance levels $\alpha=.05$ and $\alpha=.10$. Your final answer should be summarized in one elegant plot showing six power curves. Please label the legend appropriately to clearly identify which curve corresponds to the $d$ (or $\delta$) and $\alpha$.
+		
+		\medskip
+		
+		\textbf{Note} maybe write a loop in R or Python to compute these curves?
+		
+		\textbf{Answer}
+		
+		\clearpage
+		
+		\section{Question 5}
+		{\color{deepred}\fontspec{Georgia} Two-Sample Pooled Test and Likelihood Ratio}
+		
+		Recall the pooled two-sample t-procedure, which assumes the model:
+		
+		\medskip
+		
+		\underline{Assumptions}
+		
+		\begin{enumerate}
+			\item $X_1, X_2, \ldots, X_m$ is a random sample from a normal distribution with mean $\mu_1$ and variance $\sigma^2$. The variance $\sigma^2$ is unknown.
+			
+			\item $Y_1, Y_2, \ldots, Y_n$ is a random sample from a normal distribution with mean $\mu_2$ and variance $\sigma^2$. The variance $\sigma^2$ is unknown.
+			
+			\item The $X$ and $Y$ samples are independent of one another.
+		\end{enumerate}
+		
+		\medskip
+		
+		Consider the two tailed hypothesis
+		\[
+		H_0 : \mu_1 - \mu_2 = 0 
+		\qquad \text{versus} \qquad
+		H_A : \mu_1 - \mu_2 \neq 0 .
+		\]
+		
+		\medskip
+		
+		\emph{Perform the following tasks}
+		
+		\begin{enumerate}
+			
+			\item[i] Derive an expression for the likelihood
+			\[
+			\mathcal{L}(\theta) = \mathcal{L}(\mu_1,\mu_2,\sigma^2).
+			\]
+			
+			\item[ii] Find the maximum likelihood estimator of
+			\[
+			\theta = (\mu_1,\mu_2,\sigma^2).
+			\]
+			
+			Note that you are not required to perform the \emph{second derivative test} for this problem.
+			
+			\item[iii] Derive the likelihood ratio test statistic $\lambda$. Note that you are not required to perform the \emph{second derivative test} for this problem.
+			
+			\item[iv] Show that the likelihood ratio test can be expressed in terms of the t-statistic $(T)$, i.e., there exists a function $f$ such that
+			\[
+			\lambda = f(T).
+			\]
+			
+		\end{enumerate}
+		
+		\textbf{Answer}
+		
+		
+		\clearpage
+		
+		
+		\section{Question 6}
+		
+		{\color{deepred}\fontspec{Georgia} Parametric and Non-parametric Paired Procedures}
+		
+		\medskip
+		
+		Consider testing the stopping distance [ft] of two types of tires on 6 different cars. 
+		The response variable is the stopping distance of the car after the brakes are applied 
+		at 60 mph. The two types of tires are: Winter and High Performance. 
+		Does the data set indicate that the stopping distance differs between the two tire types?
+		
+		\medskip
+		
+		\begin{center}
+			\begin{tabular}{ccc}
+				\hline
+				Car & High Performance & Winter \\
+				\hline
+				1 & 226.6 & 239.5 \\
+				2 & 230.5 & 257.5 \\
+				3 & 220.0 & 236.8 \\
+				4 & 215.9 & 223.9 \\
+				5 & 231.5 & 248.0 \\
+				6 & 235.5 & 253.6 \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		\medskip
+		
+		\emph{Perform the following tasks}
+		
+		\begin{enumerate}
+			
+			\item[i] Assuming the stopping distance for both tire types are approximately normally distributed, run the paired two-sample t-procedure to test the claim
+			
+			\[
+			H_0 : \mu_D = 0 
+			\qquad \text{versus} \qquad
+			H_A : \mu_D \neq 0 .
+			\]
+			
+			Make sure to include all relevant steps in the testing procedure for full credit.
+			
+			\item[ii] Assuming the stopping distance for $D = X - Y$ is symmetric, run the Wilcoxon signed-rank procedure to test the claim
+			
+			\[
+			H_0 : \mu_D = 0 
+			\qquad \text{versus} \qquad
+			H_A : \mu_D \neq 0 .
+			\]
+			
+			Make sure to include all relevant steps in the testing procedure for full credit.
+			
+		\end{enumerate}
+		
+		
+		\textbf{Answer}
+		
+		
+		\clearpage
+		
+		\section{Question 7}
+		
+		{\color{deepred}\fontspec{Georgia} Categorical Hypothesis Testing Problem}
+		
+		\medskip
+		
+		Binomial data gathered from more than one population are often presented in a contingency table. 
+		For the case of two populations, the table might look like
+		
+		\begin{center}
+			\begin{tabular}{c|c|c|c}
+				& Population 1 & Population 2 & Total \\
+				\hline
+				Successes & $S_1$ & $S_2$ & $S = S_1 + S_2$ \\
+				Failures & $F_1$ & $F_2$ & $F = F_1 + F_2$ \\
+				\hline
+				Total & $m$ & $n$ & $N = m + n$
+			\end{tabular}
+		\end{center}
+		
+		where Population 1 is $\text{Binomial}(m,p_1)$, with $S_1$ successes and $F_1$ failures, and Population 2 is $\text{Binomial}(n,p_2)$, with $S_2$ successes and $F_2$ failures. 
+		We will motivate both the two-sample $z$-test for proportions and the chi-squared test for association based on the $2\times2$ contingency table. 
+		The hypothesis of interest is:
+		
+		\[
+		H_0: p_1 = p_2
+		\qquad \text{versus} \qquad
+		H_A: p_1 \neq p_2
+		\]
+		
+		\emph{Perform the following tasks}
+		
+		\begin{enumerate}
+			
+			\item[i] Show that a test can be based on the statistic
+			\[
+			W = \frac{(\hat p_1 - \hat p_2)^2}{\left(\frac{1}{m} + \frac{1}{n}\right)\left(\hat p (1-\hat p)\right)},
+			\]
+			where $\hat p_1 = S_1/m$, $\hat p_2 = S_2/n$, and
+			\[
+			\hat p = \frac{S_1 + S_2}{m+n}.
+			\]
+			Also show that as $m,n \to \infty$, the distribution of $W$ approaches $\chi^2_1$.
+			
+			\item[ii] Another way of measuring the departure from $H_0$ is by calculating the expected frequency table. 
+			This table is constructed by conditioning on the marginal totals and filling in the table according to $H_0: p_1=p_2$, that is,
+			
+			\medskip
+			
+			\begin{center}
+				Expected Frequencies
+				
+				\begin{tabular}{c|c|c|c}
+					& Population 1 & Population 2 & Total \\
+					\hline
+					Successes & $\frac{mS}{m+n}$ & $\frac{nS}{m+n}$ & $S = S_1 + S_2$ \\
+					Failures & $\frac{mF}{m+n}$ & $\frac{nF}{m+n}$ & $F = F_1 + F_2$ \\
+					\hline
+					Total & $m$ & $n$ & $N = m+n$
+				\end{tabular}
+			\end{center}
+			
+			Using the expected frequency table, a statistic $W^*$ is computed by going through the cells of the tables and computing
+			
+			\[
+			W^* =
+			\sum \frac{(\text{observed} - \text{expected})^2}{\text{expected}}
+			\]
+			
+			\[
+			=
+			\frac{\left(S_1 - \frac{mS}{m+n}\right)^2}{\frac{mS}{m+n}}
+			+
+			\frac{\left(S_2 - \frac{nS}{m+n}\right)^2}{\frac{nS}{m+n}}
+			+
+			\frac{\left(F_1 - \frac{mF}{m+n}\right)^2}{\frac{mF}{m+n}}
+			+
+			\frac{\left(F_2 - \frac{nF}{m+n}\right)^2}{\frac{nF}{m+n}}.
+			\]
+			
+			Show, algebraically, that $W = W^*$ and hence that $W^*$ is asymptotically chi-squared.
+			
+			\item[iii] A famous medical experiment was conducted by Joseph Lister in the late 1800s. 
+			Mortality associated with surgery was quite high, and Lister conjectured that the use of disinfectant, carbolic acid, would help. 
+			Over a period of several years Lister performed 75 amputations with and without carbonic acid. 
+			The data are given here:
+			
+			\begin{center}
+				Carbolic acid Used?
+				
+				\begin{tabular}{c|c|c}
+					& Yes & No \\
+					\hline
+					Patient lived & 34 & 19 \\
+					Patient died & 6 & 16
+				\end{tabular}
+			\end{center}
+			
+			Use these data to test whether the use of carbolic acid is associated with patient mortality.
+			
+		\end{enumerate}
+		
+		
+		\textbf{Answer}
+		
+		
+		\clearpage
+		
+		
+			\section{Question 8}
+		
+		{\color{deepred}\fontspec{Georgia} Goodness-of-fit (Practice Problem)}
+		
+		\medskip
+		
+		Construct a Chi-squared goodness-of-fit test to assess whether or not a dataset $(X)$ is normally distributed, i.e., test the null alternative pair:
+		
+		\[
+		H_0 : X \sim \text{Normal}
+		\qquad \text{versus} \qquad
+		H_A : X \text{ is not Normal}.
+		\]
+		
+		To accomplish this task, you must first convert the continuous observed data into a frequency table, i.e., the heights of the bars on a histogram. 
+		Then apply the goodness-of-fit test based on the observed and expected counts assuming the null hypothesis $H_0: X\sim\text{Normal}$ is true.
+		
+		Some considerations follow:
+		
+		\begin{itemize}
+			
+			\item Let $K$ be the number of \emph{bins} in the histogram. Note that changing the number of bins will consequently change the degrees of freedom of the chi-squared distribution.
+			
+			\item Don't forget that you have to estimate both $\mu$ and $\sigma^2$ in order to compute the expected counts, which also impacts the degrees of freedom of the chi-squared distribution.
+			
+			\item If you are successful in solving this problem, maybe simulate a few normal and non-normal datasets and compare the qqplots with the goodness-of-fit outcomes of the simulated data.
+			
+		\end{itemize}
+		
+		\textbf{Answer}
+		
+		
+		\clearpage
+		
+	\end{document}
