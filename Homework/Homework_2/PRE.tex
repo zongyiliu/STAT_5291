@@ -60,7 +60,7 @@
 \usepackage[]{amsthm} %lets us use \begin{proof}
 	\usepackage[]{amssymb} %gives us the character \varnothing
 	
-
+	
 	\title{Homework 2, STAT 5291}
 	\author{Zongyi Liu}
 	\date{Mon, Mar 2, 2026}
@@ -92,132 +92,132 @@
 		
 		\clearpage
 		
-	\section{Question 2}
-	{\color{deepred}\fontspec{Georgia} Wilcoxon Sum-Rank Test}
-	
-	\medskip
-	
-	Recall the Wilcoxon Sum-Rank Test Procedure:
-	
-	\medskip
-	
-	\emph{Assumptions}
-	
-	\medskip
-	
-	Assume that $\{X_1,\dots,X_m\}$ and $\{Y_1,\dots,Y_n\}$ are independent samples from different distributions with respective means $\mu_1$ and $\mu_2$. The distributions of $X$ and $Y$ have the same shape and differ only in location, i.e., by means $\mu_1$ and $\mu_2$. Note that the distributions do not have to be symmetric.
-	
-	\medskip
-	
-	\underline{Construction of the Wilcoxon Sum-Rank test statistic}
-	
-	\begin{enumerate}
-		\item[a] Combine the two samples, and rank the observations.
+		\section{Question 2}
+		{\color{deepred}\fontspec{Georgia} Wilcoxon Sum-Rank Test}
 		
-		\item[b] Let $T_1$ be the sum of the ranks for observations in the first group, and $T_2$ be the sum of the ranks for observations in the second group.
-	\end{enumerate}
-	
-	\medskip
-	
-	\textbf{Perform the following tasks}
-	
-	\begin{enumerate}
-		\item[i] Suppose that $m=n=2$. Derive the sampling distribution of $T_1$ under $H_0$. Also compute $E[T_1]$ and $Var[T_1]$ based on the derived sampling distribution.
+		\medskip
 		
-		\item[ii] Suppose that $m=3$ and $n=4$. Derive the sampling distribution of $T_1$ under $H_0$. Also compute $E[T_1]$ and $Var[T_1]$ based on the derived sampling distribution.
+		Recall the Wilcoxon Sum-Rank Test Procedure:
 		
-		\item[iii] Now for any $m,n>0$, show that under $H_0$,
-		\[
-		E[T_1]=\frac{m(m+n+1)}{2}
-		\]
+		\medskip
 		
-		and
+		\emph{Assumptions}
 		
-		\[
-		Var[T_1]=\frac{mn(m+n+1)}{12}.
-		\]
+		\medskip
 		
-		\textbf{Hint} Under $H_0$, the rank $R_i$ of $X_i$ is equally likely to be any one of the possible values $1,2,\dots,m+n$.
+		Assume that $\{X_1,\dots,X_m\}$ and $\{Y_1,\dots,Y_n\}$ are independent samples from different distributions with respective means $\mu_1$ and $\mu_2$. The distributions of $X$ and $Y$ have the same shape and differ only in location, i.e., by means $\mu_1$ and $\mu_2$. Note that the distributions do not have to be symmetric.
 		
-		\item[iv] Consider the following toy dataset which consists of a continuous response variable split by the respective groups. Equivalently, each group represents a realization from a continuous population. We are interested in the one-tailed test:
+		\medskip
 		
-		\[
-		H_0:\ \mu_1-\mu_2=0
-		\qquad \text{versus} \qquad
-		H_A:\ \mu_1-\mu_2<0.
-		\]
+		\underline{Construction of the Wilcoxon Sum-Rank test statistic}
 		
-		\begin{center}
-			\begin{tabular}{lcccccccc}
-				Group1 & 1.9168 & 3.5102 & 3.4567 & 2.7052 & 1.3366 & 2.7654 & 2.9780 & 2.8394 \\
-				& 2.1455 & 1.7992 \\
-				\hline
-				Group2 & 2.9204 & 3.1500 & 3.3405 & 2.7374 & 4.0499 & 3.8547 & 4.1359 & 4.0159 \\
-				& 3.4328 & 2.0894 & 3.7789 & 4.2853 & 2.8724 & 3.0208 & 3.1968
-			\end{tabular}
-		\end{center}
-		
-		Manually code up a function called \texttt{my\_wilcoxon()} which computes $T_1$ based on generic datasets \texttt{data\_1} and \texttt{data\_2}. Test your function on the above dataset, i.e.,
-		
-		\[
-		\texttt{my\_wilcoxon(Group1,Group2)}.
-		\]
-		
-		\textbf{Note} To check if your function is returning the correct value, the R function
-		
-		\[
-		\texttt{wilcox.test(Group1,Group2)}
-		\]
-		
-		is technically computing the Mann-Whitney $U$ statistic.
-		
-		\item[v] Simulate the sampling distribution of $T_1$ under $H_0$ using
-		
-		\[
-		X_1,\dots,X_m \sim f
-		\qquad
-		(\text{Some Continuous Distribution})
-		\]
-		
-		and
-		
-		\[
-		Y_1,\dots,Y_n \sim f
-		\qquad
-		(\text{Some Continuous Distribution})
-		\]
-		
-		and computing each $T_1$ based on your function
-		
-		\[
-		T_1=\texttt{my\_wilcoxon(Group1,Group2)}.
-		\]
-		
-		You can choose any continuous distribution $f$ for Group1 or Group2 as long as they are the same under $H_0$. Simulate 10,000 draws from the sampling distribution of $T_1$ and plot a histogram of your results.
-		
-
-	\item[vi] Run the Wilcoxon sum-rank procedure to test the one-tailed hypothesis
-	
-	\[
-	H_0 : \mu_1 - \mu_2 = 0 
-	\qquad \text{versus} \qquad
-	H_A : \mu_1 - \mu_2 < 0.
-	\]
-	
-	Compute the p-value using the Monte Carlo sampling distribution from Part 2.v. Also compute the large sample p-value and compare the results. Note that the large sample test statistic is:
-	
-	\[
-	z_{calc}=
-	\frac{
-		T_1-\dfrac{m(m+n+1)}{2}
-	}{
-		\sqrt{\dfrac{mn(m+n+1)}{12}}
-	}.
-	\]
+		\begin{enumerate}
+			\item[a] Combine the two samples, and rank the observations.
+			
+			\item[b] Let $T_1$ be the sum of the ranks for observations in the first group, and $T_2$ be the sum of the ranks for observations in the second group.
 		\end{enumerate}
-	
+		
+		\medskip
+		
+		\emph{Perform the following tasks}
+		
+		\begin{enumerate}
+			\item[i] Suppose that $m=n=2$. Derive the sampling distribution of $T_1$ under $H_0$. Also compute $E[T_1]$ and $Var[T_1]$ based on the derived sampling distribution.
+			
+			\item[ii] Suppose that $m=3$ and $n=4$. Derive the sampling distribution of $T_1$ under $H_0$. Also compute $E[T_1]$ and $Var[T_1]$ based on the derived sampling distribution.
+			
+			\item[iii] Now for any $m,n>0$, show that under $H_0$,
+			\[
+			E[T_1]=\frac{m(m+n+1)}{2}
+			\]
+			
+			and
+			
+			\[
+			Var[T_1]=\frac{mn(m+n+1)}{12}.
+			\]
+			
+			\emph{Hint} Under $H_0$, the rank $R_i$ of $X_i$ is equally likely to be any one of the possible values $1,2,\dots,m+n$.
+			
+			\item[iv] Consider the following toy dataset which consists of a continuous response variable split by the respective groups. Equivalently, each group represents a realization from a continuous population. We are interested in the one-tailed test:
+			
+			\[
+			H_0:\ \mu_1-\mu_2=0
+			\qquad \text{versus} \qquad
+			H_A:\ \mu_1-\mu_2<0.
+			\]
+			
+			\begin{center}
+				\begin{tabular}{lcccccccc}
+					Group1 & 1.9168 & 3.5102 & 3.4567 & 2.7052 & 1.3366 & 2.7654 & 2.9780 & 2.8394 \\
+					& 2.1455 & 1.7992 \\
+					\hline
+					Group2 & 2.9204 & 3.1500 & 3.3405 & 2.7374 & 4.0499 & 3.8547 & 4.1359 & 4.0159 \\
+					& 3.4328 & 2.0894 & 3.7789 & 4.2853 & 2.8724 & 3.0208 & 3.1968
+				\end{tabular}
+			\end{center}
+			
+			Manually code up a function called \texttt{my\_wilcoxon()} which computes $T_1$ based on generic datasets \texttt{data\_1} and \texttt{data\_2}. Test your function on the above dataset, i.e.,
+			
+			\[
+			\texttt{my\_wilcoxon(Group1,Group2)}.
+			\]
+			
+			\emph{Note} To check if your function is returning the correct value, the R function
+			
+			\[
+			\texttt{wilcox.test(Group1,Group2)}
+			\]
+			
+			is technically computing the Mann-Whitney $U$ statistic.
+			
+			\item[v] Simulate the sampling distribution of $T_1$ under $H_0$ using
+			
+			\[
+			X_1,\dots,X_m \sim f
+			\qquad
+			(\text{Some Continuous Distribution})
+			\]
+			
+			and
+			
+			\[
+			Y_1,\dots,Y_n \sim f
+			\qquad
+			(\text{Some Continuous Distribution})
+			\]
+			
+			and computing each $T_1$ based on your function
+			
+			\[
+			T_1=\texttt{my\_wilcoxon(Group1,Group2)}.
+			\]
+			
+			You can choose any continuous distribution $f$ for Group1 or Group2 as long as they are the same under $H_0$. Simulate 10,000 draws from the sampling distribution of $T_1$ and plot a histogram of your results.
+			
+			
+			\item[vi] Run the Wilcoxon sum-rank procedure to test the one-tailed hypothesis
+			
+			\[
+			H_0 : \mu_1 - \mu_2 = 0 
+			\qquad \text{versus} \qquad
+			H_A : \mu_1 - \mu_2 < 0.
+			\]
+			
+			Compute the p-value using the Monte Carlo sampling distribution from Part 2.v. Also compute the large sample p-value and compare the results. Note that the large sample test statistic is:
+			
+			\[
+			z_{calc}=
+			\frac{
+				T_1-\dfrac{m(m+n+1)}{2}
+			}{
+				\sqrt{\dfrac{mn(m+n+1)}{12}}
+			}.
+			\]
+		\end{enumerate}
+		
 		\textbf{Answer}
-
+		
 		\clearpage
 		
 		\section{Question 3}
@@ -294,8 +294,8 @@
 			Make sure to include all relevant steps in the testing procedure for full credit.
 			
 		\end{enumerate}
-	
-				\textbf{Answer}
+		
+		\textbf{Answer}
 		
 		
 		\clearpage
@@ -350,7 +350,7 @@
 		
 		\medskip
 		
-		\textbf{Note} maybe write a loop in R or Python to compute these curves?
+		\emph{Note} maybe write a loop in R or Python to compute these curves?
 		
 		\textbf{Answer}
 		
@@ -586,7 +586,7 @@
 		\clearpage
 		
 		
-			\section{Question 8}
+		\section{Question 8}
 		
 		{\color{deepred}\fontspec{Georgia} Goodness-of-fit (Practice Problem)}
 		
@@ -620,4 +620,4 @@
 		
 		\clearpage
 		
-	\end{document}
+	\end{document}hiont
