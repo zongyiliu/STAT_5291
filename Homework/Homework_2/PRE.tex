@@ -90,6 +90,285 @@
 		
 		\textbf{Answer}
 		
+		\subsection{Part I}
+		
+		Project team-members:
+		
+		\begin{enumerate}
+			\item Elden Griggs (eg3203)
+			\item Jiaming Luo (jl7310)
+			\item Yingfu Xu (yx2995)
+			\item Zongyi Liu (zl3554)
+			\item Keyan Su (ks4384)
+			
+		\end{enumerate}
+	
+	\subsection{Part II}
+	
+	\subsection{Article 1}
+	
+	{\color{deepred}\fontspec{Georgia} by Zongyi Liu}
+	
+	
+	\textit{Introduction}
+	
+	The paper I chose was titled \textit{Granular Credit Risk} written by four economists (Sigurd Galaasen, Rustam Jamilov, Ragnar Juelsrud, and H\'{e}l\`{e}ne Rey) from Norway. This paper studies how large individual loans (``granular exposures'') in bank portfolios can generate macroeconomic effects, challenging the traditional view that idiosyncratic credit risk disappears through diversification. It used detailed loan-level administrative data from Norway, and the result was that shocks to large borrowers can significantly affect banks and the broader economy.
+	
+	\medskip
+	
+	\textit{Motivation}
+	
+	Traditional banking theory (e.g., Diamond 1984) argues that when banks hold many small loans, idiosyncratic borrower risk averages out through diversification. But in reality bank portfolios are highly concentrated, with a fat-tailed distribution of loan sizes, meaning a few large borrowers account for a substantial share of lending. The paper investigates whether shocks to such large borrowers can survive aggregation and influence bank outcomes and the real economy. This idea is connected to the ``granular hypothesis'' in macroeconomics (Gabaix 2011), which argues that shocks to large economic agents can generate aggregate fluctuations.
+	
+	\medskip
+	
+	\textit{Data and Setup}
+	
+	The authors use a matched bank-firm dataset from Norway containing detailed information on bank lending relationships. Their empirical strategy exploits the fat-tailed distribution of loan shares and applies a granular instrumental variable (GIV) approach to isolate exogenous shocks to large borrowers. The identification strategy allows them to measure how shocks to specific borrowers propagate through banks and ultimately affect other firms.
+	
+	\medskip
+	
+	\textit{Main Findings}
+	
+	The paper documents three key results.
+	\begin{enumerate}
+		\item \textit{Idiosyncratic borrower shocks affect bank outcomes.} Negative shocks to large borrowers reduce loan returns and affect banks' balance sheets. Because some exposures are large relative to the bank's portfolio, these shocks do not wash out through diversification.
+		\item \textit{Granular credit risk survives portfolio aggregation.} Even though banks hold many loans, the presence of large exposures means that idiosyncratic shocks remain economically significant at the bank level.
+		\item \textit{Credit shocks spill over to other firms and the macroeconomy.} Banks affected by granular shocks adjust their lending behavior, generating spillovers to other firms that were not directly exposed to the original shock. The authors find that these spillovers reduce firms' investment, increase default risk, and affect broader economic activity. Thus shocks originating from a few large borrowers can propagate through the financial system and have macroeconomic consequences.
+	\end{enumerate}
+	
+	\medskip
+	
+	\textit{Implications}
+	
+	The results support the rationale behind large exposure regulations in banking (such as Basel rules limiting concentration risk). The authors estimate that reducing credit concentration beyond what is justified by firm size could reduce the macroeconomic pass-through of granular credit shocks by about 40\%, with further reductions possible through better portfolio diversification. Overall, the study demonstrates that micro-level borrower shocks can have macroeconomic consequences when financial exposures are concentrated, highlighting the importance of monitoring large credit exposures in banking systems.
+	
+	\medskip
+	
+	\textit{Intro Section (tentative)}
+	
+	Accurate prediction of borrower default helps banks reduce potential losses and improve credit allocation decisions. Recent research highlights that borrower-level credit risk can have broader implications for the financial system. For example, the NBER working paper \textit{Granular Credit Risk} studies how shocks to individual borrowers affect banks and the broader economy. Using detailed loan-level data, the authors show that idiosyncratic borrower shocks can survive diversification within bank portfolios and propagate through the banking system, reducing investment and increasing default risk among other firms.
+	
+	Motivated by this literature, we hope to work on the borrower-level component of credit risk by analyzing a public credit dataset from Kaggle. The dataset contains simulated credit bureau information, including borrower characteristics such as age, income, employment length, loan amount, interest rate, and credit history, along with a binary indicator of loan default. In this project, credit risk prediction is formulated as a binary classification problem in which the goal is to estimate whether a borrower will default on a loan. By applying statistical or machine learning models to this dataset, we aim to examine how borrower characteristics relate to default risk and evaluate the effectiveness of predictive models for credit risk assessment. With the results from the Kaggle dataset, we also want to further utilize the methodology on real data from banks or other financial institutions to study the issues addressed in the paper and develop ideas to optimize banking portfolios.
+	
+	
+	\subsection{Article 2}
+	
+	{\color{deepred}\fontspec{Georgia} by Zongyi Liu}
+	
+	
+	\textit{Motivation}
+	
+	Credit risk management is a pivotal task for financial institutions. Banks must evaluate whether a borrower is likely to repay a loan or default. Here I chose a paper written by several master and doctoral students from the U.K.\ on the topic of \textit{Credit Risk Prediction Using Machine Learning and Deep Learning}. Traditional credit scoring methods typically rely on statistical models such as logistic regression. However, these models may fail to capture complex nonlinear relationships in financial data. With the increasing availability of large datasets and computational power, machine learning methods have become an important alternative for predicting borrower default risk. This study investigates whether modern machine learning algorithms can improve the accuracy of credit risk prediction compared with traditional statistical approaches.
+	
+	\medskip
+	
+	\textit{Data and Setup}
+	
+	The paper analyzes a borrower-level credit dataset containing various features describing the financial and demographic characteristics of loan applicants, including variables related to income, employment history, loan characteristics, and credit history. The objective is to predict whether a borrower will default on a loan, treated as a binary classification problem. The target variable indicates the loan outcome (default or non-default), while the explanatory variables represent borrower characteristics and loan attributes.
+	
+	\medskip
+	
+	\textit{Methodology}
+	
+	To address this prediction task, the authors implement several classification models commonly used in credit risk analysis. Logistic regression is used as a benchmark because it is widely adopted in traditional credit scoring systems. In addition, the study applies more advanced machine learning models, including neural networks, AdaBoost, XGBoost, and LightGBM. These models are trained on the dataset to learn patterns between borrower features and loan repayment outcomes. The performance of each model is evaluated using standard classification metrics such as accuracy, precision, recall, F1-score, and the area under the ROC curve (AUC).
+	
+	\medskip
+	
+	\textit{Main Findings}
+	
+	The empirical results show that machine learning algorithms outperform traditional statistical models in predicting credit risk. In particular, gradient boosting models such as XGBoost and LightGBM achieve the best predictive performance. These models are able to capture complex interactions among variables and nonlinear relationships in borrower data, which improves the ability to identify high-risk borrowers. Logistic regression, while still useful due to its interpretability, generally produces lower predictive accuracy compared with the more advanced machine learning methods.
+	
+	\medskip
+	
+	\textit{Implications}
+	
+	The findings suggest that incorporating machine learning techniques into credit risk assessment can significantly improve the accuracy of default prediction. More accurate credit scoring models allow financial institutions to make better lending decisions, reduce default-related losses, and allocate credit more efficiently. The study highlights the potential benefits of adopting data-driven approaches in modern financial risk management.
+	
+	\medskip
+	
+	\textit{Intro Section (tentative)}
+	
+	Traditional credit scoring methods often rely on statistical models such as logistic regression to estimate the probability of default. However, recent research suggests that machine learning methods can improve prediction accuracy by capturing nonlinear relationships and complex interactions among borrower characteristics. For example, recent studies compare several machine learning algorithms---including neural networks, boosting methods, and other classifiers---for credit risk prediction and find that advanced models such as gradient boosting often outperform traditional statistical approaches.
+	
+	Motivated by this literature, this project studies the problem of borrower default prediction using a publicly available credit risk dataset from Kaggle. The dataset contains borrower-level information such as age, income, employment length, loan amount, interest rate, and credit history, along with an indicator of whether the loan defaulted. In this project, we treat credit risk prediction as a binary classification problem and evaluate several predictive models using standard metrics such as accuracy and ROC-AUC. The goal is to examine how borrower characteristics influence default risk and to evaluate the effectiveness of machine learning methods for credit risk prediction.
+	
+	\bigskip
+	
+	\textit{Bibliography}
+	
+	\hangindent=1.5em
+	Galaasen, S., Jamilov, R., Juelsrud, R., \& Rey, H. (2020). Granular credit risk (NBER Working Paper No.\ 27994). \textit{National Bureau of Economic Research}. \texttt{https://doi.org/10.3386/w27994}
+	\hangindent=1.5em
+	Chang, V., Sivakulasingam, S., Wang, H., Wong, S.~T., Ganatra, M.~A., \& Luo, J. (2024). Credit risk prediction using machine learning and deep learning: A study on credit card customers. \textit{Risks}, \textit{12}(11), 174. \texttt{https://doi.org/10.3390/risks12110174}
+	
+	\subsection{Article 3}
+	
+	{\color{deepred}\fontspec{Georgia} by Yingfu Xu}
+	
+
+	\textit{Introduction}
+	
+	The models used to predict the default rate are various, while stakeholders can only see the prediction results instead of the procedures, leading to a lack of trust in the prediction model. The paper \textit{Explainable Prediction of Loan Default Based on Machine Learning Models} analyzed and compared four main prediction models: Logistic Regression, Decision Tree, XGBoost, and LightGBM. The authors then leverage the LIME (Local Interpretable Model-Agnostic Explanations) technique to explain the model results and relevant factors, finding that prediction results are influenced by the amount, time, level of the loan, and the borrower's credit rating.
+	
+	\medskip
+	
+	\textit{Data and Setup}
+	
+	The data used for this paper is provided by Datawhale, extracted from a competition website held by ALIYUN. The raw data contains 800,000 entries; the analysis selected 46 variables, including 15 anonymous variables ($n_0$ to $n_{14}$), covering all related variables centered around borrowers' financial condition, credit profile, and loan-related information, with \texttt{isDefault} as the dependent variable coded with binary indicators. For the data preprocessing phase, the authors filled all missing values with the median, deleted all outliers on a $3\sigma$ basis, and reduced the data entries to 612,742 for final modeling.
+	
+	For model training, the project performed an 80/20 train-test split, randomly assigning 80\% of the data for training and 20\% for testing. The authors also utilized five-fold cross-validation for the LightGBM model after rating it as the best-performing model, examining its stability with a classification threshold of 0.5.
+	
+	\medskip
+	
+	\textit{Methodology}
+	
+	The project can be divided into two phases: model comparison and best-performing model explanation.
+	
+	For the model comparison stage, four classification models are evaluated: Logistic Regression as the traditional baseline examining linear relationships, Decision Tree as a classical tree model, and XGBoost and LightGBM as tree-based ensemble boosting models studying complicated nonlinear relationships. During data preprocessing, the authors utilized multiple techniques including data deletion, IV (information value) for variable filtering, PCA for highly correlated variables, and PSI to test stability.
+	
+	For model evaluation, the paper used AUC (area under the ROC curve), precision, accuracy, and KS (Kolmogorov--Smirnov) statistic to assess each model from different perspectives. To provide interpretability, the authors applied the LIME technique to the best-performing LightGBM model to explain how individual predictions were made.
+	
+	\medskip
+	
+	\textit{Main Findings}
+	
+	All examined models performed strongly with an AUC larger than 0.7, with XGBoost and LightGBM slightly outperforming the two more traditional models (Logistic Regression and Decision Tree). LightGBM also demonstrated higher accuracy and precision compared to the other models across additional metrics, leading the authors to conclude that tree-based boosting models perform better for default prediction than traditional linear models, with LightGBM being the best among them.
+	
+	To further investigate model interpretability, five-fold cross-validation on LightGBM yielded an average AUC of 0.7206 and accuracy of 0.8086, along with small variance, demonstrating stability and a low level of overfitting. LIME identified several notable variables from the default sample, including loan term, loan grade, DTI (debt-to-income ratio), home ownership status, and credit score, which the authors identify as the key attributes affecting loan default risk.
+	
+	\medskip
+	
+	\textit{Bibliography}
+	
+	\hangindent=1.5em
+	Zhu, X., Chu, Q., Song, X., Hu, P., \& Peng, L. (2023). Explainable prediction of loan default based on machine learning models. \textit{Data Science and Management}, \textit{6}(3), 123--133. \texttt{https://doi.org/10.1016/j.dsm.2023.04.003}
+	
+	
+	\subsection{Article 4}
+	
+	{\color{deepred}\fontspec{Georgia} by Jiaming Luo}
+
+	
+	\textit{Introduction}
+	
+	The paper I chose is titled \textit{Understanding the Performance of Machine Learning Models to Predict Credit Default: A Novel Approach for Supervisory Evaluation} by Andr\'{e}s Alonso and Jos\'{e} Manuel Carb\'{o}. The paper studies how different machine learning (ML) methods perform in credit default prediction using a unique, anonymized dataset from a major Spanish bank. The authors compare a traditional benchmark---logistic regression (Logit)---with a set of widely used ML models: Lasso-penalized logistic regression, CART, Random Forest, XGBoost, and Deep Neural Networks. Importantly, they evaluate models the way a regulator or supervisor would validate an Internal Ratings-Based (IRB) system, focusing on both classification (discriminating default vs.\ non-default) and calibration (whether predicted probabilities match observed default rates).
+	
+	\medskip
+	
+	\textit{Motivation}
+	
+	ML models are increasingly used in credit risk management---covering credit scoring, provisioning, monitoring, and regulatory capital calculation---but from a supervisory perspective they raise concerns around interpretability, stability, and governance. The paper argues that before supervisors can decide how to regulate ML, it is important to understand the size of the potential benefit in practical business terms. The authors frame a key tradeoff: ML can improve predictive performance, but may also increase ``supervisory cost'' (difficulty of evaluation and approval). They therefore aim to quantify not only predictive gains, but also the economic impact of improved prediction---especially in the form of regulatory capital savings under Basel IRB rules.
+	
+	\medskip
+	
+	\textit{Data and Setup}
+	
+	The authors use an anonymized dataset from Banco Santander with more than 75,000 consumer credit operations. The dataset includes up to 370 risk factors per loan, but feature labels are intentionally not disclosed to preserve anonymization. The observed default rate is approximately 3.95\%. The data has no time dimension, so the study focuses on point-in-time default prediction rather than through-the-cycle modeling.
+	
+	Six models are trained and compared: Logit, Lasso-logit, CART, Random Forest, XGBoost, and Deep Neural Networks. The workflow uses standard validation practice: an 80/20 train-test split, out-of-sample evaluation, and standardized inputs (mean 0, variance 1). To separate ``information advantage'' (more data or features) from ``model advantage'' (algorithmic power), the authors run simulation exercises varying sample size and number of features, tracking how performance changes in each case.
+	
+	\medskip
+	
+	\textit{Main Findings}
+	
+	The paper documents three key results.
+	\begin{enumerate}
+		\item \textit{ML models outperform traditional Logit in classification.} Using AUC-ROC as the main discrimination metric, Logit performs worst and advanced ML models perform better, with XGBoost and Random Forest ranking best. The reported AUCs are approximately: Logit 0.79, Lasso 0.80, CART 0.81, Deep Neural Network 0.81, Random Forest 0.83, and XGBoost 0.84.
+		\item \textit{Calibration matters, and ML improves calibration.} The paper uses the Brier score and reliability curves to assess calibration. Differences in Brier score are numerically small due to the low default rate, but XGBoost and Random Forest again perform best. Traditional models such as Logit and Lasso can systematically under- or over-estimate the probability of default (PD) in certain probability ranges, while XGBoost and Random Forest stay closer to the 45-degree perfect calibration line.
+		\item \textit{More complex algorithms do not automatically predict better.} Deep Neural Networks are not consistently superior to tree-based ensembles. In both discrimination and calibration, tree-based methods often win despite neural networks being architecturally more complex.
+	\end{enumerate}
+	
+	\medskip
+	
+	\textit{Intro Section (tentative)}
+	
+	Credit default prediction is a core component of modern credit risk management because it supports decisions about loan approval, pricing, provisioning, and capital planning. Recent work emphasizes that model quality should be evaluated not only by how well a model ranks borrowers by risk, but also by how accurately it estimates default probabilities, since PD is directly used in risk systems such as Basel's IRB framework. Alonso and Carb\'{o} study this issue by comparing traditional logistic regression with modern machine learning approaches---including Lasso-logit, CART, Random Forest, XGBoost, and Deep Neural Networks---using an anonymized dataset of more than 75,000 consumer loans from a major Spanish bank. Their results show that ML models typically outperform Logit in both discrimination and calibration, but that more complex algorithms do not necessarily predict better: tree-based ensemble methods, especially XGBoost and Random Forest, achieve the strongest overall performance. Importantly, the authors translate predictive gains into business impact by showing that improved PD estimation can lead to meaningful reductions in regulatory capital requirements under IRB-style calculations. Motivated by this literature, our project analyzes a public credit risk dataset and formulates default prediction as a binary classification problem using borrower and loan characteristics as predictors. We aim to compare baseline statistical models with machine learning methods, evaluate both discrimination and calibration performance, and identify the most important drivers of default risk, with the broader goal of building a model that is both accurate and practically useful for credit risk assessment and decision-making.
+	
+	\medskip
+	
+	\textit{Bibliography}
+	
+	\hangindent=1.5em
+	Alonso, A., \& Carb\'{o}, J.~M. (2020). Understanding the performance of machine learning models to predict credit default: A novel approach for supervisory evaluation (Preliminary draft). \texttt{https://www.eba.europa.eu/sites/default/files/document\_library/About\%20Us/EBA\%20Research\%20Workshops/2020/Papers/936774/2.2\%20Understanding\%20the\%20performance\%20of\%20machine\%20learning\%20models.pdf}
+	
+	\subsection{Article 5}
+	
+	{\color{deepred}\fontspec{Georgia} by Keyan Su}
+	
+	
+	\textit{Introduction}
+	
+	This paper provides a comprehensive update to the influential 2003 benchmarking study by Baesens et al.\ on classification algorithms for credit scoring.
+	
+	\medskip
+	
+	\textit{Methodology}
+	
+	The study compares 41 classification algorithms across eight real-world retail credit scoring datasets. The classifiers span three categories: individual classifiers, homogeneous ensembles, and heterogeneous ensembles that combine multiple algorithm types. Using $N\times 2$ cross-validation, the authors evaluate performance using six measures. Non-parametric statistical tests (Friedman test with post-hoc procedures) ensure robust comparisons.
+	
+	\medskip
+	
+	\textit{Key Findings}
+	
+	Heterogeneous ensemble classifiers dominate the top rankings, securing the first 11 positions overall. The best-performing classifier is HCES-Bag, followed by weighted averaging ensembles. Random forest emerges as the strongest homogeneous ensemble (ranked 12th), while logistic regression---the industry standard---ranks only 24th.
+	
+	\medskip
+	
+	\textit{Financial Implications}
+	
+	The authors use a cost-sensitive analysis with varying misclassification cost ratios and find that advanced classifiers can reduce error costs by 3--6\% compared to logistic regression. However, the most statistically accurate classifier (HCES-Bag) does not always yield the highest cost savings, particularly when the cost of misclassifying bad risks is very high.
+	
+	\medskip
+	
+	\textit{Performance Measure Analysis}
+	
+	Correlation analysis reveals that AUC, H-measure, PCC, and KS produce highly similar classifier rankings. However, the Brier Score and partial Gini index capture distinct performance aspects, leading the authors to recommend using at least three measures: AUC (or H-measure), partial Gini, and Brier Score.
+	
+	\medskip
+	
+	\textit{Conclusions}
+	
+	The authors recommend random forest as a minimum benchmark for future studies and caution against using logistic regression as the sole comparator. Research attention might usefully shift toward data quality, variable selection, and LGD/EAD modeling.
+	
+	\medskip
+	
+	\textit{Bibliography}
+	
+	\hangindent=1.5em
+	Lessmann, S., Baesens, B., Seow, H.-V., \& Thomas, L.~C. (2015). Benchmarking state-of-the-art classification algorithms for credit scoring: An update of research. \textit{European Journal of Operational Research}, \textit{247}(1), 124--136.
+
+	
+	\subsection{Article 6}
+	
+	{\color{deepred}\fontspec{Georgia} by Elden Griggs}
+	
+		\textit{Summary on ``Credit Risk Scoring Analysis Based on Machine Learning Models''}
+
+	
+	\textit{Introduction}
+	
+	This paper examines the Home Credit Default Risk Kaggle dataset and evaluates several different feature engineering techniques and machine learning models. The techniques and models were compared on the basis of AUC score. The results suggest that a LightGBM model trained on expert-crafted feature datasets can achieve the best results on their dataset, which is conceptually similar to ours but considerably larger in size.
+	
+	\medskip
+	
+	\textit{Methodology}
+	
+	The authors first preprocess their data by discarding features that contain over 70\% null values and apply three methods of imputation. They one-hot encode categorical variables and use label encoding for features with fewer than two categories. Features are constructed using both a polynomial approach and an expert-crafted approach. Three model types are then compared: logistic regression, random forest, and LightGBM.
+	
+	\medskip
+	
+	\textit{Conclusions}
+	
+	LightGBM performs the best based on AUC score. There are some similarities between their dataset and ours in terms of outcome, but major differences exist in the number of features and sample size $N$. Given our smaller feature set, it is likely that we will not need to construct polynomial features.
+	
+	\medskip
+	
+	\textit{Bibliography}
+	
+	\hangindent=1.5em
+	Qiu, Z., Li, Y., Ni, P., \& Li, G. (2019). Credit risk scoring analysis based on machine learning models. In \textit{2019 6th International Conference on Information Science and Control Engineering (ICISCE)} (pp.\ 220--223). IEEE. \texttt{https://doi.org/10.1109/ICISCE48695.2019.00052}
+		
 		\clearpage
 		
 		\section{Question 2}
@@ -382,7 +661,7 @@
 		
 		\clearpage
 		
-		\subsection{Part iv}
+		\subsection{Part IV}
 		
 		First I need to pool and rank all $m+n=25$ observations. Here we combine Group 1 ($m=10$) and Group 2 ($n=15$) and sorting gives the following ranks:
 		
@@ -426,7 +705,7 @@
 		For the Mann-Whitney $U$ statistic, which is related to $T_1$, we can get as
 		$$U = T_1 - \frac{m(m+1)}{2} = 83 - \frac{10\cdot 11}{2} = 83 - 55 = 28.$$
 		
-		Also the hint below gives a reexamine tool by using R-package, but I manually coded up the function in Python as below, as it might be more sophisticated and useful than R. However, I also put the R code for this assignment in my Github repository. 
+		Also the hint below gives a reexamine tool by using R-package, but I manually coded up the function in Python as below, as it might be more sophisticated and useful than R. However, I also put the R code for this assignment in my \href{https://github.com/zongyiliu/STAT_5291/tree/main/Homework/Homework_2}{Github repository}.
 		\begin{lstlisting}
 			def my_wilcoxon(data_1, data_2):
 			combined = [(x, 1) for x in data_1] + [(y, 2) for y in data_2]
@@ -474,7 +753,7 @@
 		$E[T_1] = \frac{m(m+n+1)}{2} = \frac{10\times 26}{2} = 130.$ The observed value $T_1=83$ is considerably smaller than $130$, which provides evidence in favour of $H_A: \mu_1-\mu_2 < 0$.
 		\clearpage
 		
-		\subsection{Part v}
+		\subsection{Part V}
 		
 		To simulate the sampling distribution of $T_1$ under $H_0$, I generated
 		$X_1,\dots,X_{10}$ and $Y_1,\dots,Y_{15}$ independently from the same continuous
@@ -562,7 +841,7 @@
 		
 		\clearpage
 		
-		\subsection{Part vi}
+		\subsection{Part VI}
 		
 		For the observed data, $m=10$, $n=15$, and the Wilcoxon rank-sum statistic for
 		Group 1 is $T_1=83$. Because the alternative is $H_A:\mu_1-\mu_2<0$, smaller values of $T_1$ provide
@@ -636,7 +915,7 @@
 			# observed Wilcoxon statistic
 			T1_obs = my_wilcoxon(Group1, Group2)
 			
-			# ---- Monte Carlo p-value under H0 ----
+			# Monte Carlo p-value under H0
 			# under H0, both groups come from the same continuous distribution
 			# choose N(0,1) for both
 			np.random.seed(123)
@@ -672,6 +951,7 @@
 		\section{Question 3}
 		
 		{\color{deepred}\fontspec{Georgia} Parametric and Nonparametric Two-sample Procedures}
+		
 		
 		Consider the toy dataset from Problem 2, which consists of a continuous response variable split by the respective groups. Equivalently, each group represents a realization from a continuous population. We are interested in the two-tailed test:
 		
@@ -744,6 +1024,7 @@
 		
 		\textbf{Answer}
 		
+		Full codes are put in my \href{https://github.com/zongyiliu/STAT_5291/tree/main/Homework/Homework_2}{Github repository}.
 		
 		\subsection{Part I}
 		
@@ -912,7 +1193,7 @@
 		
 		\clearpage
 		
-		\subsection{Part iv}
+		\subsection{Part IV}
 		
 		
 		We test
@@ -981,7 +1262,7 @@
 		
 		\clearpage
 		
-		\subsection{Part v}
+		\subsection{Part V}
 		
 		
 		We test
@@ -1060,8 +1341,6 @@
 		
 		{\color{deepred}\fontspec{Georgia} Power and Sample Size Determination}
 		
-		\medskip
-		
 		Consider the two-sample pooled t-procedure for testing the upper tailed hypothesis:
 		
 		\[
@@ -1110,6 +1389,8 @@
 		
 		\textbf{Answer}
 		
+		Full codes are put in my \href{https://github.com/zongyiliu/STAT_5291/tree/main/Homework/Homework_2}{Github repository}.
+		
 		\subsection{Part I}
 		
 		We test
@@ -1129,41 +1410,73 @@
 		
 		Thus $T\sim t_\nu(\delta)$. The power function is therefore $\pi(\Delta)
 		=P_\Delta(T>t_{\alpha,\nu})
-		=1-F_{t_\nu(\delta)}(t_{\alpha,\nu})$, where $F_{t_\nu(\delta)}$ is the CDF of the noncentral $t$ distribution.
-		
-		Hence the noncentrality parameter is ${\delta=\frac{(\mu_1-\mu_2)-\Delta_0}{\sigma\sqrt{\frac1m+\frac1n}}}$.
+		=1-F_{t_\nu(\delta)}(t_{\alpha,\nu})$, where $F_{t_\nu(\delta)}$ is the CDF of the noncentral $t$ distribution. Hence the noncentrality parameter is ${\delta=\frac{(\mu_1-\mu_2)-\Delta_0}{\sigma\sqrt{\frac1m+\frac1n}}}$.
 		
 		\clearpage
 		
 		\subsection{Part II}
 		
 		
-		Assume a balanced design with $m=n$. Let the common sample size be $n$. Then $\delta=\frac{(\mu_1-\mu_2)-\Delta_0}{\sigma\sqrt{2/n}}$.
+		Assume a balanced design with $m=n$, so that $\nu=2n-2$ degrees of freedom and
+		$\delta=\frac{(\mu_1-\mu_2)-\Delta_0}{\sigma\sqrt{2/n}}=d_0\sqrt{\frac{n}{2}},$
+		where $d_0=\frac{(\mu_1-\mu_2)-\Delta_0}{\sigma}$ is the standardized effect relative to the null value.
 		
-		The pilot study estimates the effect size $d=\frac{\mu_2-\mu_1}{\sigma}$. Since the test is written in terms of $\mu_1-\mu_2$, we note that
-		$\frac{\mu_1-\mu_2}{\sigma}=-d$. Define the standardized effect relative to the null value as $d_0=\frac{(\mu_1-\mu_2)-\Delta_0}{\sigma}$.
+		The pilot study estimates the effect size $d=\frac{\mu_2-\mu_1}{\sigma}$, so that $\frac{\mu_1-\mu_2}{\sigma}=-d$. When $\Delta_0=0$, we have $d_0=-d$, and hence
+		$\delta = -d\sqrt{\frac{n}{2}}.$
 		
-		Then under a balanced design ${\delta=d_0\sqrt{\frac n2}}$. The required sample size is the smallest $n$ such that $P(t_{2n-2}(\delta)>t_{\alpha,2n-2})\ge1-\beta$, with $\delta=d_0\sqrt{n/2}$.
+		The power of the upper-tailed test at sample size $n$ is
+		$$\text{power}(n) = P(t_{2n-2}(\delta) > t_{\alpha,\,2n-2}) = 1 - F_{t_{2n-2}(\delta)}(t_{\alpha,\,2n-2}),$$
+		where $F_{t_{2n-2}(\delta)}$ denotes the CDF of the noncentral $t$ distribution with $2n-2$ degrees of freedom and noncentrality parameter $\delta=d_0\sqrt{n/2}$.
 		
-		Equivalently, ${\text{choose the smallest }n\text{ such that }
-			1-F_{t_{2n-2}(d_0\sqrt{n/2})}(t_{\alpha,2n-2})\ge1-\beta}$. We use a normal approximation to the noncentral $t$, the desired power $1-\beta$ satisfies approximately
-		$\delta\approx z_{1-\alpha}+z_{1-\beta}$.
-		Since $\delta=d_0\sqrt{n/2}$, we obtain
-		$d_0\sqrt{\frac n2}\approx z_{1-\alpha}+z_{1-\beta}$.
-		Solving for $n$ gives
-		${n\approx\frac{2(z_{1-\alpha}+z_{1-\beta})^2}{d_0^2}}$.
+		To find the minimal sample size achieving pre-specified power $1-\beta$, we require the smallest $n$ such that
+		$$1 - F_{t_{2n-2}(d_0\sqrt{n/2})}(t_{\alpha,\,2n-2}) \geq 1-\beta.$$
 		
-		If $\Delta_0=0$, then $d_0=(\mu_1-\mu_2)/\sigma=-d$, so
-		${n\approx\frac{2(z_{1-\alpha}+z_{1-\beta})^2}{d^2}}$.
-		Finally, since the sample size must be an integer, choose
-		${n_{\min}=\left\lceil\frac{2(z_{1-\alpha}+z_{1-\beta})^2}{d_0^2}\right\rceil}$
-		as the approximate minimal sample size per group.
+		For a large-sample approximation, we replace the noncentral $t$ by a normal distribution. The upper-tailed test rejects when $T > t_{\alpha,\nu} \approx z_{1-\alpha}$, and the power condition becomes approximately
+		$$\delta \approx z_{1-\alpha} + z_{1-\beta},$$
+		where $z_{1-\alpha}$ and $z_{1-\beta}$ are the $(1-\alpha)$- and $(1-\beta)$-quantiles of the standard normal distribution. Substituting $\delta = d_0\sqrt{n/2}$ and solving for $n$ gives
+		$$d_0\sqrt{\frac{n}{2}} \approx z_{1-\alpha}+z_{1-\beta} \implies n \approx \frac{2(z_{1-\alpha}+z_{1-\beta})^2}{d_0^2}.$$
+		
+		Since $n$ must be a positive integer, the approximate minimal sample size per group is
+		$n_{\min} = \left\lceil \frac{2(z_{1-\alpha}+z_{1-\beta})^2}{d_0^2} \right\rceil.$
+		
+		When $\Delta_0=0$, we have $d_0^2=d^2$, so
+		$n_{\min} = \left\lceil \frac{2(z_{1-\alpha}+z_{1-\beta})^2}{d^2} \right\rceil.$ The power curve $\text{power}(n)$ for $n=2,3,\dots,200$ is computed exactly using the noncentral $t$ CDF for fixed $\alpha$ and fixed effect size $d$ (or equivalently fixed $\delta$).
 		
 		\clearpage
 		
 		\subsection{Part III}
 		
-		\includegraphics[max width=0.6\textwidth, center]{Q4_P1}
+		
+		Assume a balanced design with $m=n$. Under $H_A:\mu_1-\mu_2>0$ with $\Delta_0=0$, the noncentrality parameter is
+		$$\delta = \frac{\mu_1-\mu_2}{\sigma}\sqrt{\frac{n}{2}} = -d\sqrt{\frac{n}{2}},$$
+		where $d=(\mu_2-\mu_1)/\sigma$ is estimated from each pilot study via the pooled estimator
+		$\hat d = \frac{\bar Y - \bar X}{S_p}, \qquad S_p = \sqrt{\frac{(n_1-1)S_1^2+(n_2-1)S_2^2}{n_1+n_2-2}}.$
+		
+		For a fixed $\alpha$ and fixed $d$, the power at balanced sample size $n$ is
+		$\text{power}(n) = 1 - F_{t_{2n-2}(\delta)}(t_{\alpha,\,2n-2}),$
+		where $F_{t_{2n-2}(\delta)}$ is the CDF of the noncentral $t$ distribution with $2n-2$ degrees of freedom and noncentrality parameter $\delta = -d\sqrt{n/2}$, and $t_{\alpha,\,2n-2}$ is the upper-$\alpha$ critical value of the central $t_{2n-2}$ distribution.
+		
+		The three pilot studies yield the following estimated effect sizes:
+		
+		\begin{center}
+			\begin{tabular}{cc}
+				\hline
+				Pilot Study & $\hat d$ \\
+				\hline
+				Dataset 1 & $0.21$ \\
+				Dataset 2 & $0.31$ \\
+				Dataset 3 & $0.44$ \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		For each dataset and each $\alpha\in\{0.05,0.10\}$, the power curve $\text{power}(n)$ for $n=2,3,\dots,200$ is computed using the noncentral $t$ CDF. The six resulting curves are shown below.
+		
+		As expected, power increases with $n$ for all curves. Larger effect sizes (Dataset 3, $\hat d=0.44$) reach the target power of $0.80$ at a smaller sample size than smaller effect sizes (Dataset 1, $\hat d=0.21$). Similarly, a larger significance level $\alpha=0.10$ yields higher power than $\alpha=0.05$ for any fixed $n$ and $d$.
+		
+			\includegraphics[width=0.85\textwidth]{Q4_P1_2.png}
+			
+
 		
 		\clearpage
 		
@@ -1280,15 +1593,11 @@
 		
 		\subsection{Part II}
 		
-		To maximize $\mathcal L$, equivalently maximize $\ell$.
-		
-		Differentiating with respect to $\mu_1$ and $\mu_2$ gives
+		To maximize $\mathcal L$, equivalently maximize $\ell$. Differentiating with respect to $\mu_1$ and $\mu_2$ gives
 		$
 		\hat\mu_1=\bar X,  \hat\mu_2=\bar Y.
-		$
-		
-		Substituting these into the log-likelihood, we maximize in $\sigma^2$:
-		$
+		$ Substituting these into the log-likelihood, we maximize in $\sigma^2$:
+		$$
 		\ell(\bar X,\bar Y,\sigma^2)
 		=
 		-\frac{m+n}{2}\log(2\pi)
@@ -1297,7 +1606,7 @@
 		\left[
 		\sum_{i=1}^m (x_i-\bar X)^2+\sum_{j=1}^n (y_j-\bar Y)^2
 		\right].
-		$
+		$$
 		Hence
 		$
 		\hat\sigma^2
@@ -1308,9 +1617,7 @@
 		\right]
 		=
 		\frac{SSE_1+SSE_2}{m+n}.
-		$
-		
-		Therefore the unrestricted MLE is
+		$ Therefore the unrestricted MLE is
 		$
 		\hat\theta=
 		\left(
@@ -1322,9 +1629,9 @@
 		
 		\subsection{Part III}
 		
-		Under $H_0:\mu_1-\mu_2=0$, we write $\mu_1=\mu_2=\mu$. Then the likelihood becomes
+		Under $H_0:\mu_1-\mu_2=0$, we write $\mu_1=\mu_2=\mu$. Then the likelihood becomes $
+		\mathcal L_0(\mu,\sigma^2)$\\
 		$
-		\mathcal L_0(\mu,\sigma^2)
 		=
 		(2\pi\sigma^2)^{-(m+n)/2}
 		\exp\!\left(
@@ -1333,9 +1640,7 @@
 		\sum_{i=1}^m (x_i-\mu)^2+\sum_{j=1}^n (y_j-\mu)^2
 		\right]
 		\right).
-		$
-		
-		The MLE of $\mu$ under $H_0$ is the combined sample mean
+		$ The MLE of $\mu$ under $H_0$ is the combined sample mean
 		$
 		\hat\mu_0=\bar Z=\frac{m\bar X+n\bar Y}{m+n}.
 		$
@@ -1348,11 +1653,9 @@
 		\left[
 		\sum_{i=1}^m (x_i-\bar Z)^2+\sum_{j=1}^n (y_j-\bar Z)^2
 		\right].
+		$ Using the identity
 		$
-		
-		Using the identity
-		$
-		\sum_{i=1}^m (x_i-\bar Z)^2+\sum_{j=1}^n (y_j-\bar Z)^2
+		\sum_{i=1}^m (x_i-\bar Z)^2+\sum_{j=1}^n (y_j-\bar Z)^2$$
 		=
 		SSE_1+SSE_2+\frac{mn}{m+n}(\bar X-\bar Y)^2,
 		$
@@ -1390,7 +1693,7 @@
 		
 		\clearpage
 		
-		\subsection{Part iv}
+		\subsection{Part IV}
 		
 		Recall the pooled variance
 		$
@@ -1458,8 +1761,6 @@
 		
 		{\color{deepred}\fontspec{Georgia} Parametric and Non-parametric Paired Procedures}
 		
-		\medskip
-		
 		Consider testing the stopping distance [ft] of two types of tires on 6 different cars. 
 		The response variable is the stopping distance of the car after the brakes are applied 
 		at 60 mph. The two types of tires are: Winter and High Performance. 
@@ -1492,7 +1793,7 @@
 			
 			\[
 			H_0 : \mu_D = 0 
-			\text{versus} 
+			\text{ versus } 
 			H_A : \mu_D \neq 0 .
 			\]
 			
@@ -1502,7 +1803,7 @@
 			
 			\[
 			H_0 : \mu_D = 0 
-			\text{versus} 
+			\text{ versus } 
 			H_A : \mu_D \neq 0 .
 			\]
 			
@@ -1513,57 +1814,44 @@
 		
 		\textbf{Answer}
 		
+		
+		
+		
+		\subsection{Part I}
 		Let $X$ denote the stopping distance for High Performance tires and $Y$ the stopping distance for Winter tires. Define paired differences
 		$
 		D_i = X_i - Y_i,  i=1,\dots,6.
 		$
-		
 		From the data we obtain
 		$
 		D = (-12.9,-27.0,-16.8,-8.0,-16.5,-18.1).
 		$
-		
-		
-		\subsection{Part I}
 		
 		We test
 		$
 		H_0:\mu_D=0
 		\text{vs} 
 		H_A:\mu_D\ne 0.
-		$
-		
-		First compute the sample mean
+		$ First compute the sample mean
 		$
 		\bar D=\frac{1}{6}\sum_{i=1}^6 D_i
 		= -16.55.
-		$
-		
-		Next compute the sample standard deviation
+		$ Next compute the sample standard deviation
 		$
 		s_D \approx 6.49.
-		$
-		
-		The test statistic is
+		$ The test statistic is
 		$
 		t=\frac{\bar D-0}{s_D/\sqrt{n}}
 		=\frac{-16.55}{6.49/\sqrt{6}}
 		\approx -6.25.
-		$
-		
-		The degrees of freedom are
+		$ The degrees of freedom are
 		$
 		df=n-1=5.
 		$
 		
 		For a two–sided test, the critical value at $\alpha=0.05$ is approximately
 		$
-		t_{0.025,5}\approx 2.571.
-		$
-		
-		Since $|t|=6.25>2.571$, we reject $H_0$. The $p$–value is very small ($p<0.01$).
-		
-		\medskip
+		t_{0.025,5}\approx 2.571.$ Since $|t|=6.25>2.571$, we reject $H_0$. The $p$–value is very small ($p<0.01$).
 		
 		There is strong evidence that the mean stopping distance differs between the two tire types. Because $\bar D<0$, High Performance tires tend to have shorter stopping distances than Winter tires.
 		
@@ -1571,26 +1859,16 @@
 		
 		\subsection{Part II}
 		
-		Again test
-		$
-		H_0:\mu_D=0
-		\text{vs} 
-		H_A:\mu_D\ne 0.
-		$
+		Again test $H_0:\mu_D=0$ vs $H_A:\mu_D\ne 0$.
 		
-		Compute the absolute differences
-		$
-		|D|=(12.9,27.0,16.8,8.0,16.5,18.1).
-		$
-		
-		Rank them from smallest to largest:
+		Compute the absolute differences $|D|=(12.9,27.0,16.8,8.0,16.5,18.1)$ and rank them from smallest to largest:
 		
 		\begin{center}
 			\begin{tabular}{ccc}
 				\hline
 				$D_i$ & $|D_i|$ & Rank \\
 				\hline
-				$-8.0$ & 8.0 & 1 \\
+				$-8.0$  & 8.0  & 1 \\
 				$-12.9$ & 12.9 & 2 \\
 				$-16.5$ & 16.5 & 3 \\
 				$-16.8$ & 16.8 & 4 \\
@@ -1600,27 +1878,13 @@
 			\end{tabular}
 		\end{center}
 		
-		All differences are negative, so
+		Since all differences are negative, the positive and negative rank sums are
+		$$W_+ = 0, \qquad W_- = 1+2+3+4+5+6 = 21.$$
+		The Wilcoxon signed-rank statistic is $W = \min(W_+, W_-) = 0$.
 		
-		$
-		W_+=0,  W_- = 1+2+3+4+5+6=21.
-		$
-		
-		The Wilcoxon statistic is
-		$
-		W=\min(W_+,W_-)=0.
-		$
-		
-		For $n=6$, the exact two–sided $p$–value is
-		$
-		p=\frac{2}{2^6}=0.03125.
-		$
-		
-		
-		Since $p<0.05$, we reject $H_0$. The Wilcoxon signed–rank test also indicates that the stopping distance differs between the tire types.
-		
-		Overall, both the paired $t$–test and the Wilcoxon signed–rank test provide evidence that the stopping distances differ between High Performance and Winter tires, with High Performance tires producing shorter stopping distances on average.
-		
+		To compute the exact two-sided $p$-value, note that under $H_0$ each of the $2^6 = 64$ sign assignments is equally likely. The value $W_+ = 0$ occurs only when all six differences are assigned a negative sign, which corresponds to exactly $1$ out of $64$ arrangements. For a two-sided test we double this probability, giving
+		$$p = \frac{2 \times 1}{2^6} = \frac{2}{64} = 0.03125.$$
+		Since $p = 0.03125 < 0.05$, we reject $H_0$ and conclude that the stopping distance differs significantly between the two tire types.
 		\clearpage
 		
 		\section{Question 7}
@@ -1895,7 +2159,7 @@
 			$$p\text{-value}=\mathbb{P}\!\left(\chi^2_{K-3}\ge Q_{\mathrm{obs}}\right),$$
 			and we reject when this is less than $\alpha$.
 		\end{enumerate}
-	
+		
 		To compare this test with Q-Q plots, one could simulate:
 		\begin{itemize}
 			\item Normal data, e.g.\ $X_i\sim N(0,1)$;
