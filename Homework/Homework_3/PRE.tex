@@ -1,0 +1,578 @@
+\documentclass[letterpaper]{article} 
+\usepackage[utf8]{inputenc}
+\linespread{0.85}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{fontspec}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[version=4]{mhchem}
+\usepackage{stmaryrd}
+\usepackage[dvipsnames]{xcolor}
+\colorlet{LightRubineRed}{RubineRed!70}
+\colorlet{Mycolor1}{green!10!orange}
+\definecolor{Mycolor2}{HTML}{00F9DE}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{lipsum}
+\usepackage{fancyvrb}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage[export]{adjustbox}
+\graphicspath{ {./images/} }
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{float}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{tcolorbox}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\definecolor{deepred}{RGB}{139,0,0}
+\usepackage{hyperref} 
+\usepackage{xcolor} % For custom colors
+\lstset{
+	language=Python,                % Choose the language (e.g., Python, C, R)
+	basicstyle=\ttfamily\small, % Font size and type
+	keywordstyle=\color{blue},  % Keywords color
+	commentstyle=\color{gray},  % Comments color
+	stringstyle=\color{red},    % String color
+	numbers=left,               % Line numbers
+	numberstyle=\tiny\color{gray}, % Line number style
+	stepnumber=1,               % Numbering step
+	breaklines=true,            % Auto line break
+	backgroundcolor=\color{black!5}, % Light gray background
+	frame=single,               % Frame around the code
+}
+\usepackage{float}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+	\usepackage[]{amssymb} %gives us the character \varnothing
+	
+	
+	\title{Homework 3, STAT 5291}
+	\author{Zongyi Liu}
+	\date{Sun, Mar 22, 2026}
+	\begin{document}
+		\maketitle
+		
+		\section{Question 1}
+		
+		{\color{deepred}\fontspec{Georgia} Problem 1: Project Contribution: Model and Testing}
+		
+		Present the following tasks in a meaningful order so that you can start including sections in your write-up. Note that each project group member can submit an identical solution for Problem 1.
+		
+		\emph{Perform the following tasks}
+		\begin{itemize}
+			\item[(i)] List out your project teammates (names and UNIs).
+			\item[(ii)] Fit one or two statistical models related to your project. If you are not ready to fit your final model, then fit a preliminary model which can be used as a baseline. Make sure to include summary output of your chosen model, which is analogous to the classic linear regression summary table. For more advanced models, use your best judgment on providing summary output.
+			\item[(iii)] If applicable, formally test at least one of your research questions using the model from Problem 1.ii. If you did not choose an inferential analysis, then provide some meaningful contribution to this problem part.
+			\item[(iv)] Perform a model validation procedure based on your chosen model from Problem 1.ii. Ideally, choose some form of cross-validation and check for stability in predictions or parameter estimates.
+			\item[(v)] Include one or two graphics that incorporate aspects of your estimated model, statistical conclusion or model validation.
+		\end{itemize}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+	\section{Question 2}
+	
+	{\color{deepred}\fontspec{Georgia}  Multinomial}
+	
+	\textbf{Idea of Multinomial}
+	
+	Consider rolling a $K$-sided die $n$ times with $N_1 = n_1, N_2 = n_2, \ldots, N_K = n_K$ are the outcomes of the rolls. Assume that each index $\{1, \ldots, K\}$, or equivalently each bin $\{B_1, \ldots, B_K\}$, takes on probabilities $p_1, \ldots, p_K$, such that $\sum_{k=1}^{K} p_k = 1$.
+	
+	
+	\textbf{Multinomial Random Variable}
+	
+	Let the random vector $(N_1 \ \cdots \ N_K)$ be distributed multinomial with parameters $(p_1 \ \cdots \ p_K)$, such that $\sum_{j=1}^{K} p_j = 1$. The probability mass function of the multinomial distribution is
+	\[
+	f(n_1, \ldots, n_K;\, p_1, \ldots, p_K) \frac{n!}{n_1! \cdots n_K!} \prod_{k=1}^{K} p_k^{n_k}.
+	\]
+	
+	The support of any $n_k$ is $\{0, \ldots, n\}$ such that $\sum_{k=1}^{K} n_k = n$.
+	
+	\bigskip
+	
+	\emph{Perform the following tasks}
+	\begin{itemize}
+		\item[(i)] For a fixed bin $B_k$, derive the mean of $N_k$.
+		\item[(ii)] For a fixed bin $B_k$, derive the variance of $N_k$.
+		\item[(iii)] For a fixed bins $B_j, B_k$, derive the covariance of $N_j, N_k$ for $j \neq k$.
+	\end{itemize}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+	\section{Question 3}
+	
+	{\color{deepred}\fontspec{Georgia}  Goodness of Fit Proof}
+	
+	Let the random vector $(N_1 \ \cdots \ N_K)$ be distributed multinomial with parameters $(p_1 \ \cdots \ p_K)$, such that $\sum_{j=1}^{K} p_j = 1$.
+	
+	\emph{Perform the following tasks}
+	\begin{itemize}
+		\item[(i)] Consider the sequence of random variables $\{Y_{k,1}, Y_{k,2}, Y_{k,3}, \ldots\}$, where
+		\[
+		Y_k = Y_{k,n} = \frac{N_k - np_k}{\sqrt{np_k}}.
+		\]
+		For fixed $k$, show that $Y_{k,n} \xrightarrow{d} N(0, 1 - p_k)$, as $n \to \infty$.
+		
+		\item[(ii)] Derive an expression for $Cov(Y_j, Y_k)$ for $j \neq k$. Note that for $j = k$, $Cov(Y_k, Y_k) = var(Y_k) = 1 - p_k$.
+		
+		\item[(iii)] Consider a sequence of iid standard normals $Z_1, Z_2, \ldots, Z_K$ and define the vectors
+		\[
+		\mathbf{Z} = (Z_1 \ \cdots \ Z_K)^T \qquad \text{and} \qquad \mathbf{p} = (\sqrt{p_1} \ \cdots \ \sqrt{p_K})^T.
+		\]
+		Show that
+		\[
+		(Y_1 \ \cdots \ Y_K) \xrightarrow{d} \mathbf{W} = \mathbf{Z} - (\mathbf{Z} \cdot \mathbf{p})\mathbf{p}.
+		\]
+		
+		\item[(iv)] Let $\mathbf{W} = \mathbf{Z} - (\mathbf{Z} \cdot \mathbf{p})\mathbf{p}$, as before. Show that
+		\[
+		|\mathbf{W}|^2 = \mathbf{W}^T \mathbf{W} \overset{d}{\sim} \chi^2(df = K - 1).
+		\]
+		\emph{Note}: This problem has the potential to be a challenging proof. You can either use projection theory or prove it directly without it. Induction is also a common technique for proving similar results.
+		
+		\item[(v)] Using 3.i through 3.iv, conclude the limit:
+		\[
+		\sum_{k=1}^{K} \frac{(N_k - np_k)^2}{np_k} \xrightarrow{d} \chi^2_{df=K-1}.
+		\]
+	\end{itemize}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+	\section{Question 4}
+	
+	{\color{deepred}\fontspec{Georgia} Single Factor ANOVA Complete Problem}
+	
+	Consider a study with continuous response $(y)$ and four different treatment groups $(C,F_1,F_2,F_3)$. More specifically, suppose that the response variable is the weight loss [lbs] of each respondent over the course of two months. Each group represents $J=20$ males within the age range 35-40 years old and suppose that each respondent followed the same diet regimen. The treatment variable or explanatory variable of interest is the amount of physical activity (or fitness level). The experimenter is interested in the research question:
+	\[
+	\text{``Does increased physical activity yield different degrees of weight loss while dieting?''}
+	\]
+	
+	The four treatment groups represent the different fitness levels:
+	\[
+	\begin{aligned}
+		C   & = \text{Zero hours of cardio training and weight training per week} \\
+		F_1 & = \text{Two hours of cardio training per week} \\
+		F_2 & = \text{Two hours of weight training per week} \\
+		F_3 & = \text{Two hours of cardio training and two hours of weight training per week}
+	\end{aligned}
+	\]
+	
+	In this particular experiment, we assume a balanced design with $J=20,\ I=4$. The one-way anova model of interest is:
+	\begin{equation}
+		Y_{ij}=\mu+\alpha_i+\epsilon_{ij},
+		\qquad
+		\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+		\qquad
+		j=1,\ldots,20,
+		\qquad
+		i=1,2,3,4,
+	\end{equation}
+	Such that
+	\begin{equation}
+		\mu=\frac{1}{4}\sum_{i=1}^4 \mu_i,
+		\qquad
+		\alpha_i=\mu_i-\mu,
+		\qquad \text{and} \qquad
+		\sum_{i=1}^4 \alpha_i=0.
+	\end{equation}
+	
+	The data follows:
+	
+	\begin{center}
+		\begin{tabular}{c c c c}
+			\hline
+			$C$ & $F_1$ & $F_2$ & $F_3$ \\
+			$(i=1)$ & $(i=2)$ & $(i=3)$ & $(i=4)$ \\
+			\hline
+			16.30 & 22.60 & 14.60 & 26.10 \\
+			11.90 & 13.00 & 16.80 & 27.80 \\
+			19.30 & 30.10 & 16.90 & 19.70 \\
+			23.60 & 14.10 & 18.10 & 16.90 \\
+			15.10 & 21.00 & 20.20 & 23.30 \\
+			16.80 & 14.20 & 15.30 & 26.00 \\
+			8.50  & 19.80 & 17.60 & 23.90 \\
+			18.70 & 31.80 & 28.10 & 20.50 \\
+			15.20 & 27.00 & 19.10 & 21.00 \\
+			9.80  & 17.20 & 19.90 & 27.80 \\
+			23.60 & 16.60 & 18.70 & 23.10 \\
+			9.10  & 22.50 & 21.30 & 22.80 \\
+			18.30 & 14.10 & 16.00 & 24.90 \\
+			13.20 & 14.70 & 25.30 & 22.00 \\
+			12.00 & 25.70 & 13.30 & 23.40 \\
+			15.30 & 19.20 & 24.40 & 21.60 \\
+			23.50 & 23.20 & 11.40 & 24.00 \\
+			9.50  & 28.10 & 11.10 & 30.60 \\
+			13.60 & 19.00 & 18.40 & 29.10 \\
+			26.00 & 12.00 & 19.60 & 31.30 \\
+			\hline
+			$\bar{y}_1=15.965$ & $\bar{y}_2=20.295$ & $\bar{y}_3=18.305$ & $\bar{y}_4=24.290$ \\
+			\hline
+		\end{tabular}
+		
+		Table 1: Single factor ANOVA data
+	\end{center}
+	
+	\emph{Perform the following tasks}
+	\begin{enumerate}
+		\item[(i)] Assuming the one-way ANOVA model, estimate the parameters $\mu,\alpha_1,\alpha_2,\alpha_3,\alpha_4$ based on the group averages $\bar{y}_1,\bar{y}_2,\bar{y}_3,\bar{y}_3$.
+		
+		\item[(ii)] Suppose that the data is stacked and we assume the linear regression model:
+		\[
+		Y_i=\beta_0+\beta_1 x_{i1}+\beta_2 x_{i2}+\beta_3 x_{i3}+\epsilon_i,
+		\qquad
+		\epsilon_i\overset{iid}{\sim}N(0,\sigma^2),
+		\qquad
+		i=1,2,\ldots,80,
+		\]
+		\[
+		x_{i1}=
+		\begin{cases}
+			1 & \text{if } F_1 \\
+			0 & \text{if not } F_1
+		\end{cases}
+		\qquad
+		x_{i2}=
+		\begin{cases}
+			1 & \text{if } F_2 \\
+			0 & \text{if not } F_2
+		\end{cases}
+		\qquad
+		x_{i3}=
+		\begin{cases}
+			1 & \text{if } F_3 \\
+			0 & \text{if not } F_3
+		\end{cases}
+		\]
+		Estimate the parameters $\beta_0,\beta_1,\beta_2,\beta_3$ based on the group averages $\bar{y}_1,\bar{y}_2,\bar{y}_3,\bar{y}_3$.
+		
+		\item[(iii)] Run the relevant f-procedure to test the hypothesis:
+		\[
+		\text{``Does increased physical activity yield different degrees of weight loss while dieting?''}
+		\]
+		
+		For full credit, make sure to include the null/alternative pair, the anova table, the test statistic, p-value, statistical conclusion and interpretations.
+		
+		\item[(iv)] As a follow-up to problem 2.iii, run a Tukey post hoc procedure to test all pairwise means. Make sure to include all relevant steps in the analysis, including the interpretations.
+		
+		\item[(v)] As a follow-up to problem 2.iii, run a Dunnett's post hoc procedure to test all pairwise means against the control. Make sure to include all relevant steps in the analysis, including the interpretations.
+		
+		\item[(vi)] Suppose that the experimenter planned a priori that she was going to test the following five hypotheses:
+		\[
+		\begin{array}{rllll}
+			1) & H_0:\mu_1-\mu_2=0 & \text{versus} & H_A:\mu_1-\mu_2\neq 0 \\
+			2) & H_0:\mu_1-\mu_3=0 & \text{versus} & H_A:\mu_1-\mu_3\neq 0 \\
+			3) & H_0:\mu_1-\mu_4=0 & \text{versus} & H_A:\mu_1-\mu_4\neq 0 \\
+			4) & H_0:\mu_1-\dfrac{\mu_2+\mu_3+\mu_4}{3}=0 & \text{versus} & H_A:\mu_1-\dfrac{\mu_2+\mu_3+\mu_4}{3}\neq 0 \\
+			5) & H_0:\mu_2-\mu_3=0 & \text{versus} & H_A:\mu_2-\mu_3\neq 0
+		\end{array}
+		\]
+		
+		Test all the above hypotheses and adjust accordingly using the Bonferroni procedure. Make sure to include all relevant steps in the analysis, including the interpretations.
+		
+		\item[(vii)] Estimate the rejection rate of the ANOVA F-test based on the observed data from Table 1, i.e., estimate the power of the F-test.
+	\end{enumerate}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+	\section{Question 5}
+	
+	{\color{deepred}\fontspec{Georgia}   Single Factor ANOVA Expected Mean Squares}
+	
+	Assume the single factor ANOVA model:
+	\[
+	Y_{ij}=\mu+\alpha_i+\epsilon_{ij},
+	\qquad
+	\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+	\qquad
+	j=1,\ldots,J,
+	\qquad
+	i=1,\ldots,I,
+	\]
+	Such that
+	\begin{equation}
+		\mu=\frac{1}{I}\sum_{i=1}^I \mu_i,
+		\qquad
+		\alpha_i=\mu_i-\mu,
+		\qquad \text{and} \qquad
+		\sum_{i=1}^I \alpha_i=0.
+	\end{equation}
+	
+	Under the above model statement, prove the following identities:
+	\begin{enumerate}
+		\item[(i)]
+		$
+		E[\bar{Y}_{..}]=\mu
+		$
+		
+		\item[(ii)]
+		$
+		E[MSE]=\sigma^2
+		$
+		
+		\item[(iii)]
+		$
+		E[MSTr]=\sigma^2+\frac{J}{I-1}\sum_{i=1}^I \alpha_i^2
+		$
+	\end{enumerate}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+	\section{Question 6}
+	
+	{\color{deepred}\fontspec{Georgia}   Linear Regression}
+	
+	Consider the multiple linear regression model
+	\begin{equation}
+		Y_i=\beta_0+\beta_1 x_{i1}+\cdots+\beta_{p-1}x_{i,p-1}+\epsilon_i,
+		\qquad
+		\epsilon_i\overset{iid}{\sim}N(0,\sigma^2),
+		\qquad
+		i=1,2,\ldots,n,
+	\end{equation}
+	and assume that the design matrix $\mathbf{X}$ is full column rank. For known vector $\mathbf{c}\in\mathbb{R}^p$, define the linear parameter $\psi$ by
+	\[
+	\psi=\mathbf{c}^T\beta.
+	\]
+	
+	\emph{Perform the following tasks}
+	\begin{enumerate}
+		\item[(i)] Consider testing the null/alternative pair:
+		\[
+		H_0:\mathbf{c}^T\beta=0
+		\qquad
+		\text{versus}
+		\qquad
+		H_A:\mathbf{c}^T\beta\neq 0.
+		\]
+		
+		Show that the likelihood ratio test statistic can be based on
+		\[
+		T=\frac{\mathbf{c}^T\hat{\beta}}{\sqrt{\mathbf{c}^T(\widehat{\mathrm{var}}[\hat{\beta}])\mathbf{c}}},
+		\]
+		where
+		\[
+		\hat{\beta}=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+		\qquad \text{and} \qquad
+		\widehat{\mathrm{var}}[\hat{\beta}]=MSE(\mathbf{X}^T\mathbf{X})^{-1}.
+		\]
+		
+		\emph{Hint:} Use the method of Lagrange multiplier.
+		
+		\item[(ii)] Consider testing the null/alternative pair:
+		\[
+		H_0:\mathbf{c}^T\beta=0
+		\qquad
+		\text{versus}
+		\qquad
+		H_A:\mathbf{c}^T\beta>0.
+		\]
+		
+		Derive an expression for power($\psi'$), where $\psi'$ represents the departure from $H_0$.
+	\end{enumerate}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+	\section{Question 7}
+	
+	{\color{deepred}\fontspec{Georgia}  Block Design}
+	
+	Assume the model
+	\begin{equation}
+		Y_{ij}=\mu+\alpha_i+\beta_j+\epsilon_{ij},
+		\qquad
+		\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+		\qquad
+		j=1,\ldots,J,
+		\qquad
+		i=1,\ldots,I,
+	\end{equation}
+	and
+	\begin{equation}
+		\sum_{i=1}^I \alpha_i=0,
+		\qquad
+		\sum_{j=1}^J \beta_j=0.
+	\end{equation}
+	
+	\emph{Perform the following tasks}
+	\begin{enumerate}
+		\item[(i)] Prove that total variation $SST$ can be partitioned into three sources of variation $SSTr$, $SSB$ and $SSE$. More specifically, prove the additive identity:
+		\[
+		SST=SSTr+SSB+SSE
+		\]
+		
+		\item[(ii)] Prove the expected mean square relation:
+		\[
+		E[MSB]=\sigma^2+\frac{I}{J-1}\sum_{j=1}^J \beta_i^2
+		\]
+		
+		\item[(iii)] Consider an experiment consisting of $24$ respondents where each experimental unit was randomly assigned one of four drug groups: Control, Dose 1, Dose 2 and Dose 3. Assume that the response variable $(y)$ is some continuous biological measurement. The respondents were also chosen such that another health indicator could be used as a blocking variable with three levels: B1, B2 and B3. The data are displayed in Table 2. At 5\% significance, run the relevant testing procedure to see if drug dosage is statistically related to the response $y$, after controlling for the blocking variation. For full credit, fill out the relevant ANOVA table, identify the test statistic, compute the p-value and state the statistical conclusion.
+	\end{enumerate}
+	
+	\begin{center}
+		\begin{tabular}{c c c c c c c}
+			\hline
+			Group & \multicolumn{2}{c}{B1} & \multicolumn{2}{c}{B2} & \multicolumn{2}{c}{B3} \\
+			\hline
+			Control & 100.7 & 102.4 & 104.3 & 109.2 & 101.7 & 99.4 \\
+			Dose 1  & 103.5 & 104.0 & 107.7 & 105.9 & 104.5 & 102.3 \\
+			Dose 2  & 97.8  & 94.6  & 105.2 & 102.9 & 98.0  & 99.9 \\
+			Dose 3  & 102.6 & 102.2 & 106.8 & 106.6 & 100.1 & 96.0 \\
+			\hline
+		\end{tabular}
+		
+		Table 2: Randomized Block Data with $K=2$.
+	\end{center}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+	\section{Question 8}
+	{\color{deepred}\fontspec{Georgia}  Design Matrix, Least Squares Equation and Estimability}
+	
+	Consider the same two factor dataset from Table 2.
+	
+	\emph{Perform the following tasks}
+	\begin{enumerate}
+		\item[(i)] Assuming the two-factor model
+		\begin{equation}
+			Y_{ijk}=\mu+\alpha_i+\beta_j+\epsilon_{ijk},
+			\qquad
+			\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+			\qquad
+			j=1,2,3,
+			\qquad
+			i=1,2,3,4,
+			\qquad
+			k=1,2
+		\end{equation}
+		set up the rank-deficient design matrix $\mathbf{X}$ based on the parameter vector:
+		\[
+		\beta^T=(\mu \quad \alpha_1 \quad \alpha_2 \quad \alpha_3 \quad \alpha_4 \quad \beta_1 \quad \beta_2 \quad \beta_3)
+		\]
+		
+		Also, using R or Python or similar, compute the least squares solution. Denote $\hat{\beta}_{RD}$ as the rank deficient least squares solution. Do the estimates match your intuition?
+		
+		\item[(ii)] Assuming the two-factor model
+		\begin{equation}
+			Y_{ijk}=\mu+\alpha_i+\beta_j+\epsilon_{ijk},
+			\qquad
+			\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+			\qquad
+			j=1,2,3,
+			\qquad
+			i=1,2,3,4,
+			\qquad
+			k=1,2
+		\end{equation}
+		and
+		\begin{equation}
+			\sum_{i=1}^4 \alpha_i=0,
+			\qquad
+			\sum_{j=1}^3 \beta_j=0,
+		\end{equation}
+		set up the full-rank design matrix $\mathbf{X}$ based on the parameter vector:
+		\[
+		\beta^T=(\mu \quad \alpha_1 \quad \alpha_2 \quad \alpha_3 \quad \beta_1 \quad \beta_2)
+		\]
+		
+		Also, using R or Python or similar, compute the least squares solution. Denote $\hat{\beta}_{FR}$ as the unique full rank least squares solution. Do the estimates match your intuition?
+		
+		\item[(iii)] Consider the rank deficient model (7) and define the contrasts vectors
+		\[
+		c_1^T=(0 \quad 1 \quad -1 \quad 0 \quad 0 \quad 0 \quad 0 \quad 0)
+		\]
+		\[
+		c_2^T=(0 \quad 1 \quad -1/3 \quad -1/3 \quad -1/3 \quad 0 \quad 0 \quad 0)
+		\]
+		\[
+		c_3^T=(0 \quad 1 \quad 1 \quad 0 \quad 0 \quad -1 \quad -1 \quad 0)
+		\]
+		
+		Define analogous contrasts $c_1^*,c_2^*,c_3^*$ for the full rank model (8) and compute the following estimated contrasts
+		\[
+		c_1^T\hat{\beta}_{RD},
+		\qquad
+		(c_1^*)^T\hat{\beta}_{FR},
+		\qquad
+		c_2^T\hat{\beta}_{RD},
+		\qquad
+		(c_2^*)^T\hat{\beta}_{FR},
+		\qquad
+		c_3^T\hat{\beta}_{RD},
+		\qquad
+		(c_3^*)^T\hat{\beta}_{FR}.
+		\]
+		
+		Based on the estimated contrasts, determine which ones are estimable.
+	\end{enumerate}
+	
+		\textbf{Answer}
+	
+	\clearpage
+	
+	\section{Question 9}
+	Problem 9: Non-parametric [10 pts]
+	
+	Consider the following dataset, which includes the discrete response variable $y$ split by four groups Group1, Group2, Group3 and Group4. The data are displayed below:
+	
+	\begin{center}
+		\begin{tabular}{c c c c}
+			\hline
+			Group1 & Group2 & Group3 & Group4 \\
+			\hline
+			8  & 8  & 11 & 13 \\
+			10 & 14 & 12 & 17 \\
+			12 & 16 & 11 & 20 \\
+			10 & 14 & 23 & 15 \\
+			13 & 10 & 19 & 11 \\
+			12 & 11 & 11 & 17 \\
+			12 & 10 & 17 & 16 \\
+			15 & 9  & 17 & 5 \\
+			13 & 9  & 16 & 11 \\
+			9  & 12 & 16 & 20 \\
+			\hline
+		\end{tabular}
+	\end{center}
+	
+	Perform the following tasks:
+	\begin{enumerate}
+		\item[(i)] Run a Kruskal-Wallis test (at $\alpha=.05$) on the above dataset to check if the true average of the response differs per group. Ideally students should show each step by hand. Students will have to look up how to deal with ties when calculating the test statistic. Make sure to include all relevant steps in the testing procedure for full credit.
+		
+		\item[(ii)] Run a permutation test (at $\alpha=.05$) on the above dataset to check if the true average of the response differs per group. Make sure to include all relevant steps in the testing procedure for full credit.
+	\end{enumerate}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+		
+		
+		
+	\end{document}
