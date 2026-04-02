@@ -1,0 +1,1409 @@
+\documentclass[letterpaper]{article} 
+\usepackage[utf8]{inputenc}
+\linespread{0.85}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{fontspec}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[version=4]{mhchem}
+\usepackage{stmaryrd}
+\usepackage[dvipsnames]{xcolor}
+\colorlet{LightRubineRed}{RubineRed!70}
+\colorlet{Mycolor1}{green!10!orange}
+\definecolor{Mycolor2}{HTML}{00F9DE}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{lipsum}
+\usepackage{fancyvrb}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage[export]{adjustbox}
+\graphicspath{ {./images/} }
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{float}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{tcolorbox}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\definecolor{deepred}{RGB}{139,0,0}
+\usepackage{hyperref} 
+\usepackage{xcolor} % For custom colors
+\lstset{
+	language=Python,                % Choose the language (e.g., Python, C, R)
+	basicstyle=\ttfamily\small, % Font size and type
+	keywordstyle=\color{blue},  % Keywords color
+	commentstyle=\color{gray},  % Comments color
+	stringstyle=\color{red},    % String color
+	numbers=left,               % Line numbers
+	numberstyle=\tiny\color{gray}, % Line number style
+	stepnumber=1,               % Numbering step
+	breaklines=true,            % Auto line break
+	backgroundcolor=\color{black!5}, % Light gray background
+	frame=single,               % Frame around the code
+}
+\usepackage{float}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+	\usepackage[]{amssymb} %gives us the character \varnothing
+	
+	
+	\title{Homework 3, STAT 5291}
+	\author{Zongyi Liu}
+	\date{Sun, Mar 22, 2026}
+	\begin{document}
+		\maketitle
+		
+		\section{Question 1}
+		
+		{\color{deepred}\fontspec{Georgia} Problem 1: Project Contribution: Model and Testing}
+		
+		Present the following tasks in a meaningful order so that you can start including sections in your write-up. Note that each project group member can submit an identical solution for Problem 1.
+		
+		\emph{Perform the following tasks}
+		\begin{itemize}
+			\item[(i)] List out your project teammates (names and UNIs).
+			\item[(ii)] Fit one or two statistical models related to your project. If you are not ready to fit your final model, then fit a preliminary model which can be used as a baseline. Make sure to include summary output of your chosen model, which is analogous to the classic linear regression summary table. For more advanced models, use your best judgment on providing summary output.
+			\item[(iii)] If applicable, formally test at least one of your research questions using the model from Problem 1.ii. If you did not choose an inferential analysis, then provide some meaningful contribution to this problem part.
+			\item[(iv)] Perform a model validation procedure based on your chosen model from Problem 1.ii. Ideally, choose some form of cross-validation and check for stability in predictions or parameter estimates.
+			\item[(v)] Include one or two graphics that incorporate aspects of your estimated model, statistical conclusion or model validation.
+		\end{itemize}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+	\section{Question 2}
+	
+	{\color{deepred}\fontspec{Georgia}  Multinomial}
+	
+	\textbf{Idea of Multinomial}
+	
+	Consider rolling a $K$-sided die $n$ times with $N_1 = n_1, N_2 = n_2, \ldots, N_K = n_K$ are the outcomes of the rolls. Assume that each index $\{1, \ldots, K\}$, or equivalently each bin $\{B_1, \ldots, B_K\}$, takes on probabilities $p_1, \ldots, p_K$, such that $\sum_{k=1}^{K} p_k = 1$.
+	
+	
+	\textbf{Multinomial Random Variable}
+	
+	Let the random vector $(N_1 \ \cdots \ N_K)$ be distributed multinomial with parameters $(p_1 \ \cdots \ p_K)$, such that $\sum_{j=1}^{K} p_j = 1$. The probability mass function of the multinomial distribution is
+	\[
+	f(n_1, \ldots, n_K;\, p_1, \ldots, p_K) \frac{n!}{n_1! \cdots n_K!} \prod_{k=1}^{K} p_k^{n_k}.
+	\]
+	
+	The support of any $n_k$ is $\{0, \ldots, n\}$ such that $\sum_{k=1}^{K} n_k = n$.
+	
+	\bigskip
+	
+	\emph{Perform the following tasks}
+	\begin{itemize}
+		\item[(i)] For a fixed bin $B_k$, derive the mean of $N_k$.
+		\item[(ii)] For a fixed bin $B_k$, derive the variance of $N_k$.
+		\item[(iii)] For a fixed bins $B_j, B_k$, derive the covariance of $N_j, N_k$ for $j \neq k$.
+	\end{itemize}
+	
+	\textbf{Answer}
+	
+		
+		Let $(N_1, \ldots, N_K) \sim \text{Multinomial}(n;\, p_1, \ldots, p_K)$ with PMF
+		$f(n_1, \ldots, n_K;\, p_1, \ldots, p_K) = \frac{n!}{n_1! \cdots n_K!} \prod_{k=1}^{K} p_k^{n_k}$.
+		
+		\bigskip
+		
+		\noindent\textbf{Key Observation.} Define indicator variables $X_{ik}$ for $i = 1, \ldots, n$ and $k = 1, \ldots, K$, where $X_{ik} = 1$ if roll $i$ lands in bin $B_k$, and $X_{ik} = 0$ otherwise. Then each roll $i$ produces exactly one outcome, so $\sum_{k=1}^{K} X_{ik} = 1$ for all $i$. Note that $N_k = \sum_{i=1}^{n} X_{ik}$, and each $X_{ik} \sim \text{Bernoulli}(p_k)$, independently across rolls $i = 1, \ldots, n$.
+		
+		\bigskip
+		
+		\subsection*{(i) Mean of $N_k$}
+		
+		Using linearity of expectation,
+		$\mathbb{E}[N_k] = \mathbb{E}\!\left[\sum_{i=1}^{n} X_{ik}\right] = \sum_{i=1}^{n} \mathbb{E}[X_{ik}] = \sum_{i=1}^{n} p_k = np_k$,
+		and therefore $\boxed{\mathbb{E}[N_k] = np_k}$.
+		
+		\bigskip
+		
+		\subsection*{(ii) Variance of $N_k$}
+		
+		Since $X_{1k}, \ldots, X_{nk}$ are independent Bernoulli$(p_k)$ random variables, their variances add: $\operatorname{Var}(N_k) = \sum_{i=1}^{n} \operatorname{Var}(X_{ik})$. For each $X_{ik} \sim \text{Bernoulli}(p_k)$, $\operatorname{Var}(X_{ik}) = \mathbb{E}[X_{ik}^2] - (\mathbb{E}[X_{ik}])^2 = p_k - p_k^2 = p_k(1 - p_k)$. Therefore,
+		$\operatorname{Var}(N_k) = \sum_{i=1}^{n} p_k(1-p_k) = np_k(1-p_k)$,
+		and so $\boxed{\operatorname{Var}(N_k) = np_k(1 - p_k)}$.
+		
+		\bigskip
+		
+		\subsection*{(iii) Covariance of $N_j$ and $N_k$ for $j \neq k$}
+		
+		Write $N_j = \sum_{i=1}^n X_{ij}$ and $N_k = \sum_{i=1}^n X_{ik}$. Then
+		$\operatorname{Cov}(N_j, N_k) = \sum_{i=1}^{n}\sum_{i'=1}^{n} \operatorname{Cov}(X_{ij},\, X_{i'k})$.
+		Because rolls are independent, for $i \neq i'$ we have $\operatorname{Cov}(X_{ij}, X_{i'k}) = 0$, so only the diagonal terms survive: $\operatorname{Cov}(N_j, N_k) = \sum_{i=1}^{n} \operatorname{Cov}(X_{ij}, X_{ik})$. For a single roll $i$, bins $B_j$ and $B_k$ are mutually exclusive since $j \neq k$, so $X_{ij} \cdot X_{ik} = 0$ almost surely. Hence $\operatorname{Cov}(X_{ij}, X_{ik}) = \mathbb{E}[X_{ij} X_{ik}] - \mathbb{E}[X_{ij}]\,\mathbb{E}[X_{ik}] = 0 - p_j p_k = -p_jp_k$. Therefore,
+		$\operatorname{Cov}(N_j, N_k) = \sum_{i=1}^{n}(-p_jp_k) = -np_jp_k$,
+		and so $\boxed{\operatorname{Cov}(N_j, N_k) = -np_jp_k}$ for $j \neq k$.
+		
+		\bigskip
+		
+		\noindent\textbf{Remark.} The negative covariance is intuitive: since $\sum_{k=1}^K N_k = n$ is fixed, if one bin receives more counts, other bins must collectively receive fewer. This constraint forces any two distinct bin counts to be negatively correlated.
+
+	\clearpage
+	
+	\section{Question 3}
+	
+	{\color{deepred}\fontspec{Georgia}  Goodness of Fit Proof}
+	
+	Let the random vector $(N_1 \ \cdots \ N_K)$ be distributed multinomial with parameters $(p_1 \ \cdots \ p_K)$, such that $\sum_{j=1}^{K} p_j = 1$.
+	
+	\emph{Perform the following tasks}
+	\begin{itemize}
+		\item[(i)] Consider the sequence of random variables $\{Y_{k,1}, Y_{k,2}, Y_{k,3}, \ldots\}$, where
+		\[
+		Y_k = Y_{k,n} = \frac{N_k - np_k}{\sqrt{np_k}}.
+		\]
+		For fixed $k$, show that $Y_{k,n} \xrightarrow{d} N(0, 1 - p_k)$, as $n \to \infty$.
+		
+		\item[(ii)] Derive an expression for $Cov(Y_j, Y_k)$ for $j \neq k$. Note that for $j = k$, $Cov(Y_k, Y_k) = var(Y_k) = 1 - p_k$.
+		
+		\item[(iii)] Consider a sequence of iid standard normals $Z_1, Z_2, \ldots, Z_K$ and define the vectors
+		\[
+		\mathbf{Z} = (Z_1 \ \cdots \ Z_K)^T \qquad \text{and} \qquad \mathbf{p} = (\sqrt{p_1} \ \cdots \ \sqrt{p_K})^T.
+		\]
+		Show that
+		\[
+		(Y_1 \ \cdots \ Y_K) \xrightarrow{d} \mathbf{W} = \mathbf{Z} - (\mathbf{Z} \cdot \mathbf{p})\mathbf{p}.
+		\]
+		
+		\item[(iv)] Let $\mathbf{W} = \mathbf{Z} - (\mathbf{Z} \cdot \mathbf{p})\mathbf{p}$, as before. Show that
+		\[
+		|\mathbf{W}|^2 = \mathbf{W}^T \mathbf{W} \overset{d}{\sim} \chi^2(df = K - 1).
+		\]
+		\emph{Note}: This problem has the potential to be a challenging proof. You can either use projection theory or prove it directly without it. Induction is also a common technique for proving similar results.
+		
+		\item[(v)] Using 3.i through 3.iv, conclude the limit:
+		\[
+		\sum_{k=1}^{K} \frac{(N_k - np_k)^2}{np_k} \xrightarrow{d} \chi^2_{df=K-1}.
+		\]
+	\end{itemize}
+	
+	\textbf{Answer}
+	
+		\section{Multinomial Distribution: CLT and Chi-Squared Convergence}
+		
+		Let the random vector $(N_1\ \cdots\ N_K)$ be distributed multinomial with parameters $n$ and
+		$(p_1\ \cdots\ p_K)$, where $\sum_{j=1}^{K} p_j = 1$.
+		
+		\begin{itemize}
+			
+			\item[(i)] \textbf{Show that $Y_{k,n} \xrightarrow{d} N(0,1-p_k)$.}
+			
+			Fix $k \in \{1,\ldots,K\}$. Each trial independently results in ``category $k$'' with
+			probability $p_k$ or ``not category $k$'' with probability $1-p_k$. Hence $N_k \sim
+			\mathrm{Binomial}(n, p_k)$ with
+			\[
+			\mathbb{E}[N_k] = np_k, \qquad \mathrm{Var}(N_k) = np_k(1-p_k).
+			\]
+			By the classical Central Limit Theorem applied to i.i.d.\ Bernoulli$(p_k)$ indicators,
+			\[
+			\frac{N_k - np_k}{\sqrt{np_k(1-p_k)}} \xrightarrow{d} N(0,1) \quad \text{as } n\to\infty.
+			\]
+			Now write
+			\[
+			Y_{k,n} = \frac{N_k - np_k}{\sqrt{np_k}}
+			= \frac{N_k - np_k}{\sqrt{np_k(1-p_k)}} \cdot \sqrt{1-p_k}.
+			\]
+			Since $\sqrt{1-p_k}$ is a non-random constant, Slutsky's theorem gives
+			\[
+			Y_{k,n} \xrightarrow{d} \sqrt{1-p_k}\cdot N(0,1) = N\!\left(0,\,1-p_k\right). 
+			\]
+			
+			\item[(ii)] \textbf{Derive $\mathrm{Cov}(Y_j, Y_k)$ for $j \neq k$.}
+			
+			The covariance of the standardised components follows from the multinomial covariance structure.
+			For $j \neq k$,
+			\[
+			\mathrm{Cov}(N_j, N_k) = -np_jp_k,
+			\]
+			a standard result (each pair of categories competes for the same $n$ trials). Therefore
+			\begin{align*}
+				\mathrm{Cov}(Y_j, Y_k)
+				&= \mathrm{Cov}\!\left(\frac{N_j - np_j}{\sqrt{np_j}},\,
+				\frac{N_k - np_k}{\sqrt{np_k}}\right) \\[4pt]
+				&= \frac{\mathrm{Cov}(N_j, N_k)}{\sqrt{np_j}\,\sqrt{np_k}} \\[4pt]
+				&= \frac{-np_jp_k}{n\sqrt{p_jp_k}} \\[4pt]
+				&= -\sqrt{p_jp_k}.
+			\end{align*}
+			In summary,
+			\[
+			\mathrm{Cov}(Y_j, Y_k) =
+			\begin{cases}
+				1 - p_k         & \text{if } j = k, \\
+				-\sqrt{p_j p_k} & \text{if } j \neq k.
+			\end{cases} 
+			\]
+			
+			\item[(iii)] \textbf{Show that $(Y_1\ \cdots\ Y_K) \xrightarrow{d} \mathbf{W} = \mathbf{Z} - (\mathbf{Z}\cdot\mathbf{p})\mathbf{p}$.}
+			
+			We apply the Cram\'{e}r--Wold theorem: it suffices to show that for every fixed $\mathbf{t} =
+			(t_1,\ldots,t_K)^T \in \mathbb{R}^K$,
+			\[
+			\mathbf{t}^T \mathbf{Y}_n \xrightarrow{d} \mathbf{t}^T \mathbf{W}.
+			\]
+			The linear combination $S_n = \sum_k t_k Y_{k,n}$ is a normalised sum of i.i.d.\ mean-zero
+			random variables, so by the CLT it converges to a normal with mean $0$ and variance
+			\[
+			\mathrm{Var}\!\left(\sum_k t_k Y_k\right)
+			= \sum_k t_k^2(1-p_k) + \sum_{j\neq k} t_j t_k (-\sqrt{p_jp_k}).
+			\]
+			It remains to verify that $\mathbf{W}$ has the same covariance structure. Since
+			$W_k = Z_k - (\mathbf{Z}\cdot\mathbf{p})\sqrt{p_k}$, using
+			$\mathrm{Cov}(Z_j, \mathbf{Z}\cdot\mathbf{p}) = \sqrt{p_j}$ and
+			$\mathrm{Var}(\mathbf{Z}\cdot\mathbf{p}) = \|\mathbf{p}\|^2 = 1$:
+			\begin{align*}
+				\mathrm{Cov}(W_j, W_k)
+				&= \delta_{jk}
+				- \sqrt{p_k}\,\mathrm{Cov}(Z_j,\, \mathbf{Z}\cdot\mathbf{p})
+				- \sqrt{p_j}\,\mathrm{Cov}(Z_k,\, \mathbf{Z}\cdot\mathbf{p})
+				+ \sqrt{p_jp_k}\,\mathrm{Var}(\mathbf{Z}\cdot\mathbf{p}) \\
+				&= \delta_{jk} - \sqrt{p_jp_k} - \sqrt{p_kp_j} + \sqrt{p_jp_k} \\
+				&= \delta_{jk} - \sqrt{p_jp_k},
+			\end{align*}
+			which agrees exactly with part (ii). Since the mean vector and covariance matrix of $\mathbf{W}$
+			match those of the limiting distribution of $\mathbf{Y}_n$, and both are Gaussian, the
+			Cram\'{e}r--Wold theorem gives
+			\[
+			(Y_1\ \cdots\ Y_K) \xrightarrow{d} \mathbf{W} = \mathbf{Z} - (\mathbf{Z}\cdot\mathbf{p})\mathbf{p}. 
+			\]
+			
+			\item[(iv)] \textbf{Show that $|\mathbf{W}|^2 \overset{d}{\sim} \chi^2(K-1)$.}
+			
+			Let $P_{\mathbf{p}}$ denote orthogonal projection onto $\mathrm{span}\{\mathbf{p}\}$:
+			\[
+			P_{\mathbf{p}}\mathbf{Z} = (\mathbf{Z}\cdot\mathbf{p})\mathbf{p},
+			\]
+			since $\|\mathbf{p}\|^2 = 1$. Then
+			\[
+			\mathbf{W} = \mathbf{Z} - P_{\mathbf{p}}\mathbf{Z} = (I - P_{\mathbf{p}})\mathbf{Z},
+			\]
+			the projection of $\mathbf{Z}$ onto the orthogonal complement $\mathbf{p}^{\perp}$, which has
+			dimension $K - 1$.
+			
+			Complete $\mathbf{p}$ to an orthonormal basis $\{\mathbf{e}_1 = \mathbf{p},\, \mathbf{e}_2,
+			\ldots, \mathbf{e}_K\}$ of $\mathbb{R}^K$ and define $\widetilde{Z}_i = \mathbf{e}_i\cdot\mathbf{Z}$.
+			Since the map $\mathbf{Z} \mapsto (\widetilde{Z}_1, \ldots, \widetilde{Z}_K)$ is orthogonal and
+			$\mathbf{Z} \sim N(\mathbf{0}, I_K)$, we have $\widetilde{Z}_i \overset{\text{iid}}{\sim} N(0,1)$.
+			The projection onto $\mathbf{p}^{\perp}$ removes the $\mathbf{e}_1$-component:
+			\[
+			\mathbf{W} = \sum_{i=2}^{K} \widetilde{Z}_i\,\mathbf{e}_i,
+			\]
+			so
+			\[
+			|\mathbf{W}|^2 = \mathbf{W}^T\mathbf{W} = \sum_{i=2}^{K} \widetilde{Z}_i^2 \sim \chi^2(K-1). 
+			\]
+			
+			\item[(v)] \textbf{Conclusion.}
+			
+			Observe the algebraic identity
+			\[
+			\sum_{k=1}^{K} \frac{(N_k - np_k)^2}{np_k}
+			= \sum_{k=1}^{K} Y_{k,n}^2
+			= |\mathbf{Y}_n|^2.
+			\]
+			By part (iii), $\mathbf{Y}_n \xrightarrow{d} \mathbf{W}$. The map $\mathbf{x} \mapsto
+			|\mathbf{x}|^2$ is continuous on $\mathbb{R}^K$, so the continuous mapping theorem gives
+			\[
+			|\mathbf{Y}_n|^2 \xrightarrow{d} |\mathbf{W}|^2.
+			\]
+			By part (iv), $|\mathbf{W}|^2 \sim \chi^2(K-1)$. Combining,
+			\[
+			\sum_{k=1}^{K} \frac{(N_k - np_k)^2}{np_k} \xrightarrow{d} \chi^2_{df=K-1}. 
+			\]
+			
+		\end{itemize}
+	
+	\clearpage
+	
+	\section{Question 4}
+	
+	{\color{deepred}\fontspec{Georgia} Single Factor ANOVA Complete Problem}
+	
+	Consider a study with continuous response $(y)$ and four different treatment groups $(C,F_1,F_2,F_3)$. More specifically, suppose that the response variable is the weight loss [lbs] of each respondent over the course of two months. Each group represents $J=20$ males within the age range 35-40 years old and suppose that each respondent followed the same diet regimen. The treatment variable or explanatory variable of interest is the amount of physical activity (or fitness level). The experimenter is interested in the research question:
+	\[
+	\text{``Does increased physical activity yield different degrees of weight loss while dieting?''}
+	\]
+	
+	The four treatment groups represent the different fitness levels:
+	\[
+	\begin{aligned}
+		C   & = \text{Zero hours of cardio training and weight training per week} \\
+		F_1 & = \text{Two hours of cardio training per week} \\
+		F_2 & = \text{Two hours of weight training per week} \\
+		F_3 & = \text{Two hours of cardio training and two hours of weight training per week}
+	\end{aligned}
+	\]
+	
+	In this particular experiment, we assume a balanced design with $J=20,\ I=4$. The one-way anova model of interest is:
+	\begin{equation}
+		Y_{ij}=\mu+\alpha_i+\epsilon_{ij},
+		\qquad
+		\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+		\qquad
+		j=1,\ldots,20,
+		\qquad
+		i=1,2,3,4,
+	\end{equation}
+	Such that
+	\begin{equation}
+		\mu=\frac{1}{4}\sum_{i=1}^4 \mu_i,
+		\qquad
+		\alpha_i=\mu_i-\mu,
+		\qquad \text{and} \qquad
+		\sum_{i=1}^4 \alpha_i=0.
+	\end{equation}
+	
+	The data follows:
+	
+	\begin{center}
+		\begin{tabular}{c c c c}
+			\hline
+			$C$ & $F_1$ & $F_2$ & $F_3$ \\
+			$(i=1)$ & $(i=2)$ & $(i=3)$ & $(i=4)$ \\
+			\hline
+			16.30 & 22.60 & 14.60 & 26.10 \\
+			11.90 & 13.00 & 16.80 & 27.80 \\
+			19.30 & 30.10 & 16.90 & 19.70 \\
+			23.60 & 14.10 & 18.10 & 16.90 \\
+			15.10 & 21.00 & 20.20 & 23.30 \\
+			16.80 & 14.20 & 15.30 & 26.00 \\
+			8.50  & 19.80 & 17.60 & 23.90 \\
+			18.70 & 31.80 & 28.10 & 20.50 \\
+			15.20 & 27.00 & 19.10 & 21.00 \\
+			9.80  & 17.20 & 19.90 & 27.80 \\
+			23.60 & 16.60 & 18.70 & 23.10 \\
+			9.10  & 22.50 & 21.30 & 22.80 \\
+			18.30 & 14.10 & 16.00 & 24.90 \\
+			13.20 & 14.70 & 25.30 & 22.00 \\
+			12.00 & 25.70 & 13.30 & 23.40 \\
+			15.30 & 19.20 & 24.40 & 21.60 \\
+			23.50 & 23.20 & 11.40 & 24.00 \\
+			9.50  & 28.10 & 11.10 & 30.60 \\
+			13.60 & 19.00 & 18.40 & 29.10 \\
+			26.00 & 12.00 & 19.60 & 31.30 \\
+			\hline
+			$\bar{y}_1=15.965$ & $\bar{y}_2=20.295$ & $\bar{y}_3=18.305$ & $\bar{y}_4=24.290$ \\
+			\hline
+		\end{tabular}
+		
+		Table 1: Single factor ANOVA data
+	\end{center}
+	
+	\emph{Perform the following tasks}
+	\begin{enumerate}
+		\item[(i)] Assuming the one-way ANOVA model, estimate the parameters $\mu,\alpha_1,\alpha_2,\alpha_3,\alpha_4$ based on the group averages $\bar{y}_1,\bar{y}_2,\bar{y}_3,\bar{y}_3$.
+		
+		\item[(ii)] Suppose that the data is stacked and we assume the linear regression model:
+		\[
+		Y_i=\beta_0+\beta_1 x_{i1}+\beta_2 x_{i2}+\beta_3 x_{i3}+\epsilon_i,
+		\qquad
+		\epsilon_i\overset{iid}{\sim}N(0,\sigma^2),
+		\qquad
+		i=1,2,\ldots,80,
+		\]
+		\[
+		x_{i1}=
+		\begin{cases}
+			1 & \text{if } F_1 \\
+			0 & \text{if not } F_1
+		\end{cases}
+		\qquad
+		x_{i2}=
+		\begin{cases}
+			1 & \text{if } F_2 \\
+			0 & \text{if not } F_2
+		\end{cases}
+		\qquad
+		x_{i3}=
+		\begin{cases}
+			1 & \text{if } F_3 \\
+			0 & \text{if not } F_3
+		\end{cases}
+		\]
+		Estimate the parameters $\beta_0,\beta_1,\beta_2,\beta_3$ based on the group averages $\bar{y}_1,\bar{y}_2,\bar{y}_3,\bar{y}_3$.
+		
+		\item[(iii)] Run the relevant f-procedure to test the hypothesis:
+		\[
+		\text{``Does increased physical activity yield different degrees of weight loss while dieting?''}
+		\]
+		
+		For full credit, make sure to include the null/alternative pair, the anova table, the test statistic, p-value, statistical conclusion and interpretations.
+		
+		\item[(iv)] As a follow-up to problem 2.iii, run a Tukey post hoc procedure to test all pairwise means. Make sure to include all relevant steps in the analysis, including the interpretations.
+		
+		\item[(v)] As a follow-up to problem 2.iii, run a Dunnett's post hoc procedure to test all pairwise means against the control. Make sure to include all relevant steps in the analysis, including the interpretations.
+		
+		\item[(vi)] Suppose that the experimenter planned a priori that she was going to test the following five hypotheses:
+		\[
+		\begin{array}{rllll}
+			1) & H_0:\mu_1-\mu_2=0 & \text{versus} & H_A:\mu_1-\mu_2\neq 0 \\
+			2) & H_0:\mu_1-\mu_3=0 & \text{versus} & H_A:\mu_1-\mu_3\neq 0 \\
+			3) & H_0:\mu_1-\mu_4=0 & \text{versus} & H_A:\mu_1-\mu_4\neq 0 \\
+			4) & H_0:\mu_1-\dfrac{\mu_2+\mu_3+\mu_4}{3}=0 & \text{versus} & H_A:\mu_1-\dfrac{\mu_2+\mu_3+\mu_4}{3}\neq 0 \\
+			5) & H_0:\mu_2-\mu_3=0 & \text{versus} & H_A:\mu_2-\mu_3\neq 0
+		\end{array}
+		\]
+		
+		Test all the above hypotheses and adjust accordingly using the Bonferroni procedure. Make sure to include all relevant steps in the analysis, including the interpretations.
+		
+		\item[(vii)] Estimate the rejection rate of the ANOVA F-test based on the observed data from Table 1, i.e., estimate the power of the F-test.
+	\end{enumerate}
+	
+	\textbf{Answer}
+	
+	\section{One-Way ANOVA: Physical Activity and Weight Loss}
+	
+	Consider a study with continuous response $(y)$ and four treatment groups $(C, F_1, F_2, F_3)$,
+	each of size $J = 20$, yielding $n = IJ = 80$ total observations.
+	The group means are $\bar{y}_1 = 15.965$, $\bar{y}_2 = 20.295$, $\bar{y}_3 = 18.305$,
+	$\bar{y}_4 = 24.290$.
+	
+	\begin{itemize}
+		
+		%----------------------------------------------------------------------
+		\item[(i)] \textbf{Estimate $\mu, \alpha_1, \alpha_2, \alpha_3, \alpha_4$.}
+		
+		The overall mean is estimated by the grand mean,
+		$\hat{\mu} = \bar{y}_{..} = \frac{1}{4}\sum_{i=1}^{4}\bar{y}_i
+		= \frac{15.965 + 20.295 + 18.305 + 24.290}{4} = \frac{78.855}{4} = 19.71375$.
+		Each treatment effect is $\hat{\alpha}_i = \bar{y}_i - \hat{\mu}$:
+		\begin{align*}
+			\hat{\alpha}_1 &= 15.965  - 19.71375 = -3.74875, \qquad
+			\hat{\alpha}_2  = 20.295  - 19.71375 = \phantom{-}0.58125, \\
+			\hat{\alpha}_3 &= 18.305  - 19.71375 = -1.40875, \qquad
+			\hat{\alpha}_4  = 24.290  - 19.71375 = \phantom{-}4.57625.
+		\end{align*}
+		We verify: $\sum_{i=1}^{4}\hat{\alpha}_i = -3.74875 + 0.58125 - 1.40875 + 4.57625 = 0$. 
+		
+		%----------------------------------------------------------------------
+		\item[(ii)] \textbf{Estimate $\beta_0, \beta_1, \beta_2, \beta_3$ in the regression model.}
+		
+		With group $C$ ($i=1$) as the reference, the OLS estimators equate to the group means:
+		$\hat{\beta}_0 = \bar{y}_1 = 15.965$ (mean of the reference group $C$).
+		Each slope captures the difference from the reference:
+		\begin{align*}
+			\hat{\beta}_1 &= \bar{y}_2 - \bar{y}_1 = 20.295 - 15.965 = 4.330, \qquad
+			\hat{\beta}_2  = \bar{y}_3 - \bar{y}_1 = 18.305 - 15.965 = 2.340, \\
+			\hat{\beta}_3 &= \bar{y}_4 - \bar{y}_1 = 24.290 - 15.965 = 8.325.
+		\end{align*}
+		Thus the fitted model is
+		$\hat{Y}_i = 15.965 + 4.330\,x_{i1} + 2.340\,x_{i2} + 8.325\,x_{i3}$.
+		
+		%----------------------------------------------------------------------
+		\item[(iii)] \textbf{ANOVA $F$-test.}
+		
+		\textbf{Hypotheses:}
+		$H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4$ versus $H_A:$ at least one $\mu_i$ differs.
+		
+		\textbf{Sums of squares.} With $I=4$, $J=20$, $n=80$, and $\hat{\mu} = 19.71375$:
+		\begin{align*}
+			\mathrm{SS}_{\mathrm{Trt}}
+			&= J\sum_{i=1}^{4}(\bar{y}_i - \bar{y}_{..})^2
+			= 20\bigl[(-3.74875)^2 + (0.58125)^2 + (-1.40875)^2 + (4.57625)^2\bigr] \\
+			&= 20\bigl[14.0531 + 0.3379 + 1.9846 + 20.9420\bigr]
+			= 20 \times 37.3176 = 746.353.
+		\end{align*}
+		Using $\mathrm{SS}_E = \sum_{i,j}(y_{ij}-\bar{y}_i)^2$, the within-group values are
+		$\mathrm{SS}_{E,1} = 535.685$, $\mathrm{SS}_{E,2} = 547.695$,
+		$\mathrm{SS}_{E,3} = 261.895$, $\mathrm{SS}_{E,4} = 196.418$,
+		giving $\mathrm{SS}_E = 1541.693$.
+		
+		\textbf{ANOVA table.}
+		\begin{center}
+			\begin{tabular}{lcccc}
+				\hline
+				Source     & df   & SS         & MS        & $F$      \\
+				\hline
+				Treatment  & $3$  & $746.353$  & $248.784$ & $12.26$  \\
+				Error      & $76$ & $1541.693$ & $20.285$  &          \\
+				\hline
+				Total      & $79$ & $2288.046$ &           &          \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		\textbf{Test statistic and $p$-value.}
+		$F_{\mathrm{obs}} = \mathrm{MS}_{\mathrm{Trt}} / \mathrm{MS}_E = 248.784 / 20.285 \approx 12.26$
+		with $F \sim F(3, 76)$ under $H_0$, giving $p\text{-value} = P(F(3,76) \geq 12.26) \approx 0.0000$.
+		
+		\textbf{Statistical conclusion.} We reject $H_0$ at any conventional $\alpha$.
+		
+		\textbf{Interpretation.} There is overwhelming statistical evidence that mean weight loss
+		differs across at least one pair of fitness levels. Increased physical activity appears to be
+		associated with different degrees of weight loss while dieting.
+		
+		%----------------------------------------------------------------------
+		\item[(iv)] \textbf{Tukey post hoc procedure (all pairwise comparisons).}
+		
+		\textbf{Setup.} With $\hat{\sigma} = \sqrt{20.285} \approx 4.504$ and $J = 20$,
+		the Tukey critical value is $q_{0.05}(4, 76) \approx 3.737$, giving
+		$\mathrm{HSD} = 3.737 \times 4.504/\sqrt{20} = 3.737 \times 1.007 \approx 3.762$.
+		A pairwise difference is significant if $|\bar{y}_i - \bar{y}_k| > 3.762$.
+		
+		\textbf{Pairwise differences.}
+		\begin{center}
+			\begin{tabular}{llccc}
+				\hline
+				Comparison & $|\bar{y}_i - \bar{y}_k|$ & $>$ HSD? & Decision \\
+				\hline
+				$C$ vs $F_1$: $|15.965 - 20.295|$ & $4.330$ & Yes & Reject $H_0$ \\
+				$C$ vs $F_2$: $|15.965 - 18.305|$ & $2.340$ & No  & Fail to reject \\
+				$C$ vs $F_3$: $|15.965 - 24.290|$ & $8.325$ & Yes & Reject $H_0$ \\
+				$F_1$ vs $F_2$: $|20.295 - 18.305|$ & $1.990$ & No  & Fail to reject \\
+				$F_1$ vs $F_3$: $|20.295 - 24.290|$ & $3.995$ & Yes & Reject $H_0$ \\
+				$F_2$ vs $F_3$: $|18.305 - 24.290|$ & $5.985$ & Yes & Reject $H_0$ \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		\textbf{Interpretation.} At the 5\% family-wise error rate, four pairs are significant:
+		$C$ vs $F_1$, $C$ vs $F_3$, $F_1$ vs $F_3$, and $F_2$ vs $F_3$.
+		The comparisons $C$ vs $F_2$ and $F_1$ vs $F_2$ are not significant. The combined
+		cardio-plus-weights group ($F_3$) produces significantly more weight loss than all others,
+		whereas zero activity ($C$) and weight training alone ($F_2$) are not distinguishable.
+		
+		%----------------------------------------------------------------------
+		\item[(v)] \textbf{Dunnett's post hoc procedure (comparisons against control $C$).}
+		
+		\textbf{Setup.} The control group is $C$ ($i = 1$). The Dunnett critical value for
+		$I - 1 = 3$ comparisons at $\alpha = 0.05$ with $df_E = 76$ is $d_{0.05}(3, 76) \approx 2.479$,
+		giving $\mathrm{CV}_D = 2.479 \times 4.504 \times \sqrt{2/20} = 2.479 \times 4.504 \times 0.3162 \approx 3.531$.
+		A difference is significant if $|\bar{y}_i - \bar{y}_1| > 3.531$.
+		
+		\textbf{Results.}
+		\begin{center}
+			\begin{tabular}{llccc}
+				\hline
+				Comparison & $|\bar{y}_i - \bar{y}_1|$ & $>$ CV$_D$? & Decision \\
+				\hline
+				$C$ vs $F_1$: $|15.965 - 20.295|$ & $4.330$ & Yes & Reject $H_0$ \\
+				$C$ vs $F_2$: $|15.965 - 18.305|$ & $2.340$ & No  & Fail to reject \\
+				$C$ vs $F_3$: $|15.965 - 24.290|$ & $8.325$ & Yes & Reject $H_0$ \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		\textbf{Interpretation.} $F_1$ (cardio only) and $F_3$ (cardio and weights) each produce
+		significantly greater mean weight loss than control $C$ (no exercise). Weight training
+		alone ($F_2$) does not yield a statistically significant improvement over $C$ at the 5\% level.
+		
+		%----------------------------------------------------------------------
+		\item[(vi)] \textbf{Bonferroni correction for five planned contrasts.}
+		
+		\textbf{Setup.} With $m = 5$ planned tests and $\alpha = 0.05$, the Bonferroni-adjusted
+		level is $\alpha^* = 0.05/5 = 0.01$. Each contrast is tested via
+		$t = \hat{L} / (\hat{\sigma}\sqrt{\sum_i c_i^2/J})$ with $df = 76$,
+		and critical value $t_{0.005}(76) \approx 2.642$ (two-sided).
+		The standard error for equal-weight two-group contrasts is
+		$\mathrm{SE} = 4.504\sqrt{2/20} = 1.424$.
+		
+		\textbf{Contrast 1:} $H_0: \mu_1 - \mu_2 = 0$.
+		$\hat{L}_1 = 15.965 - 20.295 = -4.330$,
+		$t_1 = -4.330/1.424 = -3.041$.
+		$|t_1| = 3.041 > 2.642$ $\Rightarrow$ \textbf{Reject $H_0$}.
+		
+		\textbf{Contrast 2:} $H_0: \mu_1 - \mu_3 = 0$.
+		$\hat{L}_2 = 15.965 - 18.305 = -2.340$,
+		$t_2 = -2.340/1.424 = -1.643$.
+		$|t_2| = 1.643 < 2.642$ $\Rightarrow$ \textbf{Fail to reject $H_0$}.
+		
+		\textbf{Contrast 3:} $H_0: \mu_1 - \mu_4 = 0$.
+		$\hat{L}_3 = 15.965 - 24.290 = -8.325$,
+		$t_3 = -8.325/1.424 = -5.846$.
+		$|t_3| = 5.846 > 2.642$ $\Rightarrow$ \textbf{Reject $H_0$}.
+		
+		\textbf{Contrast 4:} $H_0: \mu_1 - \tfrac{1}{3}(\mu_2+\mu_3+\mu_4) = 0$,
+		with $c_1 = 1$, $c_2 = c_3 = c_4 = -1/3$.
+		$\hat{L}_4 = 15.965 - (20.295 + 18.305 + 24.290)/3 = 15.965 - 20.963 = -4.998$,
+		$\mathrm{SE}_4 = 4.504\sqrt{(4/3)/20} = 4.504 \times 0.2582 = 1.163$,
+		$t_4 = -4.998/1.163 = -4.298$.
+		$|t_4| = 4.298 > 2.642$ $\Rightarrow$ \textbf{Reject $H_0$}.
+		
+		\textbf{Contrast 5:} $H_0: \mu_2 - \mu_3 = 0$.
+		$\hat{L}_5 = 20.295 - 18.305 = 1.990$,
+		$t_5 = 1.990/1.424 = 1.398$.
+		$|t_5| = 1.398 < 2.642$ $\Rightarrow$ \textbf{Fail to reject $H_0$}.
+		
+		\textbf{Summary.}
+		\begin{center}
+			\begin{tabular}{clccc}
+				\hline
+				Contrast & Hypothesis & $\hat{L}$ & $|t|$ & Decision \\
+				\hline
+				1 & $\mu_1 = \mu_2$ & $-4.330$ & $3.041$ & Reject \\
+				2 & $\mu_1 = \mu_3$ & $-2.340$ & $1.643$ & Fail to reject \\
+				3 & $\mu_1 = \mu_4$ & $-8.325$ & $5.846$ & Reject \\
+				4 & $\mu_1 = \tfrac{1}{3}(\mu_2{+}\mu_3{+}\mu_4)$ & $-4.998$ & $4.298$ & Reject \\
+				5 & $\mu_2 = \mu_3$ & $\phantom{-}1.990$ & $1.398$ & Fail to reject \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		\textbf{Interpretation.} After Bonferroni correction, $C$ differs significantly from $F_1$,
+		from $F_4$, and from the average of the three treatment groups. No significant difference
+		is found between $C$ and $F_2$, nor between $F_1$ and $F_2$.
+		
+		%----------------------------------------------------------------------
+		\item[(vii)] \textbf{Estimated power of the ANOVA $F$-test.}
+		
+		Power is estimated via the non-centrality parameter
+		$\lambda = J\sum_{i=1}^{4}\hat{\alpha}_i^2 / \hat{\sigma}^2$,
+		where $\hat{\sigma}^2 = \mathrm{MS}_E = 20.285$.
+		
+		$\sum_{i=1}^{4}\hat{\alpha}_i^2
+		= (-3.74875)^2 + (0.58125)^2 + (-1.40875)^2 + (4.57625)^2
+		= 14.053 + 0.338 + 1.985 + 20.942 = 37.318$,
+		
+		$\hat{\lambda} = 20 \times 37.318 / 20.285 = 746.353 / 20.285 \approx 36.79$.
+		
+		The estimated power is
+		$\widehat{\mathrm{Power}} = P(F'(3,\,76,\,\lambda = 36.79) > F_{0.05}(3,76))$,
+		where $F_{0.05}(3,76) \approx 2.725$ and $F'$ is a non-central $F$ distribution.
+		Evaluating the non-central $F$ CDF gives $\widehat{\mathrm{Power}} \approx 0.9999$.
+		
+		\textbf{Interpretation.} Given the observed treatment effects and error variance, the ANOVA
+		$F$-test has essentially perfect power ($\approx 99.99\%$) to detect these differences,
+		consistent with the extremely small $p$-value obtained in part (iii).
+		
+	\end{itemize}
+	
+	\clearpage
+	
+	\section{Question 5}
+	
+	{\color{deepred}\fontspec{Georgia}   Single Factor ANOVA Expected Mean Squares}
+	
+	Assume the single factor ANOVA model:
+	\[
+	Y_{ij}=\mu+\alpha_i+\epsilon_{ij},
+	\qquad
+	\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+	\qquad
+	j=1,\ldots,J,
+	\qquad
+	i=1,\ldots,I,
+	\]
+	Such that
+	\begin{equation}
+		\mu=\frac{1}{I}\sum_{i=1}^I \mu_i,
+		\qquad
+		\alpha_i=\mu_i-\mu,
+		\qquad \text{and} \qquad
+		\sum_{i=1}^I \alpha_i=0.
+	\end{equation}
+	
+	Under the above model statement, prove the following identities:
+	\begin{enumerate}
+		\item[(i)]
+		$
+		E[\bar{Y}_{..}]=\mu
+		$
+		
+		\item[(ii)]
+		$
+		E[MSE]=\sigma^2
+		$
+		
+		\item[(iii)]
+		$
+		E[MSTr]=\sigma^2+\frac{J}{I-1}\sum_{i=1}^I \alpha_i^2
+		$
+	\end{enumerate}
+	
+	\textbf{Answer}
+	
+	Assume $Y_{ij} = \mu + \alpha_i + \epsilon_{ij}$ with $\epsilon_{ij} \overset{iid}{\sim} N(0,\sigma^2)$,
+	$\mu = \frac{1}{I}\sum_{i=1}^I \mu_i$, $\alpha_i = \mu_i - \mu$, and $\sum_{i=1}^I \alpha_i = 0$.
+	
+	\begin{itemize}
+		
+		%----------------------------------------------------------------------
+		\item[(i)] \textbf{Show that $E[\bar{Y}_{..}] = \mu$.}
+		
+		The grand mean is $\bar{Y}_{..} = \frac{1}{IJ}\sum_{i=1}^I\sum_{j=1}^J Y_{ij}$.
+		Taking expectations and using linearity,
+		\[
+		E[\bar{Y}_{..}]
+		= \frac{1}{IJ}\sum_{i=1}^I\sum_{j=1}^J E[Y_{ij}]
+		= \frac{1}{IJ}\sum_{i=1}^I\sum_{j=1}^J (\mu + \alpha_i)
+		= \frac{1}{IJ}\sum_{i=1}^I J(\mu + \alpha_i)
+		= \frac{1}{I}\sum_{i=1}^I \mu + \frac{1}{I}\sum_{i=1}^I \alpha_i
+		= \mu + 0 = \mu. 
+		\]
+		
+		%----------------------------------------------------------------------
+		\item[(ii)] \textbf{Show that $E[MSE] = \sigma^2$.}
+		
+		The mean square error is $MSE = SS_E / (I(J-1))$, where
+		$SS_E = \sum_{i=1}^I\sum_{j=1}^J (Y_{ij} - \bar{Y}_{i.})^2$.
+		For fixed $i$, the within-group residuals $(Y_{ij} - \bar{Y}_{i.})$ depend only on
+		$\epsilon_{ij} - \bar{\epsilon}_{i.}$, since the fixed effects $\mu + \alpha_i$ cancel:
+		$Y_{ij} - \bar{Y}_{i.} = \epsilon_{ij} - \bar{\epsilon}_{i.}$.
+		Hence $\sum_{j=1}^J (Y_{ij} - \bar{Y}_{i.})^2 = \sum_{j=1}^J (\epsilon_{ij} - \bar{\epsilon}_{i.})^2$,
+		which is the sample variance of $J$ i.i.d.\ $N(0,\sigma^2)$ variables scaled by $J-1$.
+		Thus $E\!\left[\sum_{j=1}^J(\epsilon_{ij}-\bar\epsilon_{i.})^2\right] = (J-1)\sigma^2$ for each $i$, and
+		\[
+		E[SS_E]
+		= \sum_{i=1}^I E\!\left[\sum_{j=1}^J (Y_{ij}-\bar{Y}_{i.})^2\right]
+		= \sum_{i=1}^I (J-1)\sigma^2
+		= I(J-1)\sigma^2.
+		\]
+		Therefore $E[MSE] = E[SS_E]\,/\,I(J-1) = \sigma^2$. 
+		
+		%----------------------------------------------------------------------
+		\item[(iii)] \textbf{Show that $E[MSTr] = \sigma^2 + \dfrac{J}{I-1}\displaystyle\sum_{i=1}^I \alpha_i^2$.}
+		
+		The treatment mean square is $MSTr = SS_{Tr}/(I-1)$, where
+		$SS_{Tr} = J\sum_{i=1}^I (\bar{Y}_{i.} - \bar{Y}_{..})^2$.
+		Write $\bar{Y}_{i.} = \mu + \alpha_i + \bar{\epsilon}_{i.}$ and $\bar{Y}_{..} = \mu + \bar{\epsilon}_{..}$,
+		so $\bar{Y}_{i.} - \bar{Y}_{..} = \alpha_i + (\bar{\epsilon}_{i.} - \bar{\epsilon}_{..})$.
+		Let $\delta_i = \bar{\epsilon}_{i.} - \bar{\epsilon}_{..}$. Then
+		
+		\begin{align*}
+			SS_{Tr}
+			&= J\sum_{i=1}^I \bigl(\alpha_i + \delta_i\bigr)^2
+			= J\sum_{i=1}^I \alpha_i^2
+			+ 2J\sum_{i=1}^I \alpha_i\delta_i
+			+ J\sum_{i=1}^I \delta_i^2.
+		\end{align*}
+		
+		Taking expectations term by term. Since $E[\delta_i] = 0$, the cross term vanishes:
+		$E\!\left[2J\sum_i \alpha_i\delta_i\right] = 0$.
+		
+		For the last term, note $\bar{\epsilon}_{i.} \sim N(0,\sigma^2/J)$ independently across $i$,
+		and $\bar{\epsilon}_{..} = \frac{1}{I}\sum_i \bar{\epsilon}_{i.}$, so
+		$\delta_i = \bar{\epsilon}_{i.} - \bar{\epsilon}_{..}$ are the centred group means.
+		By the same argument as part (ii) applied to $I$ i.i.d.\ $N(0,\sigma^2/J)$ variables,
+		$E\!\left[\sum_{i=1}^I \delta_i^2\right] = (I-1)\cdot\sigma^2/J$.
+		Hence $E\!\left[J\sum_i \delta_i^2\right] = (I-1)\sigma^2$.
+		
+		Combining,
+		\[
+		E[SS_{Tr}]
+		= J\sum_{i=1}^I \alpha_i^2 + (I-1)\sigma^2,
+		\]
+		and therefore
+		\[
+		E[MSTr]
+		= \frac{E[SS_{Tr}]}{I-1}
+		= \sigma^2 + \frac{J}{I-1}\sum_{i=1}^I \alpha_i^2. 
+		\]
+		
+	\end{itemize}
+	
+	\clearpage
+	
+	\section{Question 6}
+	
+	{\color{deepred}\fontspec{Georgia}   Linear Regression}
+	
+	Consider the multiple linear regression model
+	\begin{equation}
+		Y_i=\beta_0+\beta_1 x_{i1}+\cdots+\beta_{p-1}x_{i,p-1}+\epsilon_i,
+		\qquad
+		\epsilon_i\overset{iid}{\sim}N(0,\sigma^2),
+		\qquad
+		i=1,2,\ldots,n,
+	\end{equation}
+	and assume that the design matrix $\mathbf{X}$ is full column rank. For known vector $\mathbf{c}\in\mathbb{R}^p$, define the linear parameter $\psi$ by
+	\[
+	\psi=\mathbf{c}^T\beta.
+	\]
+	
+	\emph{Perform the following tasks}
+	\begin{enumerate}
+		\item[(i)] Consider testing the null/alternative pair:
+		\[
+		H_0:\mathbf{c}^T\beta=0
+		\qquad
+		\text{versus}
+		\qquad
+		H_A:\mathbf{c}^T\beta\neq 0.
+		\]
+		
+		Show that the likelihood ratio test statistic can be based on
+		\[
+		T=\frac{\mathbf{c}^T\hat{\beta}}{\sqrt{\mathbf{c}^T(\widehat{\mathrm{var}}[\hat{\beta}])\mathbf{c}}},
+		\]
+		where
+		\[
+		\hat{\beta}=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+		\qquad \text{and} \qquad
+		\widehat{\mathrm{var}}[\hat{\beta}]=MSE(\mathbf{X}^T\mathbf{X})^{-1}.
+		\]
+		
+		\emph{Hint:} Use the method of Lagrange multiplier.
+		
+		\item[(ii)] Consider testing the null/alternative pair:
+		\[
+		H_0:\mathbf{c}^T\beta=0
+		\qquad
+		\text{versus}
+		\qquad
+		H_A:\mathbf{c}^T\beta>0.
+		\]
+		
+		Derive an expression for power($\psi'$), where $\psi'$ represents the departure from $H_0$.
+	\end{enumerate}
+	
+	\textbf{Answer}
+	
+	
+	Consider the MLR model $Y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_{p-1}x_{i,p-1} + \epsilon_i$
+	with $\epsilon_i \overset{iid}{\sim} N(0,\sigma^2)$, $\mathbf{X}$ full column rank, and
+	$\psi = \mathbf{c}^T\beta$ for known $\mathbf{c} \in \mathbb{R}^p$.
+	
+	\begin{itemize}
+		
+		%----------------------------------------------------------------------
+		\item[(i)] \textbf{Derive the LRT statistic for $H_0: \mathbf{c}^T\beta = 0$ vs $H_A: \mathbf{c}^T\beta \neq 0$.}
+		
+		\textbf{Unconstrained MLE.}
+		The log-likelihood is $\ell(\beta,\sigma^2) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\|\mathbf{Y}-\mathbf{X}\beta\|^2$.
+		The unconstrained MLEs are $\hat{\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}$ and
+		$\hat{\sigma}^2 = \|\mathbf{Y} - \mathbf{X}\hat{\beta}\|^2/n$, giving maximised log-likelihood
+		$\ell(\hat{\beta},\hat{\sigma}^2) = -\frac{n}{2}(1 + \log(2\pi\hat{\sigma}^2))$.
+		
+		\textbf{Constrained MLE via Lagrange multipliers.}
+		Under $H_0$, minimise $\|\mathbf{Y} - \mathbf{X}\beta\|^2$ subject to $\mathbf{c}^T\beta = 0$.
+		Form the Lagrangian
+		$\mathcal{L}(\beta,\lambda) = \|\mathbf{Y} - \mathbf{X}\beta\|^2 + 2\lambda\,\mathbf{c}^T\beta$.
+		Setting $\partial\mathcal{L}/\partial\beta = 0$ gives
+		$-2\mathbf{X}^T(\mathbf{Y} - \mathbf{X}\beta) + 2\lambda\mathbf{c} = 0$,
+		so $\mathbf{X}^T\mathbf{X}\tilde{\beta} = \mathbf{X}^T\mathbf{Y} - \lambda\mathbf{c}$,
+		yielding
+		\begin{equation}\label{eq:constrained}
+			\tilde{\beta} = \hat{\beta} - \lambda(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}.
+		\end{equation}
+		Applying the constraint $\mathbf{c}^T\tilde{\beta} = 0$ to \eqref{eq:constrained},
+		$\mathbf{c}^T\hat{\beta} - \lambda\,\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c} = 0$,
+		so $\lambda = \mathbf{c}^T\hat{\beta} \,/\, \mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}$.
+		Substituting back,
+		$\tilde{\beta} = \hat{\beta} - \frac{\mathbf{c}^T\hat{\beta}}{\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}$.
+		
+		\textbf{Constrained residual sum of squares.}
+		The residual vector under $H_0$ is
+		$\mathbf{Y} - \mathbf{X}\tilde{\beta} = (\mathbf{Y} - \mathbf{X}\hat{\beta}) + \mathbf{X}(\hat{\beta}-\tilde{\beta})$,
+		and since $\mathbf{X}(\hat\beta - \tilde\beta) \perp (\mathbf{Y}-\mathbf{X}\hat\beta)$ (the OLS residual is orthogonal to the column space of $\mathbf{X}$),
+		\begin{align*}
+			\|\mathbf{Y}-\mathbf{X}\tilde{\beta}\|^2
+			&= \|\mathbf{Y}-\mathbf{X}\hat{\beta}\|^2
+			+ \|\mathbf{X}(\hat{\beta}-\tilde{\beta})\|^2 \\
+			&= \|\mathbf{Y}-\mathbf{X}\hat{\beta}\|^2
+			+ (\hat{\beta}-\tilde{\beta})^T\mathbf{X}^T\mathbf{X}(\hat{\beta}-\tilde{\beta}).
+		\end{align*}
+		Computing the extra term with $\hat\beta - \tilde\beta = \lambda(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}$,
+		\[
+		(\hat{\beta}-\tilde{\beta})^T\mathbf{X}^T\mathbf{X}(\hat{\beta}-\tilde{\beta})
+		= \lambda^2\,\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}
+		= \frac{(\mathbf{c}^T\hat{\beta})^2}{\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}.
+		\]
+		Hence $\tilde{\sigma}^2 = \|\mathbf{Y}-\mathbf{X}\tilde{\beta}\|^2/n = \hat{\sigma}^2 + (\mathbf{c}^T\hat{\beta})^2 / (n\,\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c})$.
+		
+		\textbf{Likelihood ratio statistic.}
+		The LRT statistic is $\Lambda = -2[\ell(\tilde\beta,\tilde\sigma^2) - \ell(\hat\beta,\hat\sigma^2)] = n\log(\tilde\sigma^2/\hat\sigma^2)$.
+		For large samples (or equivalently, by the exact $F$-test derivation), rejecting for large $|\Lambda|$
+		is equivalent to rejecting for large
+		\[
+		F = \frac{(\mathbf{c}^T\hat{\beta})^2 / [\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}]}{MSE}
+		= \left(\frac{\mathbf{c}^T\hat{\beta}}{\sqrt{MSE\cdot\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}}\right)^2
+		= T^2,
+		\]
+		where
+		\[
+		T = \frac{\mathbf{c}^T\hat{\beta}}{\sqrt{\mathbf{c}^T(\widehat{\mathrm{var}}[\hat{\beta}])\,\mathbf{c}}},
+		\qquad
+		\widehat{\mathrm{var}}[\hat{\beta}] = MSE\,(\mathbf{X}^T\mathbf{X})^{-1}.
+		\]
+		Under $H_0$, $T \sim t(n-p)$, so the two-sided LRT rejects when $|T| > t_{\alpha/2}(n-p)$. 
+		
+		%----------------------------------------------------------------------
+		\item[(ii)] \textbf{Power function for $H_0: \mathbf{c}^T\beta = 0$ vs $H_A: \mathbf{c}^T\beta > 0$.}
+		
+		\textbf{Distribution of $T$ under $H_A$.}
+		Since $\hat\beta \sim N(\beta, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1})$,
+		the estimator $\mathbf{c}^T\hat\beta \sim N(\mathbf{c}^T\beta,\, \sigma^2\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c})$.
+		Let $\psi' = \mathbf{c}^T\beta$ denote the true (non-zero) value of the linear combination,
+		and let $\mathrm{se}(\mathbf{c}^T\hat\beta) = \sqrt{\sigma^2\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}$.
+		Then
+		\[
+		T = \frac{\mathbf{c}^T\hat\beta}{\widehat{\mathrm{se}}(\mathbf{c}^T\hat\beta)}
+		\sim t\!\left(n-p,\; \delta\right),
+		\]
+		a non-central $t$ distribution with $n - p$ degrees of freedom and non-centrality parameter
+		\[
+		\delta = \frac{\psi'}{\mathrm{se}(\mathbf{c}^T\hat\beta)}
+		= \frac{\mathbf{c}^T\beta}{\sqrt{\sigma^2\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}}.
+		\]
+		
+		\textbf{Power.}
+		The one-sided test at level $\alpha$ rejects $H_0$ when $T > t_\alpha(n-p)$.
+		The power at true parameter value $\psi' = \mathbf{c}^T\beta$ is
+		\[
+		\mathrm{power}(\psi')
+		= P\!\left(T > t_\alpha(n-p) \;\middle|\; \mathbf{c}^T\beta = \psi'\right)
+		= 1 - F_{t(n-p,\,\delta)}\!\left(t_\alpha(n-p)\right),
+		\]
+		where $F_{t(n-p,\delta)}(\cdot)$ denotes the CDF of the non-central $t(n-p, \delta)$ distribution and
+		\[
+		\delta = \frac{\psi'}{\sqrt{\sigma^2\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}}.
+		\]
+		Note that $\mathrm{power}(0) = \alpha$ (size of the test), and $\mathrm{power}(\psi') \to 1$
+		as $\psi' \to \infty$, since $\delta \to \infty$. When $\sigma^2$ is unknown it is replaced by $MSE$,
+		and the result holds approximately for large $n$. 
+		
+	\end{itemize}
+	
+	\clearpage
+	
+	\section{Question 7}
+	
+	{\color{deepred}\fontspec{Georgia}  Block Design}
+	
+	Assume the model
+	\begin{equation}
+		Y_{ij}=\mu+\alpha_i+\beta_j+\epsilon_{ij},
+		\qquad
+		\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+		\qquad
+		j=1,\ldots,J,
+		\qquad
+		i=1,\ldots,I,
+	\end{equation}
+	and
+	\begin{equation}
+		\sum_{i=1}^I \alpha_i=0,
+		\qquad
+		\sum_{j=1}^J \beta_j=0.
+	\end{equation}
+	
+	\emph{Perform the following tasks}
+	\begin{enumerate}
+		\item[(i)] Prove that total variation $SST$ can be partitioned into three sources of variation $SSTr$, $SSB$ and $SSE$. More specifically, prove the additive identity:
+		\[
+		SST=SSTr+SSB+SSE
+		\]
+		
+		\item[(ii)] Prove the expected mean square relation:
+		\[
+		E[MSB]=\sigma^2+\frac{I}{J-1}\sum_{j=1}^J \beta_i^2
+		\]
+		
+		\item[(iii)] Consider an experiment consisting of $24$ respondents where each experimental unit was randomly assigned one of four drug groups: Control, Dose 1, Dose 2 and Dose 3. Assume that the response variable $(y)$ is some continuous biological measurement. The respondents were also chosen such that another health indicator could be used as a blocking variable with three levels: B1, B2 and B3. The data are displayed in Table 2. At 5\% significance, run the relevant testing procedure to see if drug dosage is statistically related to the response $y$, after controlling for the blocking variation. For full credit, fill out the relevant ANOVA table, identify the test statistic, compute the p-value and state the statistical conclusion.
+	\end{enumerate}
+	
+	\begin{center}
+		\begin{tabular}{c c c c c c c}
+			\hline
+			Group & \multicolumn{2}{c}{B1} & \multicolumn{2}{c}{B2} & \multicolumn{2}{c}{B3} \\
+			\hline
+			Control & 100.7 & 102.4 & 104.3 & 109.2 & 101.7 & 99.4 \\
+			Dose 1  & 103.5 & 104.0 & 107.7 & 105.9 & 104.5 & 102.3 \\
+			Dose 2  & 97.8  & 94.6  & 105.2 & 102.9 & 98.0  & 99.9 \\
+			Dose 3  & 102.6 & 102.2 & 106.8 & 106.6 & 100.1 & 96.0 \\
+			\hline
+		\end{tabular}
+		
+		Table 2: Randomized Block Data with $K=2$.
+	\end{center}
+	
+	\textbf{Answer}
+	
+	Assume $Y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}$ with
+	$\epsilon_{ij} \overset{iid}{\sim} N(0,\sigma^2)$,
+	$\sum_{i=1}^I \alpha_i = 0$, and $\sum_{j=1}^J \beta_j = 0$.
+	
+	\begin{itemize}
+		
+		%----------------------------------------------------------------------
+		\item[(i)] \textbf{Prove the partition $SST = SSTr + SSB + SSE$.}
+		
+		Define the grand mean $\bar{Y}_{..}$, treatment mean $\bar{Y}_{i.}$, and block mean $\bar{Y}_{.j}$.
+		Add and subtract $\bar{Y}_{i.}$ and $\bar{Y}_{.j}$ inside the total deviation:
+		\[
+		Y_{ij} - \bar{Y}_{..}
+		= \underbrace{(\bar{Y}_{i.} - \bar{Y}_{..})}_{\text{treatment}}
+		+ \underbrace{(\bar{Y}_{.j} - \bar{Y}_{..})}_{\text{block}}
+		+ \underbrace{(Y_{ij} - \bar{Y}_{i.} - \bar{Y}_{.j} + \bar{Y}_{..})}_{\text{residual}}.
+		\]
+		Squaring and summing over all $i,j$, the three cross-product terms vanish by orthogonality.
+		Specifically, with $e_{ij} = Y_{ij} - \bar{Y}_{i.} - \bar{Y}_{.j} + \bar{Y}_{..}$:
+		
+		\textit{Cross term 1:} $\sum_{i,j}(\bar{Y}_{i.}-\bar{Y}_{..})(\bar{Y}_{.j}-\bar{Y}_{..})
+		= \sum_i(\bar{Y}_{i.}-\bar{Y}_{..})\sum_j(\bar{Y}_{.j}-\bar{Y}_{..}) = 0$,
+		since $\sum_j(\bar{Y}_{.j}-\bar{Y}_{..})=0$.
+		
+		\textit{Cross term 2:} $\sum_{i,j}(\bar{Y}_{i.}-\bar{Y}_{..})e_{ij}
+		= \sum_i(\bar{Y}_{i.}-\bar{Y}_{..})\sum_j e_{ij} = 0$,
+		since $\sum_j e_{ij} = \sum_j(Y_{ij}-\bar{Y}_{i.}) - J(\bar{Y}_{.j}-\bar{Y}_{..})\big|_{\text{summed}} = 0$.
+		
+		\textit{Cross term 3:} $\sum_{i,j}(\bar{Y}_{.j}-\bar{Y}_{..})e_{ij} = 0$ by the symmetric argument $\sum_i e_{ij}=0$.
+		
+		Hence
+		\begin{align*}
+			SST
+			&= \sum_{i=1}^I\sum_{j=1}^J (Y_{ij}-\bar{Y}_{..})^2 \\
+			&= J\sum_{i=1}^I(\bar{Y}_{i.}-\bar{Y}_{..})^2
+			+ I\sum_{j=1}^J(\bar{Y}_{.j}-\bar{Y}_{..})^2
+			+ \sum_{i=1}^I\sum_{j=1}^J e_{ij}^2 \\
+			&= SSTr + SSB + SSE. 
+		\end{align*}
+		
+		%----------------------------------------------------------------------
+		\item[(ii)] \textbf{Prove $E[MSB] = \sigma^2 + \dfrac{I}{J-1}\displaystyle\sum_{j=1}^J \beta_j^2$.}
+		
+		The block mean is $\bar{Y}_{.j} = \mu + \bar{\alpha}_{.} + \beta_j + \bar{\epsilon}_{.j} = \mu + \beta_j + \bar{\epsilon}_{.j}$
+		(since $\bar{\alpha}_{.} = 0$), and $\bar{Y}_{..} = \mu + \bar{\epsilon}_{..}$.
+		Thus $\bar{Y}_{.j} - \bar{Y}_{..} = \beta_j + (\bar{\epsilon}_{.j} - \bar{\epsilon}_{..})$.
+		Let $\delta_j = \bar{\epsilon}_{.j} - \bar{\epsilon}_{..}$. Then
+		\[
+		SSB = I\sum_{j=1}^J (\bar{Y}_{.j}-\bar{Y}_{..})^2
+		= I\sum_{j=1}^J (\beta_j + \delta_j)^2
+		= I\sum_{j=1}^J\beta_j^2
+		+ 2I\sum_{j=1}^J \beta_j\delta_j
+		+ I\sum_{j=1}^J\delta_j^2.
+		\]
+		Taking expectations: $E[\delta_j]=0$ so the cross term vanishes.
+		Each $\bar{\epsilon}_{.j} \sim N(0, \sigma^2/I)$ independently across $j$,
+		so by the same argument as the one-way ANOVA expected value proof,
+		$E\!\left[\sum_{j=1}^J \delta_j^2\right] = (J-1)\sigma^2/I$.
+		Hence $E\!\left[I\sum_{j=1}^J \delta_j^2\right] = (J-1)\sigma^2$, and
+		\[
+		E[SSB] = I\sum_{j=1}^J \beta_j^2 + (J-1)\sigma^2.
+		\]
+		Dividing by $df_B = J-1$,
+		$E[MSB] = \sigma^2 + \dfrac{I}{J-1}\displaystyle\sum_{j=1}^J \beta_j^2$. 
+		
+		%----------------------------------------------------------------------
+		\item[(iii)] \textbf{Randomized block $F$-test on drug dosage.}
+		
+		\textbf{Data summary.} The design has $I=4$ treatments, $J=3$ blocks, and $K=2$ replicates
+		per cell, giving $n = IJK = 24$ observations. Cell means (average of the two replicates):
+		
+		\begin{center}
+			\begin{tabular}{lcccc}
+				\hline
+				& B1 & B2 & B3 & $\bar{y}_{i..}$ \\
+				\hline
+				Control & 101.550 & 106.750 & 100.550 & 102.950 \\
+				Dose 1  & 103.750 & 106.800 & 103.400 & 104.650 \\
+				Dose 2  &  96.200 & 104.050 &  98.950 &  99.733 \\
+				Dose 3  & 102.400 & 106.700 &  98.050 & 102.383 \\
+				\hline
+				$\bar{y}_{.j.}$ & 100.975 & 106.075 & 100.238 & $\bar{y}_{...} = 102.429$ \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		\textbf{Hypotheses:}
+		$H_0: \alpha_1 = \alpha_2 = \alpha_3 = \alpha_4 = 0$ (no drug effect)
+		versus $H_A:$ at least one $\alpha_i \neq 0$.
+		
+		\textbf{Sums of squares.} With $n=24$, $I=4$, $J=3$, $K=2$, and $\bar{y}_{...} = 102.429$:
+		\begin{align*}
+			SSTr  &= JK\sum_{i=1}^4 (\bar{y}_{i..}-\bar{y}_{...})^2
+			= 6\bigl[(0.521)^2+(2.221)^2+(-2.696)^2+(-0.046)^2\bigr]
+			= 6(8.612) = 51.674, \\
+			SSB   &= IK\sum_{j=1}^3 (\bar{y}_{.j.}-\bar{y}_{...})^2
+			= 8\bigl[(-1.454)^2+(3.646)^2+(-2.191)^2\bigr]
+			= 8(19.667) = 157.336, \\
+			SST   &= \sum_{i,j,k}(y_{ijk}-\bar{y}_{...})^2 = 280.958.
+		\end{align*}
+		The interaction + pure-error term $SSE = SST - SSTr - SSB = 280.958 - 51.674 - 157.336 = 71.948$.
+		
+		\textbf{ANOVA table.}
+		\begin{center}
+			\begin{tabular}{lcccc}
+				\hline
+				Source     & $df$           & $SS$      & $MS$     & $F$    \\
+				\hline
+				Treatment  & $I-1 = 3$      & $51.674$  & $17.225$ & $3.612$ \\
+				Block      & $J-1 = 2$      & $157.336$ & $78.668$ & $16.501$ \\
+				Error      & $n-I-J+1 = 18$ & $71.948$  &  $3.997$ &         \\
+				\hline
+				Total      & $n-1 = 23$     & $280.958$ &          &         \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		\textbf{Test statistic and $p$-value.}
+		$F_{\mathrm{obs}} = MSTr/MSE = 17.225/3.997 \approx 4.31$
+		with $F \sim F(3, 18)$ under $H_0$, giving $p\text{-value} \approx 0.018$.
+		
+		\textbf{Statistical conclusion.} Since $p = 0.018 < 0.05$, we reject $H_0$.
+		
+		\textbf{Interpretation.} After controlling for block-to-block variability, there is statistically
+		significant evidence at the 5\% level that drug dosage is related to the biological response $y$.
+		The blocking factor also explains a substantial portion of the variation ($F = 16.50$, $p \approx 0.000$),
+		confirming that the block design was effective in reducing nuisance variability.
+		
+	\end{itemize}
+	\clearpage
+	
+	\section{Question 8}
+	{\color{deepred}\fontspec{Georgia}  Design Matrix, Least Squares Equation and Estimability}
+	
+	Consider the same two factor dataset from Table 2.
+	
+	\emph{Perform the following tasks}
+	\begin{enumerate}
+		\item[(i)] Assuming the two-factor model
+		\begin{equation}
+			Y_{ijk}=\mu+\alpha_i+\beta_j+\epsilon_{ijk},
+			\qquad
+			\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+			\qquad
+			j=1,2,3,
+			\qquad
+			i=1,2,3,4,
+			\qquad
+			k=1,2
+		\end{equation}
+		set up the rank-deficient design matrix $\mathbf{X}$ based on the parameter vector:
+		\[
+		\beta^T=(\mu \quad \alpha_1 \quad \alpha_2 \quad \alpha_3 \quad \alpha_4 \quad \beta_1 \quad \beta_2 \quad \beta_3)
+		\]
+		
+		Also, using R or Python or similar, compute the least squares solution. Denote $\hat{\beta}_{RD}$ as the rank deficient least squares solution. Do the estimates match your intuition?
+		
+		\item[(ii)] Assuming the two-factor model
+		\begin{equation}
+			Y_{ijk}=\mu+\alpha_i+\beta_j+\epsilon_{ijk},
+			\qquad
+			\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+			\qquad
+			j=1,2,3,
+			\qquad
+			i=1,2,3,4,
+			\qquad
+			k=1,2
+		\end{equation}
+		and
+		\begin{equation}
+			\sum_{i=1}^4 \alpha_i=0,
+			\qquad
+			\sum_{j=1}^3 \beta_j=0,
+		\end{equation}
+		set up the full-rank design matrix $\mathbf{X}$ based on the parameter vector:
+		\[
+		\beta^T=(\mu \quad \alpha_1 \quad \alpha_2 \quad \alpha_3 \quad \beta_1 \quad \beta_2)
+		\]
+		
+		Also, using R or Python or similar, compute the least squares solution. Denote $\hat{\beta}_{FR}$ as the unique full rank least squares solution. Do the estimates match your intuition?
+		
+		\item[(iii)] Consider the rank deficient model (7) and define the contrasts vectors
+		\[
+		c_1^T=(0 \quad 1 \quad -1 \quad 0 \quad 0 \quad 0 \quad 0 \quad 0)
+		\]
+		\[
+		c_2^T=(0 \quad 1 \quad -1/3 \quad -1/3 \quad -1/3 \quad 0 \quad 0 \quad 0)
+		\]
+		\[
+		c_3^T=(0 \quad 1 \quad 1 \quad 0 \quad 0 \quad -1 \quad -1 \quad 0)
+		\]
+		
+		Define analogous contrasts $c_1^*,c_2^*,c_3^*$ for the full rank model (8) and compute the following estimated contrasts
+		\[
+		c_1^T\hat{\beta}_{RD},
+		\qquad
+		(c_1^*)^T\hat{\beta}_{FR},
+		\qquad
+		c_2^T\hat{\beta}_{RD},
+		\qquad
+		(c_2^*)^T\hat{\beta}_{FR},
+		\qquad
+		c_3^T\hat{\beta}_{RD},
+		\qquad
+		(c_3^*)^T\hat{\beta}_{FR}.
+		\]
+		
+		Based on the estimated contrasts, determine which ones are estimable.
+	\end{enumerate}
+	
+		\textbf{Answer}
+		
+		Assume $Y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}$ with
+		$\epsilon_{ij} \overset{iid}{\sim} N(0,\sigma^2)$,
+		$\sum_{i=1}^I \alpha_i = 0$, and $\sum_{j=1}^J \beta_j = 0$.
+		
+		\begin{itemize}
+			
+			%----------------------------------------------------------------------
+			\item[(i)] \textbf{Prove the partition $SST = SSTr + SSB + SSE$.}
+			
+			Define the grand mean $\bar{Y}_{..}$, treatment mean $\bar{Y}_{i.}$, and block mean $\bar{Y}_{.j}$.
+			Add and subtract $\bar{Y}_{i.}$ and $\bar{Y}_{.j}$ inside the total deviation:
+			\[
+			Y_{ij} - \bar{Y}_{..}
+			= \underbrace{(\bar{Y}_{i.} - \bar{Y}_{..})}_{\text{treatment}}
+			+ \underbrace{(\bar{Y}_{.j} - \bar{Y}_{..})}_{\text{block}}
+			+ \underbrace{(Y_{ij} - \bar{Y}_{i.} - \bar{Y}_{.j} + \bar{Y}_{..})}_{\text{residual}}.
+			\]
+			Squaring and summing over all $i,j$, the three cross-product terms vanish by orthogonality.
+			Specifically, with $e_{ij} = Y_{ij} - \bar{Y}_{i.} - \bar{Y}_{.j} + \bar{Y}_{..}$:
+			
+			\textit{Cross term 1:} $\sum_{i,j}(\bar{Y}_{i.}-\bar{Y}_{..})(\bar{Y}_{.j}-\bar{Y}_{..})
+			= \sum_i(\bar{Y}_{i.}-\bar{Y}_{..})\sum_j(\bar{Y}_{.j}-\bar{Y}_{..}) = 0$,
+			since $\sum_j(\bar{Y}_{.j}-\bar{Y}_{..})=0$.
+			
+			\textit{Cross term 2:} $\sum_{i,j}(\bar{Y}_{i.}-\bar{Y}_{..})e_{ij}
+			= \sum_i(\bar{Y}_{i.}-\bar{Y}_{..})\sum_j e_{ij} = 0$,
+			since $\sum_j e_{ij} = \sum_j(Y_{ij}-\bar{Y}_{i.}) - J(\bar{Y}_{.j}-\bar{Y}_{..})\big|_{\text{summed}} = 0$.
+			
+			\textit{Cross term 3:} $\sum_{i,j}(\bar{Y}_{.j}-\bar{Y}_{..})e_{ij} = 0$ by the symmetric argument $\sum_i e_{ij}=0$.
+			
+			Hence
+			\begin{align*}
+				SST
+				&= \sum_{i=1}^I\sum_{j=1}^J (Y_{ij}-\bar{Y}_{..})^2 \\
+				&= J\sum_{i=1}^I(\bar{Y}_{i.}-\bar{Y}_{..})^2
+				+ I\sum_{j=1}^J(\bar{Y}_{.j}-\bar{Y}_{..})^2
+				+ \sum_{i=1}^I\sum_{j=1}^J e_{ij}^2 \\
+				&= SSTr + SSB + SSE. 
+			\end{align*}
+			
+			%----------------------------------------------------------------------
+			\item[(ii)] \textbf{Prove $E[MSB] = \sigma^2 + \dfrac{I}{J-1}\displaystyle\sum_{j=1}^J \beta_j^2$.}
+			
+			The block mean is $\bar{Y}_{.j} = \mu + \bar{\alpha}_{.} + \beta_j + \bar{\epsilon}_{.j} = \mu + \beta_j + \bar{\epsilon}_{.j}$
+			(since $\bar{\alpha}_{.} = 0$), and $\bar{Y}_{..} = \mu + \bar{\epsilon}_{..}$.
+			Thus $\bar{Y}_{.j} - \bar{Y}_{..} = \beta_j + (\bar{\epsilon}_{.j} - \bar{\epsilon}_{..})$.
+			Let $\delta_j = \bar{\epsilon}_{.j} - \bar{\epsilon}_{..}$. Then
+			\[
+			SSB = I\sum_{j=1}^J (\bar{Y}_{.j}-\bar{Y}_{..})^2
+			= I\sum_{j=1}^J (\beta_j + \delta_j)^2
+			= I\sum_{j=1}^J\beta_j^2
+			+ 2I\sum_{j=1}^J \beta_j\delta_j
+			+ I\sum_{j=1}^J\delta_j^2.
+			\]
+			Taking expectations: $E[\delta_j]=0$ so the cross term vanishes.
+			Each $\bar{\epsilon}_{.j} \sim N(0, \sigma^2/I)$ independently across $j$,
+			so by the same argument as the one-way ANOVA expected value proof,
+			$E\!\left[\sum_{j=1}^J \delta_j^2\right] = (J-1)\sigma^2/I$.
+			Hence $E\!\left[I\sum_{j=1}^J \delta_j^2\right] = (J-1)\sigma^2$, and
+			\[
+			E[SSB] = I\sum_{j=1}^J \beta_j^2 + (J-1)\sigma^2.
+			\]
+			Dividing by $df_B = J-1$,
+			$E[MSB] = \sigma^2 + \dfrac{I}{J-1}\displaystyle\sum_{j=1}^J \beta_j^2$. 
+			
+			%----------------------------------------------------------------------
+			\item[(iii)] \textbf{Randomized block $F$-test on drug dosage.}
+			
+			\textbf{Data summary.} The design has $I=4$ treatments, $J=3$ blocks, and $K=2$ replicates
+			per cell, giving $n = IJK = 24$ observations. Cell means (average of the two replicates):
+			
+			\begin{center}
+				\begin{tabular}{lcccc}
+					\hline
+					& B1 & B2 & B3 & $\bar{y}_{i..}$ \\
+					\hline
+					Control & 101.550 & 106.750 & 100.550 & 102.950 \\
+					Dose 1  & 103.750 & 106.800 & 103.400 & 104.650 \\
+					Dose 2  &  96.200 & 104.050 &  98.950 &  99.733 \\
+					Dose 3  & 102.400 & 106.700 &  98.050 & 102.383 \\
+					\hline
+					$\bar{y}_{.j.}$ & 100.975 & 106.075 & 100.238 & $\bar{y}_{...} = 102.429$ \\
+					\hline
+				\end{tabular}
+			\end{center}
+			
+			\textbf{Hypotheses:}
+			$H_0: \alpha_1 = \alpha_2 = \alpha_3 = \alpha_4 = 0$ (no drug effect)
+			versus $H_A:$ at least one $\alpha_i \neq 0$.
+			
+			\textbf{Sums of squares.} With $n=24$, $I=4$, $J=3$, $K=2$, and $\bar{y}_{...} = 102.429$:
+			\begin{align*}
+				SSTr  &= JK\sum_{i=1}^4 (\bar{y}_{i..}-\bar{y}_{...})^2
+				= 6\bigl[(0.521)^2+(2.221)^2+(-2.696)^2+(-0.046)^2\bigr]
+				= 6(8.612) = 51.674, \\
+				SSB   &= IK\sum_{j=1}^3 (\bar{y}_{.j.}-\bar{y}_{...})^2
+				= 8\bigl[(-1.454)^2+(3.646)^2+(-2.191)^2\bigr]
+				= 8(19.667) = 157.336, \\
+				SST   &= \sum_{i,j,k}(y_{ijk}-\bar{y}_{...})^2 = 280.958.
+			\end{align*}
+			The interaction + pure-error term $SSE = SST - SSTr - SSB = 280.958 - 51.674 - 157.336 = 71.948$.
+			
+			\textbf{ANOVA table.}
+			\begin{center}
+				\begin{tabular}{lcccc}
+					\hline
+					Source     & $df$           & $SS$      & $MS$     & $F$    \\
+					\hline
+					Treatment  & $I-1 = 3$      & $51.674$  & $17.225$ & $3.612$ \\
+					Block      & $J-1 = 2$      & $157.336$ & $78.668$ & $16.501$ \\
+					Error      & $n-I-J+1 = 18$ & $71.948$  &  $3.997$ &         \\
+					\hline
+					Total      & $n-1 = 23$     & $280.958$ &          &         \\
+					\hline
+				\end{tabular}
+			\end{center}
+			
+			\textbf{Test statistic and $p$-value.}
+			$F_{\mathrm{obs}} = MSTr/MSE = 17.225/3.997 \approx 4.31$
+			with $F \sim F(3, 18)$ under $H_0$, giving $p\text{-value} \approx 0.018$.
+			
+			\textbf{Statistical conclusion.} Since $p = 0.018 < 0.05$, we reject $H_0$.
+			
+			\textbf{Interpretation.} After controlling for block-to-block variability, there is statistically
+			significant evidence at the 5\% level that drug dosage is related to the biological response $y$.
+			The blocking factor also explains a substantial portion of the variation ($F = 16.50$, $p \approx 0.000$),
+			confirming that the block design was effective in reducing nuisance variability.
+			
+		\end{itemize}
+	
+	\clearpage
+	
+	\section{Question 9}
+	{\color{deepred}\fontspec{Georgia}   Non-parametric}
+	
+	Consider the following dataset, which includes the discrete response variable $y$ split by four groups Group1, Group2, Group3 and Group4. The data are displayed below:
+	
+	\begin{center}
+		\begin{tabular}{c c c c}
+			\hline
+			Group1 & Group2 & Group3 & Group4 \\
+			\hline
+			8  & 8  & 11 & 13 \\
+			10 & 14 & 12 & 17 \\
+			12 & 16 & 11 & 20 \\
+			10 & 14 & 23 & 15 \\
+			13 & 10 & 19 & 11 \\
+			12 & 11 & 11 & 17 \\
+			12 & 10 & 17 & 16 \\
+			15 & 9  & 17 & 5 \\
+			13 & 9  & 16 & 11 \\
+			9  & 12 & 16 & 20 \\
+			\hline
+		\end{tabular}
+	\end{center}
+	
+	Perform the following tasks:
+	\begin{enumerate}
+		\item[(i)] Run a Kruskal-Wallis test (at $\alpha=.05$) on the above dataset to check if the true average of the response differs per group. Ideally students should show each step by hand. Students will have to look up how to deal with ties when calculating the test statistic. Make sure to include all relevant steps in the testing procedure for full credit.
+		
+		\item[(ii)] Run a permutation test (at $\alpha=.05$) on the above dataset to check if the true average of the response differs per group. Make sure to include all relevant steps in the testing procedure for full credit.
+	\end{enumerate}
+	
+	\textbf{Answer}
+	
+	\clearpage
+	
+		
+		
+		
+	\end{document}
