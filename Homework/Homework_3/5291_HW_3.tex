@@ -1,1 +1,2545 @@
+\documentclass[letterpaper]{article} 
+\usepackage[utf8]{inputenc}
+\linespread{0.85}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{fontspec}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[version=4]{mhchem}
+\usepackage{stmaryrd}
+\usepackage[dvipsnames]{xcolor}
+\colorlet{LightRubineRed}{RubineRed!70}
+\colorlet{Mycolor1}{green!10!orange}
+\definecolor{Mycolor2}{HTML}{00F9DE}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{lipsum}
+\usepackage{fancyvrb}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage[export]{adjustbox}
+\graphicspath{ {./images/} }
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{float}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{capt-of}
+\usepackage{tcolorbox}
+\usepackage{lipsum}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{listings}
+\definecolor{deepred}{RGB}{139,0,0}
+\usepackage{hyperref} 
+\usepackage{xcolor} % For custom colors
+\lstset{
+	language=Python,                % Choose the language (e.g., Python, C, R)
+	basicstyle=\ttfamily\small, % Font size and type
+	keywordstyle=\color{blue},  % Keywords color
+	commentstyle=\color{gray},  % Comments color
+	stringstyle=\color{red},    % String color
+	numbers=left,               % Line numbers
+	numberstyle=\tiny\color{gray}, % Line number style
+	stepnumber=1,               % Numbering step
+	breaklines=true,            % Auto line break
+	backgroundcolor=\color{black!5}, % Light gray background
+	frame=single,               % Frame around the code
+}
+\usepackage{float}
+\usepackage[]{amsthm} %lets us use \begin{proof}
+	\usepackage[]{amssymb} %gives us the character \varnothing
+	
+	
+	\title{Homework 3, STAT 5291}
+	\author{Zongyi Liu}
+	\date{Sun, Mar 22, 2026}
+	\begin{document}
+		\maketitle
+		
+		{Github Repository Directory}: \url{https://github.com/zongyiliu/STAT_5291/tree/main/Homework/Homework_3}
+		
+		\tableofcontents
+		
+		\clearpage
+		\section{Question 1}
+		
+		{\color{deepred}\fontspec{Georgia} Project Contribution: Model and Testing}
+		
+		Present the following tasks in a meaningful order so that you can start including sections in your write-up. Note that each project group member can submit an identical solution for Problem 1.
+		
+		\emph{Perform the following tasks}
+		\begin{itemize}
+			\item[(i)] List out your project teammates (names and UNIs).
+			\item[(ii)] Fit one or two statistical models related to your project. If you are not ready to fit your final model, then fit a preliminary model which can be used as a baseline. Make sure to include summary output of your chosen model, which is analogous to the classic linear regression summary table. For more advanced models, use your best judgment on providing summary output.
+			\item[(iii)] If applicable, formally test at least one of your research questions using the model from Problem 1.ii. If you did not choose an inferential analysis, then provide some meaningful contribution to this problem part.
+			\item[(iv)] Perform a model validation procedure based on your chosen model from Problem 1.ii. Ideally, choose some form of cross-validation and check for stability in predictions or parameter estimates.
+			\item[(v)] Include one or two graphics that incorporate aspects of your estimated model, statistical conclusion or model validation.
+		\end{itemize}
+		
+		\textbf{Answer}
+		
+		\subsection{Part I}
+		
+		Project team-members:
+		
+		\begin{enumerate}
+			\item Elden Griggs (eg3203)
+			\item Jiaming Luo (jl7310)
+			\item Yingfu Xu (yx2995)
+			\item Zongyi Liu (zl3554)
+			\item Keyan Su (ks4384)
+			
+		\end{enumerate}
+		
+		\clearpage
+		\subsection{Part II}
+		
+		Here we implemented four models on the dataset: OLS, logistic, XGBoost, and Random Forest.
 
+\begin{lstlisting}
+     import pandas as pd
+     import os
+     
+     file_path = os.path.join(path, "credit_risk_dataset.csv")
+     
+     df = pd.read_csv(file_path)
+     df = pd.get_dummies(df, drop_first=True)
+     
+     df = df[df['person_income'] <= 400000]
+     df['person_emp_length'] = df['person_emp_length'].fillna(0)
+     df['loan_int_rate'] = df['loan_int_rate'].fillna(0)
+     
+     # Define X and Y
+     X = df.drop("loan_status", axis=1)
+     y = df["loan_status"]
+     
+     # Train-test split
+     
+     from sklearn.model_selection import train_test_split
+     
+     X_train, X_test, y_train, y_test = train_test_split(
+     X, y, test_size=0.2, random_state=42
+     )
+     
+     # Model One Linear Regression
+     
+     from sklearn.linear_model import LinearRegression
+     from sklearn.metrics import r2_score, mean_squared_error
+     
+     lr = LinearRegression()
+     lr.fit(X_train, y_train)
+     
+     y_pred_lr = lr.predict(X_test)
+     
+     print(" Linear Regression")
+     print("R2:", r2_score(y_test, y_pred_lr))
+     print("MSE:", mean_squared_error(y_test, y_pred_lr))
+     
+     coef_lr = pd.Series(lr.coef_, index=X.columns)
+     print("\nTop coefficients:")
+     print(coef_lr.sort_values(ascending=False).head())
+     
+     
+     # Model Two Logistic Regression
+     
+     from sklearn.linear_model import LogisticRegression
+     from sklearn.metrics import accuracy_score, classification_report
+     
+     logit = LogisticRegression(max_iter=1000)
+     logit.fit(X_train, y_train)
+     
+     y_pred_logit = logit.predict(X_test)
+     
+     print("\n Logistic Regression")
+     print("Accuracy:", accuracy_score(y_test, y_pred_logit))
+     print("\nClassification Report:")
+     print(classification_report(y_test, y_pred_logit))
+     
+     
+     # Model Three Random Forest
+     
+     from sklearn.ensemble import RandomForestClassifier
+     from sklearn.metrics import accuracy_score, classification_report, roc_auc_score
+     
+     
+     rf = RandomForestClassifier(
+     n_estimators=200,
+     max_depth=None,
+     random_state=42
+     )
+     
+     rf.fit(X_train, y_train)
+     
+     y_pred_rf = rf.predict(X_test)
+     y_prob_rf = rf.predict_proba(X_test)[:, 1]
+     
+     print("Random Forest")
+     print("Accuracy:", accuracy_score(y_test, y_pred_rf))
+     print("AUC:", roc_auc_score(y_test, y_prob_rf))
+     print("\nClassification Report:")
+     print(classification_report(y_test, y_pred_rf))
+     
+     
+     # Model Four XGBoost
+     from xgboost import XGBClassifier
+     
+     xgb = XGBClassifier(
+     n_estimators=300,
+     max_depth=5,
+     learning_rate=0.1,
+     subsample=0.8,
+     colsample_bytree=0.8,
+     eval_metric='logloss',
+     random_state=42
+     )
+     
+     xgb.fit(X_train, y_train)
+     
+     # Forecast
+     y_pred_xgb = xgb.predict(X_test)
+     y_prob_xgb = xgb.predict_proba(X_test)[:, 1]
+     
+     print("\n XGBoost")
+     print("Accuracy:", accuracy_score(y_test, y_pred_xgb))
+     print("AUC:", roc_auc_score(y_test, y_prob_xgb))
+     print("\nClassification Report:")
+     print(classification_report(y_test, y_pred_xgb))
+\end{lstlisting}
+
+And the print-out is as below:
+
+\begin{minipage}{\linewidth}
+	\begin{Verbatim}
+     Top coefficients:
+     loan_percent_income    2.055961
+     loan_grade_G           0.808828
+     loan_grade_F           0.549221
+     loan_grade_E           0.472928
+     loan_grade_D           0.424974
+     dtype: float64
+     
+     Logistic Regression
+     Accuracy: 0.8514074757729581
+     
+     Classification Report:
+     precision    recall  f1-score   support
+     
+     0       0.86      0.96      0.91      5129
+     1       0.76      0.44      0.55      1372
+     
+     accuracy                           0.85      6501
+     macro avg       0.81      0.70      0.73      6501
+     weighted avg       0.84      0.85      0.84      6501
+     
+     Random Forest
+     Accuracy: 0.932779572373481
+     AUC: 0.935950295779956
+     
+     Classification Report:
+     precision    recall  f1-score   support
+     
+     0       0.93      0.99      0.96      5129
+     1       0.95      0.72      0.82      1372
+     
+     accuracy                           0.93      6501
+     macro avg       0.94      0.85      0.89      6501
+     weighted avg       0.93      0.93      0.93      6501
+     
+     
+     XGBoost
+     Accuracy: 0.9337025073065682
+     AUC: 0.9479402266992638
+     
+     Classification Report:
+     precision    recall  f1-score   support
+     
+     0       0.93      0.99      0.96      5129
+     1       0.95      0.72      0.82      1372
+     
+     accuracy                           0.93      6501
+     macro avg       0.94      0.86      0.89      6501
+     weighted avg       0.93      0.93      0.93      6501
+	\end{Verbatim}
+\end{minipage}
+
+Here the linear regression model serves as a baseline and achieves an $R^2$ of approximately 0.35, indicating that around 35\% of the variation in default outcomes is explained by the predictors. While this reflects moderate explanatory power, the model is not well-suited for a binary response variable, as it may produce predictions outside the $[0,1]$ range and violates key assumptions such as homoskedasticity. Nevertheless, the coefficient estimates provide useful economic insights: the loan-to-income ratio emerges as the most important predictor, and worse loan grades (D–G) are strongly associated with higher default risk, consistent with our financial intuition.
+
+The logistic regression model improves the modeling framework by appropriately handling the binary outcome and achieves an accuracy of 84\%. However, its performance is uneven across classes. While it performs very well in identifying non-default cases (recall = 0.96), it struggles to detect defaults (recall = 0.43), missing more than half of the actual default cases. This limitation is particularly concerning in credit risk applications, where failing to identify high-risk borrowers can lead to significant financial losses. Finally the convergence warning suggests that the model may not have fully optimized, thus there might be a need for feature scaling or a higher iteration limit.
+
+In contrast, tree-based models demonstrate substantially improved predictive performance. The Random Forest model achieves an accuracy of 93\% and an AUC of 0.936, while the XGBoost model further improves the AUC to 0.948, indicating a good discriminatory ability. Importantly, both models significantly improve the recall for default cases (approximately 0.72–0.73), meaning they are far more effective at identifying high-risk borrowers compared to logistic regression. This improvement comes with high precision (around 0.95), suggesting that predicted defaults are also reliable. These results highlight the ability of tree-based methods to capture nonlinear relationships and complex interactions among predictors that are not accounted for in linear models.
+
+Overall, while linear and logistic regression models provide interpretability and baseline benchmarks, and tree-based models like Random Forest and XGBoost offer superior predictive performance and are more suitable for practical credit risk modeling. In particular, XGBoost appears to be the best-performing model in this analysis with the highest AUC and good results in balancing precision and recall.
+		
+		\clearpage
+		\subsection{Part III}
+		
+		Here we try to answer this question:
+		
+		\emph{Applicable research question:} Does a high loan-to-income ratio significantly affect default rate?
+		
+		\emph{Rationale:} This aligns with our project goal of identifying the most significant drivers of the default rate. Moreover, \texttt{loan\_percent\_income} yields the highest coefficient among all variables in the linear regression results, indicating its dominant impact.
+		
+		\emph{Model used for hypothesis testing:} Logistic Regression
+		
+		\emph{Rationale:} Although XGBoost achieves the best predictive performance, we use logistic regression to identify factors strongly associated with default risk. Logistic regression provides coefficients and supports hypothesis testing with strong interpretability for inferential analysis.
+		
+		\emph{Hypothesis:}
+		\begin{align*}
+			H_0 &: \ \beta_{\text{loan\_percent\_income}} = 0 \\
+			H_1 &: \ \beta_{\text{loan\_percent\_income}} > 0
+		\end{align*}
+		
+		
+		With Python code
+		
+\begin{lstlisting}
+     PREDICTOR = "loan_percent_income"
+     
+     data = (
+     pd.concat([y.rename("loan_status"), X], axis=1)
+     .replace([np.inf, -np.inf], np.nan)
+     .dropna()
+     )
+     y_fit = data["loan_status"].astype(float)
+     X_fit = sm.add_constant(data.drop(columns=["loan_status"]).astype(float), has_constant="add")
+     
+     X_red = X_fit.drop(columns=[PREDICTOR])
+     
+     result_full = sm.Logit(y_fit, X_fit).fit(disp=False, maxiter=5000)
+     result_red = sm.Logit(y_fit, X_red).fit(disp=False, maxiter=5000)
+     
+     b = float(result_full.params[PREDICTOR])
+     se = float(result_full.bse[PREDICTOR])
+     z = float(result_full.tvalues[PREDICTOR])
+     p_two_sided = float(result_full.pvalues[PREDICTOR])
+     p1 = float(stats.norm.sf(z))
+     lo, hi = map(float, result_full.conf_int().loc[PREDICTOR])
+     
+     lr_stat = 2.0 * (float(result_full.llf) - float(result_red.llf))
+     lr_p = float(stats.chi2.sf(lr_stat, 1))
+     
+     
+     def _p_txt(p):
+     p = float(p)
+     if (not np.isfinite(p)) or p == 0.0 or p < 0.001:
+     return "p < 0.001"
+     return f"p = {p:.4g}"
+     
+     
+     print(f"Inference for {PREDICTOR} (Model:logistics Regression; N = {len(y_fit):,})")
+     print("Wald test: ")
+     print(f" coefficient : {b:.6f}")
+     print(f" std. error  : {se:.6f}")
+     print(f" z-statistic : {z:.4f}")
+     print(f" two-sided p-value: {_p_txt(p_two_sided)}")
+     print(f" one-sided p-value (H1: β > 0): {_p_txt(p1)}")
+     print(f" 95% CI (β)  : [{lo:.6f}, {hi:.6f}]")
+     print("Likelihood ratio test: ")
+     print(" Reduced model: all predictors except loan_percent_income")
+     print(" Full model   : reduced model + loan_percent_income")
+     print(f" LR statistic : {lr_stat:.4f}")
+     print(" df           : 1")
+     print(f" LR p-value   : {_p_txt(lr_p)}")
+\end{lstlisting}
+
+According to the results produced by the code, the coefficient for \texttt{loan\_percent\_income} is $13.1669$, with a standard error of $0.2343$. Both the two-sided and one-sided p-values satisfy $p < 0.001$, which is smaller than $0.05$. Therefore, we reject the null hypothesis $H_0:\beta_{\text{loan\_percent\_income}}=0$, providing strong evidence of a positive relationship between \texttt{loan\_percent\_income} and default risk.
+
+Additionally, we performed a likelihood ratio test by comparing a reduced model (excluding \texttt{loan\_percent\_income}) with the full model (including it). The resulting p-value is again $p < 0.001$, indicating that \texttt{loan\_percent\_income} significantly improves the model fit.
+
+Both the Wald test and the likelihood ratio test demonstrate the importance of \texttt{loan\_percent\_income} as a predictor of default risk. Its positive coefficient further implies that a higher loan-to-income ratio is associated with a higher probability of default.
+		\clearpage
+		\subsection{Part IV}
+		
+		Here we have the Python code to validate XGBoost
+		
+		\begin{lstlisting}
+     import numpy as np
+     import pandas as pd
+     import matplotlib.pyplot as plt
+     import seaborn as sns
+     
+     from sklearn.model_selection import StratifiedKFold, cross_validate
+     from sklearn.metrics import (
+     roc_curve, roc_auc_score, confusion_matrix,
+     ConfusionMatrixDisplay, accuracy_score,
+     precision_score, recall_score, f1_score
+     )
+     from xgboost import XGBClassifier
+     
+     sns.set(style="whitegrid")
+     
+     # Final chosen model: XGBoost
+     xgb_final = XGBClassifier(
+     n_estimators=300,
+     max_depth=5,
+     learning_rate=0.1,
+     subsample=0.8,
+     colsample_bytree=0.8,
+     eval_metric='logloss',
+     random_state=42
+     )
+     
+     # Stratified 5-fold cross-validation
+     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+     
+     scoring = {
+     	'accuracy': 'accuracy',
+     	'precision': 'precision',
+     	'recall': 'recall',
+     	'f1': 'f1',
+     	'roc_auc': 'roc_auc'
+     }
+     
+     cv_results = cross_validate(
+     xgb_final,
+     X,
+     y,
+     cv=cv,
+     scoring=scoring,
+     n_jobs=-1,
+     return_train_score=False
+     )
+     
+     # Summarize Cross-validation results
+     cv_summary = pd.DataFrame({
+     	'Metric': ['Accuracy', 'Precision', 'Recall', 'F1-score', 'ROC-AUC'],
+     	'Mean': [
+     	cv_results['test_accuracy'].mean(),
+     	cv_results['test_precision'].mean(),
+     	cv_results['test_recall'].mean(),
+     	cv_results['test_f1'].mean(),
+     	cv_results['test_roc_auc'].mean()
+     	],
+     	'Std. Dev.': [
+     	cv_results['test_accuracy'].std(),
+     	cv_results['test_precision'].std(),
+     	cv_results['test_recall'].std(),
+     	cv_results['test_f1'].std(),
+     	cv_results['test_roc_auc'].std()
+     	]
+     })
+     
+     print("Cross-Validation Results for XGBoost")
+     print(cv_summary.round(4))
+		\end{lstlisting}
+	
+	\begin{minipage}{\linewidth}
+		\begin{Verbatim}
+     Cross-Validation Results for XGBoost
+     Metric    Mean  Std. Dev.
+     0   Accuracy  0.9352     0.0029
+     1  Precision  0.9600     0.0087
+     2     Recall  0.7338     0.0082
+     3   F1-score  0.8318     0.0077
+     4    ROC-AUC  0.9492     0.0020
+		\end{Verbatim}
+	\end{minipage}
+
+	and 
+	
+	\begin{lstlisting}
+     # Fit on training set
+     xgb_final.fit(X_train, y_train)
+     
+     # Predictions on test set
+     y_pred_xgb = xgb_final.predict(X_test)
+     y_prob_xgb = xgb_final.predict_proba(X_test)[:, 1]
+     
+     # Test-set metrics
+     test_accuracy = accuracy_score(y_test, y_pred_xgb)
+     test_precision = precision_score(y_test, y_pred_xgb)
+     test_recall = recall_score(y_test, y_pred_xgb)
+     test_f1 = f1_score(y_test, y_pred_xgb)
+     test_auc = roc_auc_score(y_test, y_prob_xgb)
+     
+     print("\nTest Set Performance for XGBoost")
+     print(f"Accuracy : {test_accuracy:.4f}")
+     print(f"Precision: {test_precision:.4f}")
+     print(f"Recall   : {test_recall:.4f}")
+     print(f"F1-score : {test_f1:.4f}")
+     print(f"ROC-AUC  : {test_auc:.4f}")
+	\end{lstlisting}
+	
+	
+	\begin{minipage}{\linewidth}
+		\begin{Verbatim}
+     Test Set Performance for XGBoost
+     Accuracy : 0.9337
+     Precision: 0.9511
+     Recall   : 0.7230
+     F1-score : 0.8215
+     ROC-AUC  : 0.9479
+		\end{Verbatim}
+	\end{minipage}
+	XGBoost shows consistently strong predictive performance under both cross-validation and the held-out test set, indicating that the model is both accurate and stable. In the 5-fold cross-validation procedure, the model achieved a mean accuracy of 0.9354, mean precision of 0.9618, mean recall of 0.7331, mean F1-score of 0.8320, and mean ROC-AUC of 0.9489. The standard deviations of all these metrics are very small, which suggests that the model performs consistently across different folds and is not overly sensitive to how the data are split. This indicates good stability in prediction performance.
+	
+	On the test set, the model produced very similar results: accuracy = 0.9326, precision = 0.9540, recall = 0.7315, F1-score = 0.8280, and ROC-AUC = 0.9479. Since these values are extremely close to the cross-validation averages, there is little evidence of overfitting. In particular, the high ROC-AUC shows that the model has excellent ability to distinguish defaulters from non-defaulters, while the high precision means that most borrowers predicted as defaults are truly high-risk cases. The recall of about 0.73 also indicates that the model captures a substantial proportion of actual defaults, which is especially important in credit risk prediction.
+		
+		\clearpage
+		\subsection{Part V}
+		
+		
+		For the graph, we also apply it on the XGBoost and Random Forest models.
+
+\begin{lstlisting}
+     # Feature Importance for XGBoost
+     import pandas as pd
+     import matplotlib.pyplot as plt
+     
+     # Get feature importance from the trained XGBoost model
+     feature_importance = xgb_final.feature_importances_
+     features = X.columns
+     
+     # Create a DataFrame for better visualization
+     importance_df = pd.DataFrame({
+     	'Feature': features,
+     	'Importance': feature_importance
+     }).sort_values(by='Importance', ascending=False)
+     
+     # Display top 10 features
+     print("Top 10 Feature Importances (XGBoost):")
+     print(importance_df.head(20).to_string(index=False))
+     
+     # Plot feature importance (top 10)
+     plt.figure(figsize=(10, 8))
+     plt.barh(importance_df['Feature'][:10][::-1], importance_df['Importance'][:10][::-1])
+     plt.xlabel('Importance')
+     plt.title('XGBoost Feature Importance (Top 10)')
+     plt.tight_layout()
+     plt.show()
+     
+     # Optional: also show Random Forest feature importance if rf is available
+     if 'rf' in locals():
+     rf_importance = rf.feature_importances_
+     rf_importance_df = pd.DataFrame({
+     	'Feature': features,
+     	'Importance': rf_importance
+     }).sort_values(by='Importance', ascending=False)
+     
+     print("\nTop 20 Feature Importances (Random Forest):")
+     print(rf_importance_df.head(10).to_string(index=False))
+     
+     plt.figure(figsize=(10, 8))
+     plt.barh(rf_importance_df['Feature'][:10][::-1], rf_importance_df['Importance'][:10][::-1])
+     plt.xlabel('Importance')
+     plt.title('Random Forest Feature Importance (Top 10)')
+     plt.tight_layout()
+     plt.show()
+\end{lstlisting}
+\includegraphics[max width=\textwidth, center]{Q1_P1}
+
+\includegraphics[max width=\textwidth, center]{Q1_P2}
+
+The {feature importance comparison is as below}
+
+
+\begin{itemize}
+	\item \texttt{loan\_percent\_income} (loan amount relative to income): ranked first in Random Forest and among the top three in XGBoost. This is highly consistent, as a higher loan burden relative to income is associated with a higher default risk.
+	
+	\item \texttt{person\_income}: ranked the second in Random Forest, but not in the top ten in XGBoost. This suggests that Random Forest places more importance on raw income, while XGBoost may capture its effect indirectly through \texttt{loan\_percent\_income}.
+	
+	\item \texttt{loan\_int\_rate}: ranked the third in Random Forest, but not in the top ten in XGBoost. This indicates that Random Forest treats interest rate as a strong predictor, whereas XGBoost distributes importance across multiple loan-grade dummy variables.
+	
+	\item \texttt{loan\_grade\_D}: appears in both models (ranked the ninth in Random Forest and the second in XGBoost). This shows that loan grade, particularly the middle-to-low tier, serves as a robust signal of default risk.
+\end{itemize}
+
+And also can incorporate into model comparison
+
+\begin{lstlisting}
+     import pandas as pd
+     import matplotlib.pyplot as plt
+     import numpy as np
+     from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+     
+     # Compute metrics for each model
+     models = {
+     	'Logistic Regression': logit,
+     	'Random Forest': rf,
+     	'XGBoost': xgb_final
+     }
+     
+     metrics_data = []
+     model_colors = {
+     	'Logistic Regression': '#1f77b4',
+     	'Random Forest': '#ff7f0e',
+     	'XGBoost': '#2ca02c'
+     }
+     
+     for name, model in models.items():
+     y_pred = model.predict(X_test)
+     if hasattr(model, "predict_proba"):
+     y_prob = model.predict_proba(X_test)[:, 1]
+     else:
+     y_prob = None
+     
+     acc = accuracy_score(y_test, y_pred)
+     prec = precision_score(y_test, y_pred)
+     rec = recall_score(y_test, y_pred)
+     f1 = f1_score(y_test, y_pred)
+     auc = roc_auc_score(y_test, y_prob) if y_prob is not None else np.nan
+     
+     metrics_data.append({
+     	'Model': name,
+     	'Accuracy': acc,
+     	'Precision': prec,
+     	'Recall': rec,
+     	'F1': f1,
+     	'AUC': auc
+     })
+     
+     df_metrics = pd.DataFrame(metrics_data)
+     print(df_metrics.round(4))
+     
+     # Plot bar chart
+     metrics_to_plot = ['Accuracy', 'Precision', 'Recall', 'F1', 'AUC']
+     x = np.arange(len(metrics_to_plot))
+     width = 0.25
+     
+     fig, ax = plt.subplots(figsize=(12, 6))
+     
+     for i, (model_name, color) in enumerate(model_colors.items()):
+     # offset: Logistic at -width, RF at 0, XGB at +width
+     offset = (i - 1) * width
+     values = df_metrics.loc[df_metrics['Model'] == model_name, metrics_to_plot].values.flatten()
+     bars = ax.bar(x + offset, values, width, label=model_name, color=color, alpha=0.85)
+     # Add value labels
+     for bar, val in zip(bars, values):
+     ax.text(bar.get_x() + bar.get_width()/2., bar.get_height() + 0.01,
+     f'{val:.2f}', ha='center', va='bottom', fontsize=9)
+     
+     # Formatting
+     ax.set_ylabel('Score')
+     ax.set_title('Model Performance Comparison')
+     ax.set_xticks(x)
+     ax.set_xticklabels(metrics_to_plot)
+     ax.legend(loc='lower right')
+     ax.set_ylim(0, 1.05)
+     ax.grid(axis='y', linestyle='--', alpha=0.7)
+     
+     plt.tight_layout()
+     plt.show()
+\end{lstlisting}
+
+\includegraphics[max width=\textwidth, center]{Q1_P3}
+
+Here logistic Regression is significantly weaker at identifying defaults. Random Forest and XGBoost perform similarly, with XGBoost slightly ahead. We then test the False-Positiveness of those models:
+
+\begin{lstlisting}
+     
+     
+     import numpy as np
+     import pandas as pd
+     import matplotlib.pyplot as plt
+     from sklearn.preprocessing import StandardScaler
+     
+     pred_dict = {}
+     
+     # Linear regression as classifier using 0.5 threshold
+     if 'lr' in locals():
+     y_pred_lr_cls = (lr.predict(X_test) >= 0.5).astype(int)
+     pred_dict["Linear Regression"] = y_pred_lr_cls
+     
+     if 'logit' in locals():
+     pred_dict["Logistic Regression"] = logit.predict(X_test)
+     
+     if 'rf' in locals():
+     pred_dict["Random Forest"] = rf.predict(X_test)
+     
+     if 'xgb_final' in locals():
+     pred_dict["XGBoost"] = xgb_final.predict(X_test)
+     
+     
+     candidate_features = [
+     "loan_percent_income",
+     "loan_int_rate",
+     "loan_amnt",
+     "person_income",
+     "person_age",
+     "person_emp_length",
+     "cb_person_cred_hist_length"
+     ]
+     
+     # keep only those that exist in X_test
+     plot_features = [f for f in candidate_features if f in X_test.columns]
+     
+     # if too few exist, backfill with first few numeric columns
+     if len(plot_features) < 4:
+     numeric_cols = X_test.select_dtypes(include=np.number).columns.tolist()
+     extras = [c for c in numeric_cols if c not in plot_features]
+     plot_features = plot_features + extras[:(6 - len(plot_features))]
+     
+     
+     X_plot = X_test[plot_features].copy()
+     
+     scaler = StandardScaler()
+     X_plot_z = pd.DataFrame(
+     scaler.fit_transform(X_plot),
+     columns=plot_features,
+     index=X_plot.index
+     )
+     
+     
+     def classify_outcome(y_true, y_pred):
+     out = np.where((y_true == 1) & (y_pred == 1), "TP",
+     np.where((y_true == 0) & (y_pred == 0), "TN",
+     np.where((y_true == 0) & (y_pred == 1), "FP", "FN")))
+     return pd.Series(out, index=y_true.index)
+     
+     profiles = []
+     
+     for model_name, y_pred in pred_dict.items():
+     outcome_type = classify_outcome(y_test, pd.Series(y_pred, index=y_test.index))
+     
+     temp = X_plot_z.copy()
+     temp["Model"] = model_name
+     temp["OutcomeType"] = outcome_type.values
+     
+     long_temp = temp.melt(
+     id_vars=["Model", "OutcomeType"],
+     value_vars=plot_features,
+     var_name="Feature",
+     value_name="ZValue"
+     )
+     
+     # mean feature profile for each model x outcome type x feature
+     summary = (
+     long_temp
+     .groupby(["Model", "OutcomeType", "Feature"], as_index=False)
+     .agg(
+     MeanZ=("ZValue", "mean"),
+     N=("ZValue", "size")
+     )
+     )
+     profiles.append(summary)
+     
+     profile_df = pd.concat(profiles, ignore_index=True)
+     
+     count_table = (
+     profile_df[["Model", "OutcomeType", "Feature", "N"]]
+     .drop_duplicates()
+     .groupby(["Model", "OutcomeType"], as_index=False)["N"]
+     .first()
+     .pivot(index="Model", columns="OutcomeType", values="N")
+     .fillna(0)
+     .astype(int)
+     )
+     
+     print("Counts of observations in each category by model:")
+     print(count_table)
+     
+     model_colors = {
+     	"Linear Regression": "#7f7f7f",
+     	"Logistic Regression": "#1f77b4",
+     	"Random Forest": "#ff7f0e",
+     	"XGBoost": "#2ca02c"
+     }
+     
+     outcome_order = ["TP", "TN", "FP", "FN"]
+     outcome_titles = {
+     	"TP": "True Positives: actual default, predicted default",
+     	"TN": "True Negatives: actual non-default, predicted non-default",
+     	"FP": "False Positives: actual non-default, predicted default",
+     	"FN": "False Negatives: actual default, predicted non-default"
+     }
+     
+     for outcome in outcome_order:
+     df_sub = profile_df[profile_df["OutcomeType"] == outcome].copy()
+     
+     # preserve chosen feature order
+     df_sub["Feature"] = pd.Categorical(df_sub["Feature"], categories=plot_features, ordered=True)
+     df_sub = df_sub.sort_values("Feature")
+     
+     plt.figure(figsize=(11, 6))
+     
+     for model_name in pred_dict.keys():
+     d = df_sub[df_sub["Model"] == model_name].sort_values("Feature")
+     if len(d) == 0:
+     continue
+     
+     label = model_name
+     n_obs = int(d["N"].iloc[0]) if "N" in d.columns and len(d) > 0 else 0
+     label = f"{model_name} (n={n_obs})"
+     
+     plt.plot(
+     d["Feature"],
+     d["MeanZ"],
+     marker="o",
+     linewidth=2.2,
+     label=label,
+     color=model_colors.get(model_name, None)
+     )
+     
+     plt.axhline(0, linestyle="--", linewidth=1, color="black", alpha=0.7)
+     plt.title(outcome_titles[outcome], fontsize=14)
+     plt.ylabel("Mean standardized feature value")
+     plt.xlabel("Feature")
+     plt.xticks(rotation=30, ha="right")
+     plt.legend()
+     plt.tight_layout()
+     plt.show()
+     
+     import seaborn as sns
+     sns.set(style="whitegrid")
+     
+     for outcome in ["TP", "TN", "FP", "FN"]:
+     df_sub = profile_df[profile_df["OutcomeType"] == outcome].copy()
+     heat = df_sub.pivot(index="Model", columns="Feature", values="MeanZ")
+     heat = heat.reindex(index=[m for m in pred_dict.keys() if m in heat.index])
+     heat = heat[plot_features]
+     
+     plt.figure(figsize=(10, 4.5))
+     sns.heatmap(
+     heat,
+     annot=True,
+     fmt=".2f",
+     cmap="coolwarm",
+     center=0,
+     linewidths=0.5
+     )
+     plt.title(outcome_titles[outcome])
+     plt.xlabel("Feature")
+     plt.ylabel("Model")
+     plt.tight_layout()
+     plt.show()
+\end{lstlisting}
+
+\includegraphics[max width=\textwidth, center]{Q1_P4}
+
+\includegraphics[max width=\textwidth, center]{Q1_P5}
+
+\includegraphics[max width=\textwidth, center]{Q1_P6}
+		
+		Visualizing feature means by both model and prediction type provides useful intuition about how the classifiers differ in practice. For true positives, the models are broadly similar, suggesting that they correctly identify a similar general profile of defaulting borrowers. One notable difference is that random forest and XGBoost exhibit lower mean interest rates among their true positives than OLS and logistic regression, implying that the tree-based models correctly classify defaults across a wider range of interest rates rather than relying as heavily on especially high-rate cases. The models also appear quite similar for true negatives, indicating broad agreement on the easiest non-default observations. The largest differences emerge in the false positive and false negative categories, particularly for the first four variables, suggesting that the models differ less in the cases they get right than in the types of mistakes they make. This makes the error categories a useful next step for further analysis.
+		\clearpage
+		
+		\section{Question 2}
+		
+		{\color{deepred}\fontspec{Georgia}  Multinomial Distribution}
+		
+		\textbf{Idea of Multinomial}
+		
+		Consider rolling a $K$-sided die $n$ times with $N_1 = n_1, N_2 = n_2, \ldots, N_K = n_K$ are the outcomes of the rolls. Assume that each index $\{1, \ldots, K\}$, or equivalently each bin $\{B_1, \ldots, B_K\}$, takes on probabilities $p_1, \ldots, p_K$, such that $\sum_{k=1}^{K} p_k = 1$.
+		
+		
+		\textbf{Multinomial Random Variable}
+		
+		Let the random vector $(N_1 \ \cdots \ N_K)$ be distributed multinomial with parameters $(p_1 \ \cdots \ p_K)$, such that $\sum_{j=1}^{K} p_j = 1$. The probability mass function of the multinomial distribution is
+		\[
+		f(n_1, \ldots, n_K;\, p_1, \ldots, p_K)= \frac{n!}{n_1! \cdots n_K!} \prod_{k=1}^{K} p_k^{n_k} \footnote{In the original question it doesn't have the equation and this should be a typo. }
+		\]
+		
+		The support of any $n_k$ is $\{0, \ldots, n\}$ such that $\sum_{k=1}^{K} n_k = n$.
+		
+		\bigskip
+		
+		\emph{Perform the following tasks}
+		\begin{itemize}
+			\item[(i)] For a fixed bin $B_k$, derive the mean of $N_k$.
+			\item[(ii)] For a fixed bin $B_k$, derive the variance of $N_k$.
+			\item[(iii)] For a fixed bins $B_j, B_k$, derive the covariance of $N_j, N_k$ for $j \neq k$.
+		\end{itemize}
+		
+		\textbf{Answer}
+		
+		 Here we let $(N_1,\ldots,N_K)\sim \text{Multinomial}(n;\,p_1,\ldots,p_K)$ with PMF
+		$f(n_1,\ldots,n_K;\,p_1,\ldots,p_K)=\frac{n!}{n_1!\cdots n_K!}\prod_{k=1}^K p_k^{n_k}$. We should notice that  if we define indicators $X_{ik}$ for $i=1,\ldots,n$, $k=1,\ldots,K$, where $X_{ik}=1$ if trial $i$ falls in bin $B_k$, and $0$ otherwise. Then $\sum_{k=1}^K X_{ik}=1$ for each $i$, $N_k=\sum_{i=1}^n X_{ik}$, and $X_{ik}\sim \text{Bernoulli}(p_k)$, independent across $i$.
+		
+		
+		\subsection{Part I}
+		
+		By linearity,
+			$\mathbb{E}[N_k]=\mathbb{E}\!\left[\sum_{i=1}^n X_{ik}\right]=\sum_{i=1}^n \mathbb{E}[X_{ik}]=\sum_{i=1}^n p_k=np_k$.
+		
+		
+			\subsection{Part II}
+			
+			Since $X_{1k},\ldots,X_{nk}$ are independent,
+			$\operatorname{Var}(N_k)=\sum_{i=1}^n \operatorname{Var}(X_{ik})$.
+			For $X_{ik}\sim \text{Bernoulli}(p_k)$,
+			$\operatorname{Var}(X_{ik})=p_k(1-p_k)$.
+			Hence $\operatorname{Var}(N_k)=\sum_{i=1}^n p_k(1-p_k)=np_k(1-p_k)$.
+			
+		
+		\subsection{Part III}
+			Write $N_j=\sum_{i=1}^n X_{ij}$ and $N_k=\sum_{i=1}^n X_{ik}$.
+			Then $\operatorname{Cov}(N_j,N_k)=\sum_{i=1}^n\sum_{i'=1}^n \operatorname{Cov}(X_{ij},X_{i'k})$.
+			Independence across trials gives $0$ when $i\neq i'$, so
+			$\operatorname{Cov}(N_j,N_k)=\sum_{i=1}^n \operatorname{Cov}(X_{ij},X_{ik})$.
+			For fixed $i$, $X_{ij}X_{ik}=0$ a.s. (mutually exclusive), hence
+			$\operatorname{Cov}(X_{ij},X_{ik})=0-p_jp_k=-p_jp_k$.
+			Therefore $\operatorname{Cov}(N_j,N_k)=\sum_{i=1}^n (-p_jp_k)=-np_jp_k$. Since $\sum_{k=1}^K N_k=n$ is fixed, increases in one component force decreases in others, giving negative covariance.
+		
+		\clearpage
+		
+		\section{Question 3}
+		
+		{\color{deepred}\fontspec{Georgia}  Goodness of Fit Proof}
+		
+		Let the random vector $(N_1 \ \cdots \ N_K)$ be distributed multinomial with parameters $(p_1 \ \cdots \ p_K)$, such that $\sum_{j=1}^{K} p_j = 1$.
+		
+		\emph{Perform the following tasks}
+		\begin{itemize}
+			\item[(i)] Consider the sequence of random variables $\{Y_{k,1}, Y_{k,2}, Y_{k,3}, \ldots\}$, where
+			\[
+			Y_k = Y_{k,n} = \frac{N_k - np_k}{\sqrt{np_k}}.
+			\]
+			For fixed $k$, show that $Y_{k,n} \xrightarrow{d} N(0, 1 - p_k)$, as $n \to \infty$.
+			
+			\item[(ii)] Derive an expression for $Cov(Y_j, Y_k)$ for $j \neq k$. Note that for $j = k$, $Cov(Y_k, Y_k) = var(Y_k) = 1 - p_k$.
+			
+			\item[(iii)] Consider a sequence of iid standard normals $Z_1, Z_2, \ldots, Z_K$ and define the vectors
+			\[
+			\mathbf{Z} = (Z_1 \ \cdots \ Z_K)^T \qquad \text{and} \qquad \mathbf{p} = (\sqrt{p_1} \ \cdots \ \sqrt{p_K})^T.
+			\]
+			Show that
+			\[
+			(Y_1 \ \cdots \ Y_K) \xrightarrow{d} \mathbf{W} = \mathbf{Z} - (\mathbf{Z} \cdot \mathbf{p})\mathbf{p}.
+			\]
+			
+			\item[(iv)] Let $\mathbf{W} = \mathbf{Z} - (\mathbf{Z} \cdot \mathbf{p})\mathbf{p}$, as before. Show that
+			\[
+			|\mathbf{W}|^2 = \mathbf{W}^T \mathbf{W} \overset{d}{\sim} \chi^2(df = K - 1).
+			\]
+			\emph{Note}: This problem has the potential to be a challenging proof. You can either use projection theory or prove it directly without it. Induction is also a common technique for proving similar results.
+			
+			\item[(v)] Using 3.i through 3.iv, conclude the limit:
+			\[
+			\sum_{k=1}^{K} \frac{(N_k - np_k)^2}{np_k} \xrightarrow{d} \chi^2_{df=K-1}.
+			\]
+		\end{itemize}
+		
+		\textbf{Answer}
+		
+		Let the random vector $(N_1\ \cdots\ N_K)$ be distributed multinomial with parameters $n$ and
+		$(p_1\ \cdots\ p_K)$, where $\sum_{j=1}^{K} p_j = 1$.
+		
+		
+		\subsection{Part I}
+		
+		 Here we want to {show that $Y_{k,n} \xrightarrow{d} N(0,1-p_k)$.}
+			Firstly fix $k \in \{1,\ldots,K\}$. Each trial independently results in ``category $k$'' with
+			probability $p_k$ or ``not category $k$'' with probability $1-p_k$. Hence $N_k \sim
+			\mathrm{Binomial}(n, p_k)$ with
+			$
+			\mathbb{E}[N_k] = np_k,  \mathrm{Var}(N_k) = np_k(1-p_k).
+			$
+			By the classical Central Limit Theorem applied to i.i.d.\ Bernoulli$(p_k)$ indicators,
+			\[
+			\frac{N_k - np_k}{\sqrt{np_k(1-p_k)}} \xrightarrow{d} N(0,1) \quad \text{as } n\to\infty.
+			\]
+			Now we can write that
+			$
+			Y_{k,n} = \frac{N_k - np_k}{\sqrt{np_k}}
+			= \frac{N_k - np_k}{\sqrt{np_k(1-p_k)}} \cdot \sqrt{1-p_k}.
+			$
+			Since $\sqrt{1-p_k}$ is a non-random constant, Slutsky's theorem gives
+			$
+			Y_{k,n} \xrightarrow{d} \sqrt{1-p_k}\cdot N(0,1) = N\!\left(0,\,1-p_k\right). 
+			$
+			
+			
+			\clearpage
+			\subsection{Part II}
+			
+			 The covariance of the standardised components follows from the multinomial covariance structure.
+			For $j \neq k$,
+			$
+			\mathrm{Cov}(N_j, N_k) = -np_jp_k,
+			$
+			a standard result (each pair of categories competes for the same $n$ trials). Therefore
+			\begin{align*}
+				\mathrm{Cov}(Y_j, Y_k)
+				&= \mathrm{Cov}\!\left(\frac{N_j - np_j}{\sqrt{np_j}},\,
+				\frac{N_k - np_k}{\sqrt{np_k}}\right) \\[4pt]
+				&= \frac{\mathrm{Cov}(N_j, N_k)}{\sqrt{np_j}\,\sqrt{np_k}}
+				= \frac{-np_jp_k}{n\sqrt{p_jp_k}}
+				= -\sqrt{p_jp_k}.
+			\end{align*}
+			In summary,
+			\[
+			\mathrm{Cov}(Y_j, Y_k) =
+			\begin{cases}
+				1 - p_k         & \text{if } j = k, \\
+				-\sqrt{p_j p_k} & \text{if } j \neq k.
+			\end{cases} 
+			\]
+			
+		\clearpage
+		\subsection{Part III}
+		
+		 We apply the Cram\'{e}r--Wold theorem: it suffices to show that for every fixed $\mathbf{t} =
+			(t_1,\ldots,t_K)^T \in \mathbb{R}^K$,
+			$
+			\mathbf{t}^T \mathbf{Y}_n \xrightarrow{d} \mathbf{t}^T \mathbf{W}.
+			$
+			The linear combination $S_n = \sum_k t_k Y_{k,n}$ is a normalised sum of i.i.d.\ mean-zero
+			random variables, so by the CLT it converges to a normal with mean $0$ and variance
+			\[
+			\mathrm{Var}\!\left(\sum_k t_k Y_k\right)
+			= \sum_k t_k^2(1-p_k) + \sum_{j\neq k} t_j t_k (-\sqrt{p_jp_k}).
+			\]
+			It remains to verify that $\mathbf{W}$ has the same covariance structure. Since
+			$W_k = Z_k - (\mathbf{Z}\cdot\mathbf{p})\sqrt{p_k}$, using
+			$\mathrm{Cov}(Z_j, \mathbf{Z}\cdot\mathbf{p}) = \sqrt{p_j}$ and
+			$\mathrm{Var}(\mathbf{Z}\cdot\mathbf{p}) = \|\mathbf{p}\|^2 = 1$:
+			\begin{align*}
+				\mathrm{Cov}(W_j, W_k)
+				&= \delta_{jk}
+				- \sqrt{p_k}\,\mathrm{Cov}(Z_j,\, \mathbf{Z}\cdot\mathbf{p})
+				- \sqrt{p_j}\,\mathrm{Cov}(Z_k,\, \mathbf{Z}\cdot\mathbf{p})
+				+ \sqrt{p_jp_k}\,\mathrm{Var}(\mathbf{Z}\cdot\mathbf{p}) \\
+				&= \delta_{jk} - \sqrt{p_jp_k} - \sqrt{p_kp_j} + \sqrt{p_jp_k} \\
+				&= \delta_{jk} - \sqrt{p_jp_k},
+			\end{align*}
+			which agrees exactly with part (ii). Since the mean vector and covariance matrix of $\mathbf{W}$
+			match those of the limiting distribution of $\mathbf{Y}_n$, and both are Gaussian, the
+			Cram\'{e}r--Wold theorem gives
+			$
+			(Y_1\ \cdots\ Y_K) \xrightarrow{d} \mathbf{W} = \mathbf{Z} - (\mathbf{Z}\cdot\mathbf{p})\mathbf{p}. 
+			$
+			
+		\clearpage
+		\subsection{Part IV}
+		
+		 Let $P_{\mathbf{p}}$ denote orthogonal projection onto $\mathrm{span}\{\mathbf{p}\}$:
+			$
+			P_{\mathbf{p}}\mathbf{Z} = (\mathbf{Z}\cdot\mathbf{p})\mathbf{p},
+			$
+			since $\|\mathbf{p}\|^2 = 1$. Then we have
+			$
+			\mathbf{W} = \mathbf{Z} - P_{\mathbf{p}}\mathbf{Z} = (I - P_{\mathbf{p}})\mathbf{Z},
+			$
+			the projection of $\mathbf{Z}$ onto the orthogonal complement $\mathbf{p}^{\perp}$, which has
+			dimension $K - 1$.
+			
+			Complete $\mathbf{p}$ to an orthonormal basis $\{\mathbf{e}_1 = \mathbf{p},\, \mathbf{e}_2,
+			\ldots, \mathbf{e}_K\}$ of $\mathbb{R}^K$ and define $\widetilde{Z}_i = \mathbf{e}_i\cdot\mathbf{Z}$.
+			Since the map $\mathbf{Z} \mapsto (\widetilde{Z}_1, \ldots, \widetilde{Z}_K)$ is orthogonal and
+			$\mathbf{Z} \sim N(\mathbf{0}, I_K)$, we have $\widetilde{Z}_i \overset{\text{iid}}{\sim} N(0,1)$.
+			The projection onto $\mathbf{p}^{\perp}$ removes the $\mathbf{e}_1$-component 
+			$
+			\mathbf{W} = \sum_{i=2}^{K} \widetilde{Z}_i\,\mathbf{e}_i,
+			$
+			so
+			$
+			|\mathbf{W}|^2 = \mathbf{W}^T\mathbf{W} = \sum_{i=2}^{K} \widetilde{Z}_i^2 \sim \chi^2(K-1). 
+			$
+			
+		\clearpage
+		\subsection{Part V}
+			We observe the algebraic identity
+			\[
+			\sum_{k=1}^{K} \frac{(N_k - np_k)^2}{np_k}
+			= \sum_{k=1}^{K} Y_{k,n}^2
+			= |\mathbf{Y}_n|^2.
+			\]
+			By part (iii), $\mathbf{Y}_n \xrightarrow{d} \mathbf{W}$. The map $\mathbf{x} \mapsto
+			|\mathbf{x}|^2$ is continuous on $\mathbb{R}^K$, so the continuous mapping theorem gives
+			$
+			|\mathbf{Y}_n|^2 \xrightarrow{d} |\mathbf{W}|^2.
+			$
+			By part (iv), $|\mathbf{W}|^2 \sim \chi^2(K-1)$. Combining together, we can get
+			$
+			\sum_{k=1}^{K} \frac{(N_k - np_k)^2}{np_k} \xrightarrow{d} \chi^2_{df=K-1}. 
+			$
+			
+		
+		\clearpage
+		
+		\section{Question 4}
+		
+		{\color{deepred}\fontspec{Georgia} Single Factor ANOVA Complete Problem}
+		
+		Consider a study with continuous response $(y)$ and four different treatment groups $(C,F_1,F_2,F_3)$. More specifically, suppose that the response variable is the weight loss [lbs] of each respondent over the course of two months. Each group represents $J=20$ males within the age range 35-40 years old and suppose that each respondent followed the same diet regimen. The treatment variable or explanatory variable of interest is the amount of physical activity (or fitness level). The experimenter is interested in the research question:
+		\[
+		\text{``Does increased physical activity yield different degrees of weight loss while dieting?''}
+		\]
+		
+		The four treatment groups represent the different fitness levels:
+		\[
+		\begin{aligned}
+			C   & = \text{Zero hours of cardio training and weight training per week} \\
+			F_1 & = \text{Two hours of cardio training per week} \\
+			F_2 & = \text{Two hours of weight training per week} \\
+			F_3 & = \text{Two hours of cardio training and two hours of weight training per week}
+		\end{aligned}
+		\]
+		
+		In this particular experiment, we assume a balanced design with $J=20,\ I=4$. The one-way anova model of interest is:
+		\begin{equation}
+			Y_{ij}=\mu+\alpha_i+\epsilon_{ij},
+			\qquad
+			\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+			\qquad
+			j=1,\ldots,20,
+			\qquad
+			i=1,2,3,4,
+		\end{equation}
+		Such that
+		\begin{equation}
+			\mu=\frac{1}{4}\sum_{i=1}^4 \mu_i,
+			\qquad
+			\alpha_i=\mu_i-\mu,
+			\qquad \text{and} \qquad
+			\sum_{i=1}^4 \alpha_i=0.
+		\end{equation}
+		
+		The data follows:
+		
+		\begin{center}
+			\begin{tabular}{c c c c}
+				\hline
+				$C$ & $F_1$ & $F_2$ & $F_3$ \\
+				$(i=1)$ & $(i=2)$ & $(i=3)$ & $(i=4)$ \\
+				\hline
+				16.30 & 22.60 & 14.60 & 26.10 \\
+				11.90 & 13.00 & 16.80 & 27.80 \\
+				19.30 & 30.10 & 16.90 & 19.70 \\
+				23.60 & 14.10 & 18.10 & 16.90 \\
+				15.10 & 21.00 & 20.20 & 23.30 \\
+				16.80 & 14.20 & 15.30 & 26.00 \\
+				8.50  & 19.80 & 17.60 & 23.90 \\
+				18.70 & 31.80 & 28.10 & 20.50 \\
+				15.20 & 27.00 & 19.10 & 21.00 \\
+				9.80  & 17.20 & 19.90 & 27.80 \\
+				23.60 & 16.60 & 18.70 & 23.10 \\
+				9.10  & 22.50 & 21.30 & 22.80 \\
+				18.30 & 14.10 & 16.00 & 24.90 \\
+				13.20 & 14.70 & 25.30 & 22.00 \\
+				12.00 & 25.70 & 13.30 & 23.40 \\
+				15.30 & 19.20 & 24.40 & 21.60 \\
+				23.50 & 23.20 & 11.40 & 24.00 \\
+				9.50  & 28.10 & 11.10 & 30.60 \\
+				13.60 & 19.00 & 18.40 & 29.10 \\
+				26.00 & 12.00 & 19.60 & 31.30 \\
+				\hline
+				$\bar{y}_1=15.965$ & $\bar{y}_2=20.295$ & $\bar{y}_3=18.305$ & $\bar{y}_4=24.290$ \\
+				\hline
+			\end{tabular}
+			
+			Table 1: Single factor ANOVA data
+		\end{center}
+		
+		\emph{Perform the following tasks}
+		\begin{enumerate}
+			\item[(i)] Assuming the one-way ANOVA model, estimate the parameters $\mu,\alpha_1,\alpha_2,\alpha_3,\alpha_4$ based on the group averages $\bar{y}_1,\bar{y}_2,\bar{y}_3,\bar{y}_3$.
+			
+			\item[(ii)] Suppose that the data is stacked and we assume the linear regression model:
+			\[
+			Y_i=\beta_0+\beta_1 x_{i1}+\beta_2 x_{i2}+\beta_3 x_{i3}+\epsilon_i,
+			\qquad
+			\epsilon_i\overset{iid}{\sim}N(0,\sigma^2),
+			\qquad
+			i=1,2,\ldots,80,
+			\]
+			\[
+			x_{i1}=
+			\begin{cases}
+				1 & \text{if } F_1 \\
+				0 & \text{if not } F_1
+			\end{cases}
+			\qquad
+			x_{i2}=
+			\begin{cases}
+				1 & \text{if } F_2 \\
+				0 & \text{if not } F_2
+			\end{cases}
+			\qquad
+			x_{i3}=
+			\begin{cases}
+				1 & \text{if } F_3 \\
+				0 & \text{if not } F_3
+			\end{cases}
+			\]
+			Estimate the parameters $\beta_0,\beta_1,\beta_2,\beta_3$ based on the group averages $\bar{y}_1,\bar{y}_2,\bar{y}_3,\bar{y}_3$.
+			
+			\item[(iii)] Run the relevant f-procedure to test the hypothesis:
+			\[
+			\text{``Does increased physical activity yield different degrees of weight loss while dieting?''}
+			\]
+			
+			For full credit, make sure to include the null/alternative pair, the anova table, the test statistic, p-value, statistical conclusion and interpretations.
+			
+			\item[(iv)] As a follow-up to problem 2.iii, run a Tukey post hoc procedure to test all pairwise means. Make sure to include all relevant steps in the analysis, including the interpretations.
+			
+			\item[(v)] As a follow-up to problem 2.iii, run a Dunnett's post hoc procedure to test all pairwise means against the control. Make sure to include all relevant steps in the analysis, including the interpretations.
+			
+			\item[(vi)] Suppose that the experimenter planned a priori that she was going to test the following five hypotheses:
+			\[
+			\begin{array}{rllll}
+				1) & H_0:\mu_1-\mu_2=0 & \text{versus} & H_A:\mu_1-\mu_2\neq 0 \\
+				2) & H_0:\mu_1-\mu_3=0 & \text{versus} & H_A:\mu_1-\mu_3\neq 0 \\
+				3) & H_0:\mu_1-\mu_4=0 & \text{versus} & H_A:\mu_1-\mu_4\neq 0 \\
+				4) & H_0:\mu_1-\dfrac{\mu_2+\mu_3+\mu_4}{3}=0 & \text{versus} & H_A:\mu_1-\dfrac{\mu_2+\mu_3+\mu_4}{3}\neq 0 \\
+				5) & H_0:\mu_2-\mu_3=0 & \text{versus} & H_A:\mu_2-\mu_3\neq 0
+			\end{array}
+			\]
+			
+			Test all the above hypotheses and adjust accordingly using the Bonferroni procedure. Make sure to include all relevant steps in the analysis, including the interpretations.
+			
+			\item[(vii)] Estimate the rejection rate of the ANOVA F-test based on the observed data from Table 1, i.e., estimate the power of the F-test.
+		\end{enumerate}
+		
+		\textbf{Answer}
+		
+		Consider a study with continuous response $(y)$ and four treatment groups $(C, F_1, F_2, F_3)$,
+		each of size $J = 20$, yielding $n = IJ = 80$ total observations.
+		The group means are $\bar{y}_1 = 15.965$, $\bar{y}_2 = 20.295$, $\bar{y}_3 = 18.305$,
+		$\bar{y}_4 = 24.290$.
+		
+			
+		\subsection{Part I}
+		
+		The overall mean is estimated by the grand mean,
+		$\hat{\mu} = \bar{y}_{..} = \frac{1}{4}\sum_{i=1}^{4}\bar{y}_i
+		= \frac{15.965 + 20.295 + 18.305 + 24.290}{4} = \frac{78.855}{4} = 19.71375$.
+		Each treatment effect is $\hat{\alpha}_i = \bar{y}_i - \hat{\mu}$:
+		\begin{align*}
+			\hat{\alpha}_1 &= 15.965 - 19.71375 = -3.74875, \qquad
+			\hat{\alpha}_2  = 20.295 - 19.71375 = \phantom{-}0.58125, \\
+			\hat{\alpha}_3 &= 18.305 - 19.71375 = -1.40875, \qquad
+			\hat{\alpha}_4  = 24.290 - 19.71375 = \phantom{-}4.57625.
+		\end{align*}
+		We verify: $\sum_{i=1}^{4}\hat{\alpha}_i = -3.74875 + 0.58125 - 1.40875 + 4.57625 = 0$.
+		
+		\clearpage
+		\subsection{Part II}
+		
+		With group $C$ ($i=1$) as the reference, the OLS estimators equate to the group means:
+		$\hat{\beta}_0 = \bar{y}_1 = 15.965$ (mean of the reference group $C$).
+		Each slope captures the difference from the reference:
+		\begin{align*}
+			\hat{\beta}_1 &= \bar{y}_2 - \bar{y}_1 = 20.295 - 15.965 = 4.330, \qquad
+			\hat{\beta}_2  = \bar{y}_3 - \bar{y}_1 = 18.305 - 15.965 = 2.340, \\
+			\hat{\beta}_3 &= \bar{y}_4 - \bar{y}_1 = 24.290 - 15.965 = 8.325.
+		\end{align*}
+		Thus the fitted model is
+		$\hat{Y}_i = 15.965 + 4.330\,x_{i1} + 2.340\,x_{i2} + 8.325\,x_{i3}$.
+		
+		Part I and II are easy to calculate, although I did it in Python, but it is obvious to be reached by hand. I have put the code in my \href{https://github.com/zongyiliu/STAT_5291/tree/main/Homework/Homework_3}{Github Repo} corresponding to this assignment.
+		
+		\clearpage
+		\subsection{Part III}
+		
+		For the ANOVA $F$ test, we list essentials as below:
+		
+		\emph{Hypotheses:}
+		$H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4$ versus $H_A:$ at least one $\mu_i$ differs.
+		
+		\emph{Sums of squares:} With $I=4$, $J=20$, $n=80$, and $\hat{\mu} = 19.71375$:
+		\begin{align*}
+			\mathrm{SS}_{\mathrm{Trt}}
+			&= J\sum_{i=1}^{4}(\bar{y}_i - \bar{y}_{..})^2
+			= 20\bigl[(-3.74875)^2 + (0.58125)^2 + (-1.40875)^2 + (4.57625)^2\bigr] \\
+			&= 20\bigl[14.0531 + 0.3379 + 1.9846 + 20.9420\bigr]
+			= 20 \times 37.3176 = 746.352.
+		\end{align*}
+		Using $\mathrm{SS}_E = \sum_{i,j}(y_{ij}-\bar{y}_i)^2$, the within-group values are
+		$\mathrm{SS}_{E,1} = 528.846$, $\mathrm{SS}_{E,2} = 676.290$,
+		$\mathrm{SS}_{E,3} = 357.090$, $\mathrm{SS}_{E,4} = 262.298$,
+		giving $\mathrm{SS}_E = 1824.523$.
+		
+		\begin{center}
+			\begin{tabular}{lcccc}
+				\hline
+				Source     & df   & SS          & MS        & $F$      \\
+				\hline
+				Treatment  & $3$  & $746.352$   & $248.784$ & $10.363$ \\
+				Error      & $76$ & $1824.523$  & $24.007$  &          \\
+				\hline
+				Total      & $79$ & $2570.875$  &           &          \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		Here $F_{\mathrm{obs}} = \mathrm{MS}_{\mathrm{Trt}} / \mathrm{MS}_E = 248.784 / 24.007 \approx 10.363$
+		with $F \sim F(3, 76)$ under $H_0$, giving $p\text{-value} = P(F(3,76) \geq 10.363) \approx 0.000009$.
+		We reject $H_0$ at any conventional $\alpha$. There is overwhelming statistical evidence that mean weight
+		loss differs across at least one pair of fitness levels. Increased physical activity appears to be
+		associated with different degrees of weight loss while dieting.
+		
+		\begin{lstlisting}
+     SSTr = J * sum((m - grand)**2 for m in means)
+     SSE  = sum(sum((y-m)**2 for y in g) for g,m in zip(groups,means))
+     SST  = SSTr + SSE
+     MSTr = SSTr / (I-1)
+     MSE  = SSE  / (n-I)
+     F    = MSTr / MSE
+     p    = 1 - stats.f.cdf(F, I-1, n-I)
+     print(f"SSTr={SSTr:.3f}, SSE={SSE:.3f}, SST={SST:.3f}")
+     print(f"MSTr={MSTr:.3f}, MSE={MSE:.3f}")
+     print(f"F({I-1},{n-I}) = {F:.4f}, p-value = {p:.6f}")
+		\end{lstlisting}
+		\begin{minipage}{\linewidth}
+			\begin{Verbatim}
+     SSTr=746.352, SSE=1824.523, SST=2570.875
+     MSTr=248.784, MSE=24.007
+     F(3,76) = 10.3630, p-value = 0.000009
+			\end{Verbatim}
+		\end{minipage}
+		\clearpage
+		\subsection{Part IV}
+		With $\hat{\sigma} = \sqrt{24.007} \approx 4.900$ and $J = 20$,
+		the Tukey critical value is $q_{0.05}(4, 76) \approx 3.715$, giving
+		$\mathrm{HSD} = 3.715 \times 4.900/\sqrt{20} = 3.715 \times 1.096 \approx 4.070$.
+		A pairwise difference is significant if $|\bar{y}_i - \bar{y}_k| > 4.070$.
+		
+		\begin{center}
+			\begin{tabular}{llccc}
+				\hline
+				Comparison & $|\bar{y}_i - \bar{y}_k|$ & $>$ HSD? & Decision \\
+				\hline
+				$C$ vs $F_1$: $|15.965 - 20.295|$ & $4.330$ & Yes & Reject $H_0$ \\
+				$C$ vs $F_2$: $|15.965 - 18.305|$ & $2.340$ & No  & Fail to reject \\
+				$C$ vs $F_3$: $|15.965 - 24.290|$ & $8.325$ & Yes & Reject $H_0$ \\
+				$F_1$ vs $F_2$: $|20.295 - 18.305|$ & $1.990$ & No  & Fail to reject \\
+				$F_1$ vs $F_3$: $|20.295 - 24.290|$ & $3.995$ & No  & Fail to reject \\
+				$F_2$ vs $F_3$: $|18.305 - 24.290|$ & $5.985$ & Yes & Reject $H_0$ \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		At the 5\% family-wise error rate, three pairs are significant:
+		$C$ vs $F_1$, $C$ vs $F_3$, and $F_2$ vs $F_3$.
+		The comparisons $C$ vs $F_2$, $F_1$ vs $F_2$, and $F_1$ vs $F_3$ are not significant.
+		The combined cardio-plus-weights group ($F_3$) produces significantly more weight loss than
+		$C$ and $F_2$, while zero activity ($C$) and weight training alone ($F_2$) are not
+		distinguishable from each other.
+		
+		\begin{lstlisting}
+     sigma = np.sqrt(MSE)
+     q     = studentized_range.ppf(0.95, I, n-I)
+     HSD   = q * sigma / np.sqrt(J)
+     print(f"sigma={sigma:.4f}, q={q:.4f}, HSD={HSD:.4f}")
+     for i,j in [(0,1),(0,2),(0,3),(1,2),(1,3),(2,3)]:
+     diff = abs(means[i]-means[j])
+     sig  = "Reject" if diff > HSD else "Fail to reject"
+     print(f"  {names[i]} vs {names[j]}: |diff|={diff:.3f}, {sig}")
+		\end{lstlisting}
+		
+		\begin{minipage}{\linewidth}
+			\begin{Verbatim}
+     sigma=4.8997, q=3.7149, HSD=4.0700
+     C vs F1: |diff|=4.330, Reject
+     C vs F2: |diff|=2.340, Fail to reject
+     C vs F3: |diff|=8.325, Reject
+     F1 vs F2: |diff|=1.990, Fail to reject
+     F1 vs F3: |diff|=3.995, Fail to reject
+     F2 vs F3: |diff|=5.985, Reject
+			\end{Verbatim}
+		\end{minipage}
+		\clearpage
+		\subsection{Part V} The control group is $C$ ($i = 1$). The Dunnett critical value for
+		$I - 1 = 3$ comparisons at $\alpha = 0.05$ with $df_E = 76$ is $d_{0.05}(3, 76) \approx 2.479$,
+		giving $\mathrm{CV}_D = 2.479 \times 4.900 \times \sqrt{2/20} = 2.479 \times 4.900 \times 0.3162 \approx 3.841$.
+		A difference is significant if $|\bar{y}_i - \bar{y}_1| > 3.841$.
+		
+		\begin{center}
+			\begin{tabular}{llccc}
+				\hline
+				Comparison & $|\bar{y}_i - \bar{y}_1|$ & $>$ CV$_D$? & Decision \\
+				\hline
+				$C$ vs $F_1$: $|15.965 - 20.295|$ & $4.330$ & Yes & Reject $H_0$ \\
+				$C$ vs $F_2$: $|15.965 - 18.305|$ & $2.340$ & No  & Fail to reject \\
+				$C$ vs $F_3$: $|15.965 - 24.290|$ & $8.325$ & Yes & Reject $H_0$ \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		$F_1$ (cardio only) and $F_3$ (cardio and weights) each produce
+		significantly greater mean weight loss than control $C$ (no exercise). Weight training
+		alone ($F_2$) does not yield a statistically significant improvement over $C$ at the 5\% level.
+		
+		\begin{lstlisting}
+     CV_D = 2.479 * sigma * np.sqrt(2/J)
+     print(f"CV_D = {CV_D:.4f}")
+     for i in range(1, 4):
+     diff = abs(means[i]-means[0])
+     sig  = "Reject" if diff > CV_D else "Fail to reject"
+     print(f"  C vs {names[i]}: |diff|={diff:.3f}, {sig}")
+		\end{lstlisting}
+ \begin{minipage}{\linewidth}
+ 	\begin{Verbatim}
+     CV_D = 3.8410
+     C vs F1: |diff|=4.330, Reject
+     C vs F2: |diff|=2.340, Fail to reject
+     C vs F3: |diff|=8.325, Reject
+ 	\end{Verbatim}
+ \end{minipage}
+		\clearpage
+		\subsection{Part VI} With $m = 5$ planned tests and $\alpha = 0.05$, the Bonferroni-adjusted
+		level is $\alpha^* = 0.05/5 = 0.01$. Each contrast is tested via
+		$t = \hat{L} / (\hat{\sigma}\sqrt{\sum_i c_i^2/J})$ with $df = 76$,
+		and critical value $t_{0.005}(76) \approx 2.642$ (two-sided).
+		The standard error for equal-weight two-group contrasts is
+		$\mathrm{SE} = 4.900\sqrt{2/20} = 1.549$.
+		
+		\emph{Contrast 1:} $H_0: \mu_1 - \mu_2 = 0$.
+		$\hat{L}_1 = 15.965 - 20.295 = -4.330$,
+		$t_1 = -4.330/1.549 = -2.795$.
+		$|t_1| = 2.795 > 2.642$ $\Rightarrow$ \emph{Reject $H_0$}.
+		
+		\emph{Contrast 2:} $H_0: \mu_1 - \mu_3 = 0$.
+		$\hat{L}_2 = 15.965 - 18.305 = -2.340$,
+		$t_2 = -2.340/1.549 = -1.510$.
+		$|t_2| = 1.510 < 2.642$ $\Rightarrow$ \emph{Fail to reject $H_0$}.
+		
+		\emph{Contrast 3:} $H_0: \mu_1 - \mu_4 = 0$.
+		$\hat{L}_3 = 15.965 - 24.290 = -8.325$,
+		$t_3 = -8.325/1.549 = -5.373$.
+		$|t_3| = 5.373 > 2.642$ $\Rightarrow$ \emph{Reject $H_0$}.
+		
+		\emph{Contrast 4:} $H_0: \mu_1 - \tfrac{1}{3}(\mu_2+\mu_3+\mu_4) = 0$,
+		with $c_1 = 1$, $c_2 = c_3 = c_4 = -1/3$.
+		$\hat{L}_4 = 15.965 - (20.295 + 18.305 + 24.290)/3 = 15.965 - 20.963 = -4.998$,
+		$\mathrm{SE}_4 = 4.900\sqrt{(4/3)/20} = 4.900 \times 0.2582 = 1.265$,
+		$t_4 = -4.998/1.265 = -3.951$.
+		$|t_4| = 3.951 > 2.642$ $\Rightarrow$ \emph{Reject $H_0$}.
+		
+		\emph{Contrast 5:} $H_0: \mu_2 - \mu_3 = 0$.
+		$\hat{L}_5 = 20.295 - 18.305 = 1.990$,
+		$t_5 = 1.990/1.549 = 1.284$.
+		$|t_5| = 1.284 < 2.642$ $\Rightarrow$ \emph{Fail to reject $H_0$}.
+		
+		After Bonferroni correction, $C$ differs significantly from $F_1$,
+		from $F_3$, and from the average of the three treatment groups. No significant difference
+		is found between $C$ and $F_2$, nor between $F_1$ and $F_2$.
+
+\begin{lstlisting}
+     m_tests = 5
+     t_crit  = stats.t.ppf(1 - 0.05/(2*m_tests), n-I)
+     SE      = sigma * np.sqrt(2/J)
+     SE4     = sigma * np.sqrt((1 + 1/9 + 1/9 + 1/9)/J)
+     print(f"t_crit = {t_crit:.4f}, SE = {SE:.4f}")
+     contrasts = [
+     (means[0]-means[1], SE,  "mu1-mu2"),
+     (means[0]-means[2], SE,  "mu1-mu3"),
+     (means[0]-means[3], SE,  "mu1-mu4"),
+     (means[0]-(means[1]+means[2]+means[3])/3, SE4, "mu1-avg(F1,F2,F3)"),
+     (means[1]-means[2], SE,  "mu2-mu3"),
+     ]
+     for L, se, label in contrasts:
+     t   = L / se
+     sig = "Reject" if abs(t) > t_crit else "Fail to reject"
+     print(f"  {label}: L={L:.4f}, t={t:.4f}, {sig}")
+\end{lstlisting}
+		
+ \begin{minipage}{\linewidth}
+	\begin{Verbatim}
+     t_crit = 2.6421, SE = 1.5494
+     mu1-mu2: L=-4.3300, t=-2.7946, Reject
+     mu1-mu3: L=-2.3400, t=-1.5102, Fail to reject
+     mu1-mu4: L=-8.3250, t=-5.3730, Reject
+     mu1-avg(F1,F2,F3): L=-4.9983, t=-3.9510, Reject
+     mu2-mu3: L=1.9900, t=1.2844, Fail to reject
+	\end{Verbatim}
+\end{minipage}
+		\clearpage
+		\subsection{Part VII}
+		
+		Power is estimated via the non-centrality parameter
+		$\lambda = J\sum_{i=1}^{4}\hat{\alpha}_i^2 / \hat{\sigma}^2$,
+		where $\hat{\sigma}^2 = \mathrm{MS}_E = 24.007$.
+		$\sum_{i=1}^{4}\hat{\alpha}_i^2
+		= (-3.74875)^2 + (0.58125)^2 + (-1.40875)^2 + (4.57625)^2
+		= 14.053 + 0.338 + 1.985 + 20.942 = 37.318$,
+		$\hat{\lambda} = 20 \times 37.318 / 24.007 = 746.352 / 24.007 \approx 31.089$.
+		
+		The estimated power is
+		$\widehat{\mathrm{Power}} = P(F'(3,\,76,\,\lambda = 31.089) > F_{0.05}(3,76))$,
+		where $F_{0.05}(3,76) \approx 2.725$ and $F'$ is a non-central $F$ distribution.
+		Evaluating the non-central $F$ CDF gives $\widehat{\mathrm{Power}} \approx 0.9981$.
+		Given the observed treatment effects and error variance, the ANOVA
+		$F$-test has very high power ($\approx 99.81\%$) to detect these differences,
+		consistent with the extremely small $p$-value obtained in part (iii).
+		
+	\begin{lstlisting}
+     lam   = J * sum(a**2 for a in alphas) / MSE
+     F_crit = stats.f.ppf(0.95, I-1, n-I)
+     power  = 1 - stats.ncf.cdf(F_crit, I-1, n-I, lam)
+     print(f"lambda = {lam:.4f}, F_crit = {F_crit:.4f}, Power = {power:.6f}")
+	\end{lstlisting}
+ \begin{minipage}{\linewidth}
+	\begin{Verbatim}
+     lambda = 31.0891, F_crit = 2.7249, Power = 0.998086
+	\end{Verbatim}
+\end{minipage}
+		\clearpage
+		
+		\section{Question 5}
+		
+		{\color{deepred}\fontspec{Georgia}   Single Factor ANOVA Expected Mean Squares}
+		
+		Assume the single factor ANOVA model:
+		\[
+		Y_{ij}=\mu+\alpha_i+\epsilon_{ij},
+		\qquad
+		\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+		\qquad
+		j=1,\ldots,J,
+		\qquad
+		i=1,\ldots,I,
+		\]
+		Such that
+		\begin{equation}
+			\mu=\frac{1}{I}\sum_{i=1}^I \mu_i,
+			\qquad
+			\alpha_i=\mu_i-\mu,
+			\qquad \text{and} \qquad
+			\sum_{i=1}^I \alpha_i=0.
+		\end{equation}
+		
+		Under the above model statement, prove the following identities:
+		\begin{enumerate}
+			\item[(i)]
+			$
+			E[\bar{Y}_{..}]=\mu
+			$
+			
+			\item[(ii)]
+			$
+			E[MSE]=\sigma^2
+			$
+			
+			\item[(iii)]
+			$
+			E[MSTr]=\sigma^2+\frac{J}{I-1}\sum_{i=1}^I \alpha_i^2
+			$
+		\end{enumerate}
+		
+		\textbf{Answer}
+		
+		Assume $Y_{ij} = \mu + \alpha_i + \epsilon_{ij}$ with $\epsilon_{ij} \overset{iid}{\sim} N(0,\sigma^2)$,
+		$\mu = \frac{1}{I}\sum_{i=1}^I \mu_i$, $\alpha_i = \mu_i - \mu$, and $\sum_{i=1}^I \alpha_i = 0$.
+		
+		\subsection{Part I}
+			The grand mean is $\bar{Y}_{..} = \frac{1}{IJ}\sum_{i=1}^I\sum_{j=1}^J Y_{ij}$.
+			Taking expectations and using linearity,
+			\[
+			E[\bar{Y}_{..}]
+			= \frac{1}{IJ}\sum_{i=1}^I\sum_{j=1}^J E[Y_{ij}]
+			= \frac{1}{IJ}\sum_{i=1}^I\sum_{j=1}^J (\mu + \alpha_i)
+			= \frac{1}{IJ}\sum_{i=1}^I J(\mu + \alpha_i)
+			= \frac{1}{I}\sum_{i=1}^I \mu + \frac{1}{I}\sum_{i=1}^I \alpha_i
+			= \mu + 0 = \mu. 
+			\]
+			
+		\clearpage
+		\subsection{Part II}
+			The mean square error is $MSE = SS_E / (I(J-1))$, where
+			$SS_E = \sum_{i=1}^I\sum_{j=1}^J (Y_{ij} - \bar{Y}_{i.})^2$.
+			For fixed $i$, the within-group residuals $(Y_{ij} - \bar{Y}_{i.})$ depend only on
+			$\epsilon_{ij} - \bar{\epsilon}_{i.}$, since the fixed effects $\mu + \alpha_i$ cancel:
+			$Y_{ij} - \bar{Y}_{i.} = \epsilon_{ij} - \bar{\epsilon}_{i.}$.
+			Hence $\sum_{j=1}^J (Y_{ij} - \bar{Y}_{i.})^2 = \sum_{j=1}^J (\epsilon_{ij} - \bar{\epsilon}_{i.})^2$,
+			which is the sample variance of $J$ i.i.d.\ $N(0,\sigma^2)$ variables scaled by $J-1$.
+			Thus $E\!\left[\sum_{j=1}^J(\epsilon_{ij}-\bar\epsilon_{i.})^2\right] = (J-1)\sigma^2$ for each $i$, and
+			\[
+			E[SS_E]
+			= \sum_{i=1}^I E\!\left[\sum_{j=1}^J (Y_{ij}-\bar{Y}_{i.})^2\right]
+			= \sum_{i=1}^I (J-1)\sigma^2
+			= I(J-1)\sigma^2.
+			\]
+			Therefore $E[MSE] = E[SS_E]\,/\,I(J-1) = \sigma^2$. 
+			
+		\clearpage
+		\subsection{Part III}
+			The treatment mean square is $MSTr = SS_{Tr}/(I-1)$, where
+			$SS_{Tr} = J\sum_{i=1}^I (\bar{Y}_{i.} - \bar{Y}_{..})^2$.
+			Write $\bar{Y}_{i.} = \mu + \alpha_i + \bar{\epsilon}_{i.}$ and $\bar{Y}_{..} = \mu + \bar{\epsilon}_{..}$,
+			so $\bar{Y}_{i.} - \bar{Y}_{..} = \alpha_i + (\bar{\epsilon}_{i.} - \bar{\epsilon}_{..})$.
+			Let $\delta_i = \bar{\epsilon}_{i.} - \bar{\epsilon}_{..}$. Then
+			
+			\begin{align*}
+				SS_{Tr}
+				&= J\sum_{i=1}^I \bigl(\alpha_i + \delta_i\bigr)^2
+				= J\sum_{i=1}^I \alpha_i^2
+				+ 2J\sum_{i=1}^I \alpha_i\delta_i
+				+ J\sum_{i=1}^I \delta_i^2.
+			\end{align*}
+			
+			Taking expectations term by term. Since $E[\delta_i] = 0$, the cross term vanishes:
+			$E\!\left[2J\sum_i \alpha_i\delta_i\right] = 0$.
+			
+			For the last term, note $\bar{\epsilon}_{i.} \sim N(0,\sigma^2/J)$ independently across $i$,
+			and $\bar{\epsilon}_{..} = \frac{1}{I}\sum_i \bar{\epsilon}_{i.}$, so
+			$\delta_i = \bar{\epsilon}_{i.} - \bar{\epsilon}_{..}$ are the centred group means.
+			By the same argument as part (ii) applied to $I$ i.i.d.\ $N(0,\sigma^2/J)$ variables,
+			$E\!\left[\sum_{i=1}^I \delta_i^2\right] = (I-1)\cdot\sigma^2/J$.
+			Hence $E\!\left[J\sum_i \delta_i^2\right] = (I-1)\sigma^2$.
+			
+			Combining,
+			\[
+			E[SS_{Tr}]
+			= J\sum_{i=1}^I \alpha_i^2 + (I-1)\sigma^2,
+			\]
+			and therefore
+			\[
+			E[MSTr]
+			= \frac{E[SS_{Tr}]}{I-1}
+			= \sigma^2 + \frac{J}{I-1}\sum_{i=1}^I \alpha_i^2. 
+			\]
+			
+		
+		\clearpage
+		
+		\section{Question 6}
+		
+		{\color{deepred}\fontspec{Georgia}   Linear Regression}
+		
+		Consider the multiple linear regression model
+		\begin{equation}
+			Y_i=\beta_0+\beta_1 x_{i1}+\cdots+\beta_{p-1}x_{i,p-1}+\epsilon_i,
+			\qquad
+			\epsilon_i\overset{iid}{\sim}N(0,\sigma^2),
+			\qquad
+			i=1,2,\ldots,n,
+		\end{equation}
+		and assume that the design matrix $\mathbf{X}$ is full column rank. For known vector $\mathbf{c}\in\mathbb{R}^p$, define the linear parameter $\psi$ by
+		\[
+		\psi=\mathbf{c}^T\beta.
+		\]
+		
+		\emph{Perform the following tasks}
+		\begin{enumerate}
+			\item[(i)] Consider testing the null/alternative pair:
+			\[
+			H_0:\mathbf{c}^T\beta=0
+			\qquad
+			\text{versus}
+			\qquad
+			H_A:\mathbf{c}^T\beta\neq 0.
+			\]
+			
+			Show that the likelihood ratio test statistic can be based on
+			\[
+			T=\frac{\mathbf{c}^T\hat{\beta}}{\sqrt{\mathbf{c}^T(\widehat{\mathrm{var}}[\hat{\beta}])\mathbf{c}}},
+			\]
+			where
+			\[
+			\hat{\beta}=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}
+			\qquad \text{and} \qquad
+			\widehat{\mathrm{var}}[\hat{\beta}]=MSE(\mathbf{X}^T\mathbf{X})^{-1}.
+			\]
+			
+			\emph{Hint:} Use the method of Lagrange multiplier.
+			
+			\item[(ii)] Consider testing the null/alternative pair:
+			\[
+			H_0:\mathbf{c}^T\beta=0
+			\qquad
+			\text{versus}
+			\qquad
+			H_A:\mathbf{c}^T\beta>0.
+			\]
+			
+			Derive an expression for power($\psi'$), where $\psi'$ represents the departure from $H_0$.
+		\end{enumerate}
+		
+		\textbf{Answer}
+		
+		
+		Consider the MLR model $Y_i = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_{p-1}x_{i,p-1} + \epsilon_i$
+		with $\epsilon_i \overset{iid}{\sim} N(0,\sigma^2)$, $\mathbf{X}$ full column rank, and
+		$\psi = \mathbf{c}^T\beta$ for known $\mathbf{c} \in \mathbb{R}^p$.
+
+
+		\subsection{Part I}
+		
+		 {Here we are asked to derive the LRT statistic for $H_0: \mathbf{c}^T\beta = 0$ vs $H_A: \mathbf{c}^T\beta \neq 0$.}
+			The log-likelihood is $\ell(\beta,\sigma^2) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\|\mathbf{Y}-\mathbf{X}\beta\|^2$.
+			The unconstrained MLEs are $\hat{\beta} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{Y}$ and
+			$\hat{\sigma}^2 = \|\mathbf{Y} - \mathbf{X}\hat{\beta}\|^2/n$, giving maximised log-likelihood
+			$\ell(\hat{\beta},\hat{\sigma}^2) = -\frac{n}{2}(1 + \log(2\pi\hat{\sigma}^2))$.
+			
+			Under $H_0$, minimise $\|\mathbf{Y} - \mathbf{X}\beta\|^2$ subject to $\mathbf{c}^T\beta = 0$.
+			Form the Lagrangian
+			$\mathcal{L}(\beta,\lambda) = \|\mathbf{Y} - \mathbf{X}\beta\|^2 + 2\lambda\,\mathbf{c}^T\beta$.
+			Setting $\partial\mathcal{L}/\partial\beta = 0$ gives
+			$-2\mathbf{X}^T(\mathbf{Y} - \mathbf{X}\beta) + 2\lambda\mathbf{c} = 0$,
+			so $\mathbf{X}^T\mathbf{X}\tilde{\beta} = \mathbf{X}^T\mathbf{Y} - \lambda\mathbf{c}$,
+			yielding
+			\begin{equation}\label{eq:constrained}
+				\tilde{\beta} = \hat{\beta} - \lambda(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}.
+			\end{equation}
+			Applying the constraint $\mathbf{c}^T\tilde{\beta} = 0$ to  equation \eqref{eq:constrained},
+			$\mathbf{c}^T\hat{\beta} - \lambda\,\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c} = 0$,
+			so $\lambda = \mathbf{c}^T\hat{\beta} \,/\, \mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}$.
+			Substituting back,
+			$\tilde{\beta} = \hat{\beta} - \frac{\mathbf{c}^T\hat{\beta}}{\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}$.
+			
+			The residual vector under $H_0$ is
+			$\mathbf{Y} - \mathbf{X}\tilde{\beta} = (\mathbf{Y} - \mathbf{X}\hat{\beta}) + \mathbf{X}(\hat{\beta}-\tilde{\beta})$,
+			and since $\mathbf{X}(\hat\beta - \tilde\beta) \perp (\mathbf{Y}-\mathbf{X}\hat\beta)$ (the OLS residual is orthogonal to the column space of $\mathbf{X}$),
+			\begin{align*}
+				\|\mathbf{Y}-\mathbf{X}\tilde{\beta}\|^2
+				&= \|\mathbf{Y}-\mathbf{X}\hat{\beta}\|^2
+				+ \|\mathbf{X}(\hat{\beta}-\tilde{\beta})\|^2 \\
+				&= \|\mathbf{Y}-\mathbf{X}\hat{\beta}\|^2
+				+ (\hat{\beta}-\tilde{\beta})^T\mathbf{X}^T\mathbf{X}(\hat{\beta}-\tilde{\beta}).
+			\end{align*}
+			Computing the extra term with $\hat\beta - \tilde\beta = \lambda(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}$,
+			\[
+			(\hat{\beta}-\tilde{\beta})^T\mathbf{X}^T\mathbf{X}(\hat{\beta}-\tilde{\beta})
+			= \lambda^2\,\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}
+			= \frac{(\mathbf{c}^T\hat{\beta})^2}{\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}.
+			\]
+			Hence $\tilde{\sigma}^2 = \|\mathbf{Y}-\mathbf{X}\tilde{\beta}\|^2/n = \hat{\sigma}^2 + (\mathbf{c}^T\hat{\beta})^2 / (n\,\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c})$.
+			
+			The LRT statistic is $\Lambda = -2[\ell(\tilde\beta,\tilde\sigma^2) - \ell(\hat\beta,\hat\sigma^2)] = n\log(\tilde\sigma^2/\hat\sigma^2)$.
+			For large samples (or equivalently, by the exact $F$-test derivation), rejecting for large $|\Lambda|$
+			is equivalent to rejecting for large
+			\[
+			F = \frac{(\mathbf{c}^T\hat{\beta})^2 / [\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}]}{MSE}
+			= \left(\frac{\mathbf{c}^T\hat{\beta}}{\sqrt{MSE\cdot\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}}\right)^2
+			= T^2,
+			\]
+			where
+			\[
+			T = \frac{\mathbf{c}^T\hat{\beta}}{\sqrt{\mathbf{c}^T(\widehat{\mathrm{var}}[\hat{\beta}])\,\mathbf{c}}},
+			\qquad
+			\widehat{\mathrm{var}}[\hat{\beta}] = MSE\,(\mathbf{X}^T\mathbf{X})^{-1}.
+			\]
+			Under $H_0$, $T \sim t(n-p)$, so the two-sided LRT rejects when $|T| > t_{\alpha/2}(n-p)$. 
+			
+			\clearpage
+			\subsection{Part II}
+			
+			Since $\hat\beta \sim N(\beta, \sigma^2(\mathbf{X}^T\mathbf{X})^{-1})$,
+			the estimator $\mathbf{c}^T\hat\beta \sim N(\mathbf{c}^T\beta,\, \sigma^2\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c})$.
+			Let $\psi' = \mathbf{c}^T\beta$ denote the true (non-zero) value of the linear combination,
+			and let $\mathrm{se}(\mathbf{c}^T\hat\beta) = \sqrt{\sigma^2\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}$.
+			Then
+			\[
+			T = \frac{\mathbf{c}^T\hat\beta}{\widehat{\mathrm{se}}(\mathbf{c}^T\hat\beta)}
+			\sim t\!\left(n-p,\; \delta\right),
+			\]
+			a non-central $t$ distribution with $n - p$ degrees of freedom and non-centrality parameter
+			\[
+			\delta = \frac{\psi'}{\mathrm{se}(\mathbf{c}^T\hat\beta)}
+			= \frac{\mathbf{c}^T\beta}{\sqrt{\sigma^2\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}}.
+			\]
+			
+			The one-sided test at level $\alpha$ rejects $H_0$ when $T > t_\alpha(n-p)$.
+			The power at true parameter value $\psi' = \mathbf{c}^T\beta$ is
+			\[
+			\mathrm{power}(\psi')
+			= P\!\left(T > t_\alpha(n-p) \;\middle|\; \mathbf{c}^T\beta = \psi'\right)
+			= 1 - F_{t(n-p,\,\delta)}\!\left(t_\alpha(n-p)\right),
+			\]
+			where $F_{t(n-p,\delta)}(\cdot)$ denotes the CDF of the non-central $t(n-p, \delta)$ distribution and
+			\[
+			\delta = \frac{\psi'}{\sqrt{\sigma^2\mathbf{c}^T(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{c}}}.
+			\]
+			Note that $\mathrm{power}(0) = \alpha$ (size of the test), and $\mathrm{power}(\psi') \to 1$
+			as $\psi' \to \infty$, since $\delta \to \infty$. When $\sigma^2$ is unknown it is replaced by $MSE$,
+			and the result holds approximately for large $n$. 
+			
+		
+		\clearpage
+		
+		\section{Question 7}
+		
+		{\color{deepred}\fontspec{Georgia}  Block Design}
+		
+		Assume the model
+		\begin{equation}
+			Y_{ij}=\mu+\alpha_i+\beta_j+\epsilon_{ij},
+			\qquad
+			\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+			\qquad
+			j=1,\ldots,J,
+			\qquad
+			i=1,\ldots,I,
+		\end{equation}
+		and
+		\begin{equation}
+			\sum_{i=1}^I \alpha_i=0,
+			\qquad
+			\sum_{j=1}^J \beta_j=0.
+		\end{equation}
+		
+		\emph{Perform the following tasks}
+		\begin{enumerate}
+			\item[(i)] Prove that total variation $SST$ can be partitioned into three sources of variation $SSTr$, $SSB$ and $SSE$. More specifically, prove the additive identity:
+			\[
+			SST=SSTr+SSB+SSE
+			\]
+			
+			\item[(ii)] Prove the expected mean square relation:
+			\[
+			E[MSB]=\sigma^2+\frac{I}{J-1}\sum_{j=1}^J \beta_i^2 \footnote{This should be a typo in original question: $\beta_i^2$ should be $\beta_j^2$, 
+				as the summation is over block index $j$, not treatment index $i$.}
+			\] 
+			
+			\item[(iii)] Consider an experiment consisting of $24$ respondents where each experimental unit was randomly assigned one of four drug groups: Control, Dose 1, Dose 2 and Dose 3. Assume that the response variable $(y)$ is some continuous biological measurement. The respondents were also chosen such that another health indicator could be used as a blocking variable with three levels: B1, B2 and B3. The data are displayed in Table 2. At 5\% significance, run the relevant testing procedure to see if drug dosage is statistically related to the response $y$, after controlling for the blocking variation. For full credit, fill out the relevant ANOVA table, identify the test statistic, compute the p-value and state the statistical conclusion.
+		\end{enumerate}
+		
+		\begin{center}
+			\begin{tabular}{c|cc|cc|cc}
+				\hline
+				Group & \multicolumn{2}{c}{B1} & \multicolumn{2}{c}{B2} & \multicolumn{2}{c}{B3} \\
+				\hline
+				Control & 100.7 & 102.4 & 104.3 & 109.2 & 101.7 & 99.4 \\
+				Dose 1  & 103.5 & 104.0 & 107.7 & 105.9 & 104.5 & 102.3 \\
+				Dose 2  & 97.8  & 94.6  & 105.2 & 102.9 & 98.0  & 99.9 \\
+				Dose 3  & 102.6 & 102.2 & 106.8 & 106.6 & 100.1 & 96.0 \\
+				\hline
+			\end{tabular}
+			
+			Table 2: Randomized Block Data with $K=2$.
+		\end{center}
+		
+		\textbf{Answer}
+		
+		Assume $Y_{ij} = \mu + \alpha_i + \beta_j + \epsilon_{ij}$ with
+		$\epsilon_{ij} \overset{iid}{\sim} N(0,\sigma^2)$,
+		$\sum_{i=1}^I \alpha_i = 0$, and $\sum_{j=1}^J \beta_j = 0$.
+		
+		\subsection{Part I}
+			
+			Define the grand mean $\bar{Y}_{..}$, treatment mean $\bar{Y}_{i.}$, and block mean $\bar{Y}_{.j}$.
+			Add and subtract $\bar{Y}_{i.}$ and $\bar{Y}_{.j}$ inside the total deviation:
+			\[
+			Y_{ij} - \bar{Y}_{..}
+			= \underbrace{(\bar{Y}_{i.} - \bar{Y}_{..})}_{\text{treatment}}
+			+ \underbrace{(\bar{Y}_{.j} - \bar{Y}_{..})}_{\text{block}}
+			+ \underbrace{(Y_{ij} - \bar{Y}_{i.} - \bar{Y}_{.j} + \bar{Y}_{..})}_{\text{residual}}.
+			\]
+			Squaring and summing over all $i,j$, the three cross-product terms vanish by orthogonality.
+			Specifically, with $e_{ij} = Y_{ij} - \bar{Y}_{i.} - \bar{Y}_{.j} + \bar{Y}_{..}$:
+			
+			\textit{Cross term 1:} $\sum_{i,j}(\bar{Y}_{i.}-\bar{Y}_{..})(\bar{Y}_{.j}-\bar{Y}_{..})
+			= \sum_i(\bar{Y}_{i.}-\bar{Y}_{..})\sum_j(\bar{Y}_{.j}-\bar{Y}_{..}) = 0$,
+			since $\sum_j(\bar{Y}_{.j}-\bar{Y}_{..})=0$.
+			
+			\textit{Cross term 2:} $\sum_{i,j}(\bar{Y}_{i.}-\bar{Y}_{..})e_{ij}
+			= \sum_i(\bar{Y}_{i.}-\bar{Y}_{..})\sum_j e_{ij} = 0$,
+			since $\sum_j e_{ij} = \sum_j(Y_{ij}-\bar{Y}_{i.}) - J(\bar{Y}_{.j}-\bar{Y}_{..})\big|_{\text{summed}} = 0$.
+			
+			\textit{Cross term 3:} $\sum_{i,j}(\bar{Y}_{.j}-\bar{Y}_{..})e_{ij} = 0$ by the symmetric argument $\sum_i e_{ij}=0$.
+			
+			Hence
+			\begin{align*}
+				SST
+				&= \sum_{i=1}^I\sum_{j=1}^J (Y_{ij}-\bar{Y}_{..})^2 \\
+				&= J\sum_{i=1}^I(\bar{Y}_{i.}-\bar{Y}_{..})^2
+				+ I\sum_{j=1}^J(\bar{Y}_{.j}-\bar{Y}_{..})^2
+				+ \sum_{i=1}^I\sum_{j=1}^J e_{ij}^2 \\
+				&= SSTr + SSB + SSE. 
+			\end{align*}
+			
+		\clearpage
+		\subsection{Part II}
+			The block mean is $\bar{Y}_{.j} = \mu + \bar{\alpha}_{.} + \beta_j + \bar{\epsilon}_{.j} = \mu + \beta_j + \bar{\epsilon}_{.j}$
+			(since $\bar{\alpha}_{.} = 0$), and $\bar{Y}_{..} = \mu + \bar{\epsilon}_{..}$.
+			Thus $\bar{Y}_{.j} - \bar{Y}_{..} = \beta_j + (\bar{\epsilon}_{.j} - \bar{\epsilon}_{..})$.
+			Let $\delta_j = \bar{\epsilon}_{.j} - \bar{\epsilon}_{..}$. Then
+			\[
+			SSB = I\sum_{j=1}^J (\bar{Y}_{.j}-\bar{Y}_{..})^2
+			= I\sum_{j=1}^J (\beta_j + \delta_j)^2
+			= I\sum_{j=1}^J\beta_j^2
+			+ 2I\sum_{j=1}^J \beta_j\delta_j
+			+ I\sum_{j=1}^J\delta_j^2.
+			\]
+			Taking expectations: $E[\delta_j]=0$ so the cross term vanishes.
+			Each $\bar{\epsilon}_{.j} \sim N(0, \sigma^2/I)$ independently across $j$,
+			so by the same argument as the one-way ANOVA expected value proof,
+			$E\!\left[\sum_{j=1}^J \delta_j^2\right] = (J-1)\sigma^2/I$.
+			Hence $E\!\left[I\sum_{j=1}^J \delta_j^2\right] = (J-1)\sigma^2$, and
+			\[
+			E[SSB] = I\sum_{j=1}^J \beta_j^2 + (J-1)\sigma^2.
+			\]
+			Dividing by $df_B = J-1$,
+			$E[MSB] = \sigma^2 + \dfrac{I}{J-1}\displaystyle\sum_{j=1}^J \beta_j^2$. 
+			
+		\clearpage
+		\subsection{Part III}
+		
+		The design has $I=4$ treatments, $J=3$ blocks, and $K=2$ replicates
+			per cell, giving $n = IJK = 24$ observations. Cell means (average of the two replicates):
+			
+			\begin{center}
+				\begin{tabular}{lcccc}
+					\hline
+					& B1 & B2 & B3 & $\bar{y}_{i..}$ \\
+					\hline
+					Control & 101.550 & 106.750 & 100.550 & 102.950 \\
+					Dose 1  & 103.750 & 106.800 & 103.400 & 104.650 \\
+					Dose 2  &  96.200 & 104.050 &  98.950 &  99.733 \\
+					Dose 3  & 102.400 & 106.700 &  98.050 & 102.383 \\
+					\hline
+					$\bar{y}_{.j.}$ & 100.975 & 106.075 & 100.238 & $\bar{y}_{...} = 102.429$ \\
+					\hline
+				\end{tabular}
+			\end{center}
+			
+			We have the {hypotheses:}
+			$H_0: \alpha_1 = \alpha_2 = \alpha_3 = \alpha_4 = 0$ (no drug effect)
+			versus $H_A:$ at least one $\alpha_i \neq 0$.
+			
+			With $n=24$, $I=4$, $J=3$, $K=2$, and $\bar{y}_{...} = 102.429$,
+			the sums of squares are computed directly from the raw observations:
+			\begin{align*}
+				SSTr &= JK\sum_{i=1}^4 (\bar{y}_{i..}-\bar{y}_{...})^2 \\
+				&= 6\bigl[(102.950-102.429)^2+(104.650-102.429)^2
+				+(99.733-102.429)^2+(102.383-102.429)^2\bigr] \\
+				&= 6\bigl[(0.521)^2+(2.221)^2+(-2.696)^2+(-0.046)^2\bigr] \\
+				&= 6(12.473) = 74.838, \\
+				SSB  &= IK\sum_{j=1}^3 (\bar{y}_{.j.}-\bar{y}_{...})^2 \\
+				&= 8\bigl[(100.975-102.429)^2+(106.075-102.429)^2
+				+(100.238-102.429)^2\bigr] \\
+				&= 8\bigl[(-1.454)^2+(3.646)^2+(-2.191)^2\bigr] \\
+				&= 8(20.210) = 161.681, \\
+				SST  &= \sum_{i,j,k}(y_{ijk}-\bar{y}_{...})^2 = 309.770.
+			\end{align*}
+			Hence $SSE = SST - SSTr - SSB = 309.770 - 74.838 - 161.681 = 73.251$.
+			
+			\begin{center}
+				\begin{tabular}{lcccc}
+					\hline
+					Source     & $df$           & $SS$      & $MS$     & $F$    \\
+					\hline
+					Treatment  & $I-1 = 3$      & $74.838$  & $24.946$ & $6.130$ \\
+					Block      & $J-1 = 2$      & $161.681$ & $80.841$ & $19.865$ \\
+					Error      & $n-I-J+1 = 18$ & $73.251$  &  $4.069$ &         \\
+					\hline
+					Total      & $n-1 = 23$     & $309.770$ &          &         \\
+					\hline
+				\end{tabular}
+			\end{center}
+			
+			The test statistic is $F_{\mathrm{obs}} = MSTr/MSE = 24.946/4.069 = 6.130$,
+			with $F \sim F(3,18)$ under $H_0$, giving $p\text{-value} = 0.0046$. Since $p = 0.0046 < 0.05$, we reject $H_0$.
+			
+			After controlling for block-to-block variability, there is statistically
+			significant evidence at the 5\% level that drug dosage is related to the
+			biological response $y$. The blocking factor also explains a substantial
+			portion of the variation ($F = 19.865$, $p \approx 0.000$), confirming
+			that the block design was effective in reducing nuisance variability.
+			
+		\clearpage
+		
+		\section{Question 8}
+		{\color{deepred}\fontspec{Georgia}  Design Matrix, Least Squares Equation and Estimability}
+		
+		Consider the same two factor dataset from Table 2.
+		
+		\emph{Perform the following tasks}
+		\begin{enumerate}
+			\item[(i)] Assuming the two-factor model
+			\begin{equation}
+				Y_{ijk}=\mu+\alpha_i+\beta_j+\epsilon_{ijk},
+				\qquad
+				\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+				\qquad
+				j=1,2,3,
+				\qquad
+				i=1,2,3,4,
+				\qquad
+				k=1,2
+			\end{equation}
+			set up the rank-deficient design matrix $\mathbf{X}$ based on the parameter vector:
+			\[
+			\beta^T=(\mu \quad \alpha_1 \quad \alpha_2 \quad \alpha_3 \quad \alpha_4 \quad \beta_1 \quad \beta_2 \quad \beta_3)
+			\]
+			
+			Also, using R or Python or similar, compute the least squares solution. Denote $\hat{\beta}_{RD}$ as the rank deficient least squares solution. Do the estimates match your intuition?
+			
+			\item[(ii)] Assuming the two-factor model
+			\begin{equation}
+				Y_{ijk}=\mu+\alpha_i+\beta_j+\epsilon_{ijk},
+				\qquad
+				\epsilon_{ij}\overset{iid}{\sim}N(0,\sigma^2),
+				\qquad
+				j=1,2,3,
+				\qquad
+				i=1,2,3,4,
+				\qquad
+				k=1,2
+			\end{equation}
+			and
+			\begin{equation}
+				\sum_{i=1}^4 \alpha_i=0,
+				\qquad
+				\sum_{j=1}^3 \beta_j=0,
+			\end{equation}
+			set up the full-rank design matrix $\mathbf{X}$ based on the parameter vector:
+			\[
+			\beta^T=(\mu \quad \alpha_1 \quad \alpha_2 \quad \alpha_3 \quad \beta_1 \quad \beta_2)
+			\]
+			
+			Also, using R or Python or similar, compute the least squares solution. Denote $\hat{\beta}_{FR}$ as the unique full rank least squares solution. Do the estimates match your intuition?
+			
+			\item[(iii)] Consider the rank deficient model (7) and define the contrasts vectors
+			\[
+			c_1^T=(0 \quad 1 \quad -1 \quad 0 \quad 0 \quad 0 \quad 0 \quad 0)
+			\]
+			\[
+			c_2^T=(0 \quad 1 \quad -1/3 \quad -1/3 \quad -1/3 \quad 0 \quad 0 \quad 0)
+			\]
+			\[
+			c_3^T=(0 \quad 1 \quad 1 \quad 0 \quad 0 \quad -1 \quad -1 \quad 0)
+			\]
+			
+			Define analogous contrasts $c_1^*,c_2^*,c_3^*$ for the full rank model (8) and compute the following estimated contrasts
+			\[
+			c_1^T\hat{\beta}_{RD},
+			\qquad
+			(c_1^*)^T\hat{\beta}_{FR},
+			\qquad
+			c_2^T\hat{\beta}_{RD},
+			\qquad
+			(c_2^*)^T\hat{\beta}_{FR},
+			\qquad
+			c_3^T\hat{\beta}_{RD},
+			\qquad
+			(c_3^*)^T\hat{\beta}_{FR}.
+			\]
+			
+			Based on the estimated contrasts, determine which ones are estimable.
+		\end{enumerate}
+		
+		\textbf{Answer}
+		
+	
+		\subsection{Part I}
+				
+				The model is $Y_{ijk} = \mu + \alpha_i + \beta_j + \epsilon_{ijk}$ with
+				parameter vector
+				$\boldsymbol{\beta}^T = (\mu,\;\alpha_1,\;\alpha_2,\;\alpha_3,\;\alpha_4,\;\beta_1,\;\beta_2,\;\beta_3)$.
+				Each observation contributes one row to $\mathbf{X}$ with a 1 in the
+				intercept column, a 1 in the column of its treatment, and a 1 in the
+				column of its block. Because each treatment and each block appears the
+				same number of times, the columns satisfy
+				$\mathbf{x}_{\alpha_1}+\mathbf{x}_{\alpha_2}+\mathbf{x}_{\alpha_3}+\mathbf{x}_{\alpha_4}
+				= \mathbf{x}_{\beta_1}+\mathbf{x}_{\beta_2}+\mathbf{x}_{\beta_3}
+				= \mathbf{x}_{\mu}$,
+				giving two linear dependencies. Hence $\text{rank}(\mathbf{X})=6<8$
+				and $\mathbf{X}^T\mathbf{X}$ is singular.
+				
+				The $24\times8$ design matrix is (rows grouped by treatment, then block,
+				$k=1,2$):
+				
+				\[
+				\mathbf{X} =
+				\begin{pmatrix}
+					1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\
+					1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 \\
+					1 & 1 & 0 & 0 & 0 & 0 & 1 & 0 \\
+					1 & 1 & 0 & 0 & 0 & 0 & 1 & 0 \\
+					1 & 1 & 0 & 0 & 0 & 0 & 0 & 1 \\
+					1 & 1 & 0 & 0 & 0 & 0 & 0 & 1 \\
+					1 & 0 & 1 & 0 & 0 & 1 & 0 & 0 \\
+					1 & 0 & 1 & 0 & 0 & 1 & 0 & 0 \\
+					1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\
+					1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\
+					1 & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\
+					1 & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\
+					1 & 0 & 0 & 1 & 0 & 1 & 0 & 0 \\
+					1 & 0 & 0 & 1 & 0 & 1 & 0 & 0 \\
+					1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\
+					1 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\
+					1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\
+					1 & 0 & 0 & 1 & 0 & 0 & 0 & 1 \\
+					1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\
+					1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\
+					1 & 0 & 0 & 0 & 1 & 0 & 1 & 0 \\
+					1 & 0 & 0 & 0 & 1 & 0 & 1 & 0 \\
+					1 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\
+					1 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\
+				\end{pmatrix},
+				\qquad
+				\mathbf{y} =
+				\begin{pmatrix}
+					100.7\\102.4\\104.3\\109.2\\101.7\\99.4\\
+					103.5\\104.0\\107.7\\105.9\\104.5\\102.3\\
+					97.8\\94.6\\105.2\\102.9\\98.0\\99.9\\
+					102.6\\102.2\\106.8\\106.6\\100.1\\96.0
+				\end{pmatrix}.
+				\]
+				
+				Since $\mathbf{X}^T\mathbf{X}$ is singular, the minimum-norm least
+				squares solution is obtained via the Moore--Penrose pseudoinverse:
+				$\hat{\boldsymbol{\beta}}_{RD} = \mathbf{X}^+\mathbf{y}$.
+				Using Python (\texttt{numpy.linalg.pinv}):
+				
+				\[
+				\hat{\boldsymbol{\beta}}_{RD}^T
+				= (\hat\mu,\;\hat\alpha_1,\;\hat\alpha_2,\;\hat\alpha_3,\;\hat\alpha_4,\;
+				\hat\beta_1,\;\hat\beta_2,\;\hat\beta_3)
+				= (64.692,\;16.694,\;18.394,\;13.477,\;16.127,\;
+				20.110,\;25.210,\;19.372).
+				\]
+				
+				The solution is not unique (any vector in the null space of $\mathbf{X}$
+				can be added), but the fitted values $\hat{\mathbf{y}} = \mathbf{X}\hat{\boldsymbol{\beta}}_{RD}$
+				are unique. The treatment estimates satisfy
+				$\hat\alpha_2 > \hat\alpha_1 > \hat\alpha_4 > \hat\alpha_3$,
+				consistent with Dose~1 having the highest mean response and Dose~2 the
+				lowest, which matches the cell means in Table~2.
+				
+			\clearpage
+			\subsection{Part II}
+				
+				Imposing $\sum_{i=1}^4\alpha_i=0$ and $\sum_{j=1}^3\beta_j=0$
+				eliminates $\alpha_4 = -\alpha_1-\alpha_2-\alpha_3$ and
+				$\beta_3 = -\beta_1-\beta_2$, reducing the parameter vector to
+				$\boldsymbol{\beta}^T = (\mu,\;\alpha_1,\;\alpha_2,\;\alpha_3,\;\beta_1,\;\beta_2)$.
+				The Dose~3 rows encode
+				$\alpha_4 = -\alpha_1-\alpha_2-\alpha_3$ as $(-1,-1,-1)$ in columns
+				2--4, and B3 rows encode $\beta_3=-\beta_1-\beta_2$ as $(-1,-1)$ in
+				columns 5--6. The resulting $24\times6$ full-rank design matrix is:
+				
+				\[
+				\mathbf{X} =
+				\begin{pmatrix}
+					1 &  1 &  0 &  0 &  1 &  0 \\
+					1 &  1 &  0 &  0 &  1 &  0 \\
+					1 &  1 &  0 &  0 &  0 &  1 \\
+					1 &  1 &  0 &  0 &  0 &  1 \\
+					1 &  1 &  0 &  0 & -1 & -1 \\
+					1 &  1 &  0 &  0 & -1 & -1 \\
+					1 &  0 &  1 &  0 &  1 &  0 \\
+					1 &  0 &  1 &  0 &  1 &  0 \\
+					1 &  0 &  1 &  0 &  0 &  1 \\
+					1 &  0 &  1 &  0 &  0 &  1 \\
+					1 &  0 &  1 &  0 & -1 & -1 \\
+					1 &  0 &  1 &  0 & -1 & -1 \\
+					1 &  0 &  0 &  1 &  1 &  0 \\
+					1 &  0 &  0 &  1 &  1 &  0 \\
+					1 &  0 &  0 &  1 &  0 &  1 \\
+					1 &  0 &  0 &  1 &  0 &  1 \\
+					1 &  0 &  0 &  1 & -1 & -1 \\
+					1 &  0 &  0 &  1 & -1 & -1 \\
+					1 & -1 & -1 & -1 &  1 &  0 \\
+					1 & -1 & -1 & -1 &  1 &  0 \\
+					1 & -1 & -1 & -1 &  0 &  1 \\
+					1 & -1 & -1 & -1 &  0 &  1 \\
+					1 & -1 & -1 & -1 & -1 & -1 \\
+					1 & -1 & -1 & -1 & -1 & -1 \\
+				\end{pmatrix}.
+				\]
+				
+				Since $\text{rank}(\mathbf{X})=6$, the unique OLS solution is
+				$\hat{\boldsymbol{\beta}}_{FR} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$:
+				
+				\[
+				\hat{\boldsymbol{\beta}}_{FR}^T
+				= (\hat\mu,\;\hat\alpha_1,\;\hat\alpha_2,\;\hat\alpha_3,\;\hat\beta_1,\;\hat\beta_2)
+				= (102.429,\;0.521,\;2.221,\;-2.696,\;-1.454,\;3.646).
+				\]
+				
+				The derived parameters are
+				$\hat\alpha_4 = -0.521-2.221+2.696 = -0.046$ and
+				$\hat\beta_3 = 1.454-3.646 = -2.192$.
+				These estimates match intuition: $\hat\mu = 102.429$ equals the grand
+				mean, each $\hat\alpha_i = \bar{y}_{i..} - \bar{y}_{...}$ is the
+				treatment deviation from the grand mean, and each $\hat\beta_j =
+				\bar{y}_{.j.} - \bar{y}_{...}$ is the block deviation.
+				
+			\clearpage
+			\subsection{Part III}
+				
+				For the rank-deficient model the contrasts are as given. The analogous
+				contrasts for the full-rank model are derived by substituting
+				$\alpha_4 = -\alpha_1-\alpha_2-\alpha_3$ and
+				$\beta_3 = -\beta_1-\beta_2$ into each $c_i$:
+				
+				\begin{itemize}
+					\item $c_1^T = (0,1,-1,0,0,0,0,0)$: compares $\alpha_1$ vs.\ $\alpha_2$.
+					Under the full-rank parameterisation this is unchanged:
+					$c_1^{*T} = (0,\;1,\;-1,\;0,\;0,\;0)$.
+					
+					\item $c_2^T = (0,1,-\tfrac{1}{3},-\tfrac{1}{3},-\tfrac{1}{3},0,0,0)$:
+					compares $\alpha_1$ vs.\ the average of the remaining treatments.
+					Substituting $\alpha_4 = -\alpha_1-\alpha_2-\alpha_3$:
+					\[
+					\alpha_1 - \tfrac{1}{3}(\alpha_2+\alpha_3+\alpha_4)
+					= \alpha_1 - \tfrac{1}{3}(\alpha_2+\alpha_3-\alpha_1-\alpha_2-\alpha_3)
+					= \tfrac{4}{3}\alpha_1,
+					\]
+					so $c_2^{*T} = (0,\;\tfrac{4}{3},\;0,\;0,\;0,\;0)$.
+					
+					\item $c_3^T = (0,1,1,0,0,-1,-1,0)$: compares $\alpha_1+\alpha_2$
+					vs.\ $\beta_1+\beta_2$, mixing treatment and block effects.
+					In the full-rank model:
+					$c_3^{*T} = (0,\;1,\;1,\;0,\;-1,\;-1)$.
+				\end{itemize}
+				
+				The estimated contrasts are:
+				
+				\begin{center}
+					\begin{tabular}{lcc}
+						\hline
+						Contrast & Rank-deficient model & Full-rank model \\
+						\hline
+						$c_1,\,c_1^*$ & $c_1^T\hat{\boldsymbol{\beta}}_{RD} = -1.700$ &
+						$(c_1^*)^T\hat{\boldsymbol{\beta}}_{FR} = -1.700$ \\
+						$c_2,\,c_2^*$ & $c_2^T\hat{\boldsymbol{\beta}}_{RD} = \phantom{-}0.694$ &
+						$(c_2^*)^T\hat{\boldsymbol{\beta}}_{FR} = \phantom{-}0.694$ \\
+						$c_3,\,c_3^*$ & $c_3^T\hat{\boldsymbol{\beta}}_{RD} = -10.232$ &
+						$(c_3^*)^T\hat{\boldsymbol{\beta}}_{FR} = \phantom{-}0.550$ \\
+						\hline
+					\end{tabular}
+				\end{center}
+				
+				A contrast $c$ is {estimable} if and only if it lies in the row
+				space of $\mathbf{X}$, i.e.\ $c^T\hat{\boldsymbol{\beta}}$ is the same
+				for every least-squares solution.
+				
+				\begin{itemize}
+					\item $c_1$: \textit{estimable}. Both models give $-1.700$. The contrast
+					$\alpha_1-\alpha_2$ is a pure treatment comparison and is
+					identifiable from the data.
+					
+					\item $c_2$: \textit{estimable}. Both models give $0.694$. The
+					contrast $\alpha_1 - \bar\alpha_{\neq 1}$ is again a pure
+					treatment comparison.
+					
+					\item $c_3$: \textit{not estimable}. The rank-deficient model gives
+					$-10.232$ while the full-rank model gives $0.550$; the two
+					values differ because $c_3$ mixes treatment effects
+					($\alpha_1+\alpha_2$) with block effects ($\beta_1+\beta_2$).
+					Such a linear combination is not uniquely determined by the
+					data when the design matrix is rank-deficient.
+				\end{itemize}
+		
+		\clearpage
+		
+		\section{Question 9}
+		{\color{deepred}\fontspec{Georgia}   Non-parametric}
+		
+		Consider the following dataset, which includes the discrete response variable $y$ split by four groups Group1, Group2, Group3 and Group4. The data are displayed below:
+		
+		\begin{center}
+			\begin{tabular}{c c c c}
+				\hline
+				Group1 & Group2 & Group3 & Group4 \\
+				\hline
+				8  & 8  & 11 & 13 \\
+				10 & 14 & 12 & 17 \\
+				12 & 16 & 11 & 20 \\
+				10 & 14 & 23 & 15 \\
+				13 & 10 & 19 & 11 \\
+				12 & 11 & 11 & 17 \\
+				12 & 10 & 17 & 16 \\
+				15 & 9  & 17 & 5 \\
+				13 & 9  & 16 & 11 \\
+				9  & 12 & 16 & 20 \\
+				\hline
+			\end{tabular}
+		\end{center}
+		
+		Perform the following tasks:
+		\begin{enumerate}
+			\item[(i)] Run a Kruskal-Wallis test (at $\alpha=.05$) on the above dataset to check if the true average of the response differs per group. Ideally students should show each step by hand. Students will have to look up how to deal with ties when calculating the test statistic. Make sure to include all relevant steps in the testing procedure for full credit.
+			
+			\item[(ii)] Run a permutation test (at $\alpha=.05$) on the above dataset to check if the true average of the response differs per group. Make sure to include all relevant steps in the testing procedure for full credit.
+		\end{enumerate}
+		
+		\textbf{Answer}
+		
+		
+		\underline{Part One: Calculate by Hand}
+		
+		\subsection{Part I}
+		Let the four groups be
+		\[
+		\begin{aligned}
+			G_1&=(8,10,12,10,13,12,12,15,13,9),\\
+			G_2&=(8,14,16,14,10,11,10,9,9,12),\\
+			G_3&=(11,12,11,23,19,11,17,17,16,16),\\
+			G_4&=(13,17,20,15,11,17,16,5,11,20).
+		\end{aligned}
+		\]
+		
+		We test $H_0:\mu_1=\mu_2=\mu_3=\mu_4$ vs.\ $H_a:$ not all equal. Here $n_1=\cdots=n_4=10$, $N=40$.
+		
+	 For the {Kruskal--Wallis test}, we rank all $40$ observations (average ranks for ties). The rank sums are
+			\[
+			R_1=155,\quad R_2=143.5,\quad R_3=266.5,\quad R_4=255.
+			\]
+			
+			The test statistic is 
+			$H=\frac{12}{N(N+1)}\sum_{i=1}^4 \frac{R_i^2}{n_i}-3(N+1)$. Numerically,
+			$H=\frac{12}{40\cdot 41}\left(\frac{155^2}{10}+\frac{143.5^2}{10}+\frac{266.5^2}{10}+\frac{255^2}{10}\right)-3\cdot 41\approx 9.1935$.
+			Tie correction: $C=1-\frac{\sum (t_j^3-t_j)}{N^3-N}$.
+			From tie counts, $\sum (t_j^3-t_j)=582$, hence
+			$C=1-\frac{582}{40^3-40}\approx 0.9909$. Thus corrected statistic:
+			$H^\ast=\frac{H}{C}\approx \frac{9.1935}{0.9909}\approx 9.278$.
+			Under $H_0$, $H^\ast\sim \chi^2_3$ approximately. Since $9.278>7.815$, reject $H_0$. We can say that there is a significant difference across groups.
+			
+		\clearpage
+		\subsection{Part II}
+			
+			Permutation is essentially impossible to calculate by hand, and here I just listed the steps needed. For full procedure, please see codes in part two. Here we use ANOVA $F$ as test statistic.
+			Sample means are:
+			\[
+			\bar y_1=11.4,\quad \bar y_2=11.3,\quad \bar y_3=15.3,\quad \bar y_4=14.5,\quad \bar y=13.125.
+			\]
+			
+			Between-group sum of squares:
+			$SS_B=10(11.4-13.125)^2+10(11.3-13.125)^2+10(15.3-13.125)^2+10(14.5-13.125)^2=129.275$.
+			Within-group sum of squares:
+			$SS_W=441.1$.
+			Thus
+			$F=\frac{SS_B/3}{SS_W/36}=\frac{129.275/3}{441.1/36}\approx 3.5169$.
+			Permutation procedure: shuffle labels, recompute $F$, and estimate
+			$p=\frac{\#\{F^{(b)}\ge F_{\text{obs}}\}}{B}$.
+			Numerically, $p\approx 0.026<0.05$, so reject $H_0$. In summary, we say that there is a significant difference across groups.
+			
+		
+		Finally, we have ${\text{Reject }H_0\text{ at }\alpha=0.05}$ both with Kruskal-Wallis test and permutation test.
+		
+	\clearpage
+		
+		\underline{Part Two: Calculate by Python}
+		
+		\subsection{Part III}
+		Then I did similar procedure using programming language, namely, Python.
+		
+		For  Kruskal-Wallis test, fzirst to import the data and label them
+\begin{lstlisting}
+     group1 = [8, 10, 12, 10, 13, 12, 12, 15, 13, 9]
+     group2 = [8, 14, 16, 14, 10, 11, 10,  9,  9, 12]
+     group3 = [11, 12, 11, 23, 19, 11, 17, 17, 16, 16]
+     group4 = [13, 17, 20, 15, 11, 17, 16,  5, 11, 20]
+     
+     groups = [group1, group2, group3, group4]
+     labels = ["Group1", "Group2", "Group3", "Group4"]
+     K = len(groups)
+     n_k = [len(g) for g in groups]
+     n   = sum(n_k)
+\end{lstlisting}
+
+Then we combine and rank all observations
+
+\begin{lstlisting}
+     all_data = []
+     for k, g in enumerate(groups):
+     for obs in g:
+     all_data.append((obs, k))          # (value, group_index)
+     
+     all_values = np.array([x[0] for x in all_data])
+     ranks      = stats.rankdata(all_values)    # average rank for ties
+     
+     print(" Assign ranks (average for ties):")
+     print(f"{'Obs':>6}  {'Group':>7}  {'Rank':>6}")
+     for (val, grp), r in zip(all_data, ranks):
+     print(f"{val:>6}  {labels[grp]:>7}  {r:>6.2f}")
+\end{lstlisting}
+
+The result is 
+
+\begin{minipage}{\linewidth}
+	\begin{Verbatim}
+     Obs    Group    Rank
+     8   Group1    2.50
+     10   Group1    8.50
+     12   Group1   19.00
+     10   Group1    8.50
+     13   Group1   23.00
+     12   Group1   19.00
+     12   Group1   19.00
+     15   Group1   27.50
+     13   Group1   23.00
+     9   Group1    5.00
+     8   Group2    2.50
+     14   Group2   25.50
+     16   Group2   30.50
+     14   Group2   25.50
+     10   Group2    8.50
+     11   Group2   13.50
+     10   Group2    8.50
+     9   Group2    5.00
+     9   Group2    5.00
+     12   Group2   19.00
+     11   Group3   13.50
+     12   Group3   19.00
+     11   Group3   13.50
+     23   Group3   40.00
+     19   Group3   37.00
+     11   Group3   13.50
+     17   Group3   34.50
+     17   Group3   34.50
+     16   Group3   30.50
+     16   Group3   30.50
+     13   Group4   23.00
+     17   Group4   34.50
+     20   Group4   38.50
+     15   Group4   27.50
+     11   Group4   13.50
+     17   Group4   34.50
+     16   Group4   30.50
+     5   Group4    1.00
+     11   Group4   13.50
+     20   Group4   38.50
+	\end{Verbatim}
+\end{minipage}
+
+Then we calculate the rank sums per group
+
+\begin{lstlisting}
+     rank_sums = np.zeros(K)
+     for i, (val, grp) in enumerate(all_data):
+     rank_sums[grp] += ranks[i]
+     
+     print(" Rank sums per group:")
+     for k in range(K):
+     print(f"  R_{k+1} = {rank_sums[k]:.2f}  (n_{k+1} = {n_k[k]})")
+\end{lstlisting}
+
+And get the result to be 
+
+\begin{minipage}{\linewidth}
+	\begin{Verbatim}
+     R_1 = 155.00  (n_1 = 10)
+     R_2 = 143.50  (n_2 = 10)
+     R_3 = 266.50  (n_3 = 10)
+     R_4 = 255.00  (n_4 = 10)
+	\end{Verbatim}
+\end{minipage}
+
+Then, to correct back the $H$ value caused  by tied ranks, we calculate the tie correction factor C
+
+\begin{lstlisting}
+     unique_vals, counts = np.unique(all_values, return_counts=True)
+     tie_groups = counts[counts > 1]
+     C = 1 - np.sum(tie_groups**3 - tie_groups) / (n**3 - n)
+     print(f" Tie correction factor C = {C:.6f}")
+     print(f"  Tied values and their counts:")
+     for v, c in zip(unique_vals, counts):
+     if c > 1:
+     print(f"    value={v}, count={c}, t^3-t={c**3-c}")
+\end{lstlisting}
+
+\begin{minipage}{\linewidth}
+	\begin{Verbatim}
+     Tie correction factor C = 0.990901
+     Tied values and their counts:
+     value=8, count=2, t^3-t=6
+     value=9, count=3, t^3-t=24
+     value=10, count=4, t^3-t=60
+     value=11, count=6, t^3-t=210
+     value=12, count=5, t^3-t=120
+     value=13, count=3, t^3-t=24
+     value=14, count=2, t^3-t=6
+     value=15, count=2, t^3-t=6
+     value=16, count=4, t^3-t=60
+     value=17, count=4, t^3-t=60
+     value=20, count=2, t^3-t=6
+	\end{Verbatim}
+\end{minipage}
+
+For the $H$ value
+
+\begin{lstlisting}
+     H_raw = (12 / (n * (n + 1))) * np.sum(rank_sums**2 / np.array(n_k)) - 3 * (n + 1)
+     H     = H_raw / C
+     
+     print(f"\nH statistic:")
+     print(f"  H (uncorrected) = {H_raw:.4f}")
+     print(f"  H (tie-corrected) = H / C = {H:.4f}")
+\end{lstlisting}
+
+\begin{minipage}{\linewidth}
+	\begin{Verbatim}
+     H statistic:
+     H (uncorrected) = 9.1935
+     H (tie-corrected) = H / C = 9.2780
+	\end{Verbatim}
+\end{minipage}
+
+
+Finally we do the test
+
+\begin{lstlisting}
+     alpha   = 0.05
+     df      = K - 1
+     chi2_cv = stats.chi2.ppf(1 - alpha, df)
+     p_value = 1 - stats.chi2.cdf(H, df)
+     
+     print(f"\nDecision (chi-distribution, df = {df})")
+     print(f"  Critical value chi_{{0.05, {df}}} = {chi2_cv:.4f}")
+     print(f"  H = {H:.4f},  p-value = {p_value:.4f}")
+\end{lstlisting}
+
+\begin{minipage}{\linewidth}
+	\begin{Verbatim}
+     Decision (chi-distribution, df = 3)
+     Critical value chi_{0.05, 3} = 7.8147
+     H = 9.2780,  p-value = 0.0258
+	\end{Verbatim}
+\end{minipage}
+
+Thus the result requires us to reject $H_0$.
+
+\clearpage
+\subsection{Part IV}
+For the permutation test, I formulate the One-way ANOVA and permutate it 10,000 times. 
+			
+\begin{lstlisting}
+     rng = np.random.default_rng(seed=42)
+     B   = 10_000          # number of permutations
+     
+     # Observed test statistic: F-statistic (one-way ANOVA)
+     def f_statistic(groups):
+     k     = len(groups)
+     ns    = [len(g) for g in groups]
+     N     = sum(ns)
+     means = [np.mean(g) for g in groups]
+     grand = np.mean(np.concatenate(groups))
+     SSB   = sum(ns[i] * (means[i] - grand)**2 for i in range(k))
+     SSW   = sum(np.sum((np.array(g) - means[i])**2)
+     for i, g in enumerate(groups))
+     MSB   = SSB / (k - 1)
+     MSW   = SSW / (N - k)
+     return MSB / MSW
+     
+     all_obs   = np.concatenate(groups)
+     F_obs     = f_statistic(groups)
+     print(f"observed F-statistic = {F_obs:.4f}")
+     
+     # Permutation loop
+     F_perm = np.empty(B)
+     for b in range(B):
+     perm      = rng.permutation(all_obs)
+     perm_grps = [perm[sum(n_k[:i]):sum(n_k[:i+1])] for i in range(K)]
+     F_perm[b] = f_statistic(perm_grps)
+     
+     p_perm = np.mean(F_perm >= F_obs)
+     
+     print(f"Number of permutations B = {B}")
+     print(f"Permutation F-value = {F_obs:.4f}")
+     print(f"Permutation p-value = {p_perm:.4f}")
+\end{lstlisting}
+
+We can see the results as below
+
+\begin{minipage}{\linewidth}
+	\begin{Verbatim}
+     observed F-statistic = 3.5169
+     Number of permutations B = 10000
+     Permutation F-value = 3.5169
+     Permutation p-value = 0.0260
+	\end{Verbatim}
+\end{minipage}
+
+Here, with this $p$ value, which is smaller than 0.05, we also need to reject $H_0$.
+
+			
+		
+		\clearpage
+	\end{document}
