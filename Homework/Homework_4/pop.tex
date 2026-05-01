@@ -1,0 +1,289 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\title{Two-Way Factorial ANOVA: Age and Recall Condition}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+% ============================================================
+\section{Research Question}
+% ============================================================
+
+This study investigates how \textbf{recall performance} is jointly influenced by two factors:
+\begin{itemize}
+    \item \textbf{Age}: Young (18--30 years) vs.\ Old (55--65 years)
+    \item \textbf{Recall Condition}: Counting, Rhyming, Adjective, Imagery, Intention
+\end{itemize}
+
+Specifically, we address three interrelated questions:
+\begin{enumerate}
+    \item Does the \textbf{type of encoding condition} affect recall scores (main effect of Condition)?
+    \item Does \textbf{age group} affect recall scores (main effect of Age)?
+    \item Does the effect of encoding condition on recall \textbf{differ between age groups} (Age $\times$ Condition interaction)?
+\end{enumerate}
+
+The interaction question is of primary theoretical interest: levels of processing theory predicts that deeper encoding (Imagery, Intention) benefits recall more than shallow encoding (Counting, Rhyming), and we ask whether this benefit is equally large for young and old participants.
+
+% ============================================================
+\section{Statistical Model}
+% ============================================================
+
+\subsection{Model Specification}
+
+We assume a \textbf{two-way factorial fixed-effects ANOVA} model. Let $Y_{ijk}$ denote the recall score for the $k$-th observation ($k = 1, \ldots, 10$) in age group $i$ ($i = 1, 2$; Young, Old) and condition $j$ ($j = 1, \ldots, 5$; Counting, Rhyming, Adjective, Imagery, Intention). The model is:
+
+\[
+Y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}
+\]
+
+where:
+\begin{itemize}
+    \item $\mu$ is the grand mean
+    \item $\alpha_i$ is the main effect of Age ($\sum_i \alpha_i = 0$)
+    \item $\beta_j$ is the main effect of Condition ($\sum_j \beta_j = 0$)
+    \item $(\alpha\beta)_{ij}$ is the interaction effect ($\sum_i (\alpha\beta)_{ij} = \sum_j (\alpha\beta)_{ij} = 0$)
+    \item $\varepsilon_{ijk} \overset{\text{iid}}{\sim} \mathcal{N}(0, \sigma^2)$
+\end{itemize}
+
+The model has $a = 2$ levels of Age, $b = 5$ levels of Condition, and $n = 10$ observations per cell, for a total of $N = abn = 100$ observations.
+
+\subsection{Parameter Estimates}
+
+The grand mean is estimated as $\hat{\mu} = \bar{Y}_{\cdots} = 11.61$.
+
+\vspace{0.5em}
+\noindent\textbf{Marginal means by Age:}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lc}
+\toprule
+Age & $\hat{\mu}_{i\cdot}$ \\
+\midrule
+Young & 13.16 \\
+Old   & 10.06 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Estimated main effects: $\hat{\alpha}_{\text{Young}} = 13.16 - 11.61 = +1.55$, \; $\hat{\alpha}_{\text{Old}} = 10.06 - 11.61 = -1.55$.
+
+\vspace{0.5em}
+\noindent\textbf{Marginal means by Condition:}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lc}
+\toprule
+Condition & $\hat{\mu}_{\cdot j}$ \\
+\midrule
+Counting   & 6.75  \\
+Rhyming    & 7.25  \\
+Adjective  & 12.90 \\
+Imagery    & 15.50 \\
+Intention  & 15.65 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Cell means $\hat{\mu}_{ij}$ (estimated by $\bar{Y}_{ij\cdot}$):}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccccc}
+\toprule
+ & Counting & Rhyming & Adjective & Imagery & Intention \\
+\midrule
+Young & 6.5  & 7.6  & 14.8 & 17.6 & 19.3 \\
+Old   & 7.0  & 6.9  & 11.0 & 13.4 & 12.0 \\
+\bottomrule
+\end{tabular}
+\caption{Estimated cell means $\hat{\mu}_{ij} = \bar{Y}_{ij\cdot}$}
+\end{table}
+
+The estimated interaction effects are $\widehat{(\alpha\beta)}_{ij} = \bar{Y}_{ij\cdot} - \bar{Y}_{i\cdot\cdot} - \bar{Y}_{\cdot j\cdot} + \bar{Y}_{\cdots}$, e.g.:
+\[
+\widehat{(\alpha\beta)}_{\text{Young, Intention}} = 19.3 - 13.16 - 15.65 + 11.61 = +2.10
+\]
+\[
+\widehat{(\alpha\beta)}_{\text{Old, Intention}} = 12.0 - 10.06 - 15.65 + 11.61 = -2.10
+\]
+
+The residual variance is estimated as $\hat{\sigma}^2 = \text{MS}_{\text{Residual}} = \frac{722.30}{90} = 8.026$.
+
+% ============================================================
+\section{Exploratory Plots: Research Question and Interaction}
+% ============================================================
+
+Figure~\ref{fig:interaction} shows the interaction plot of mean recall scores by condition and age group, and Figure~\ref{fig:boxplot} presents side-by-side boxplots for each cell.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{plot_interaction.png}
+    \caption{Interaction plot of mean recall ($\pm$ SE) by recall condition and age group. Non-parallel lines suggest an Age $\times$ Condition interaction.}
+    \label{fig:interaction}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{plot_boxplot.png}
+    \caption{Boxplots of recall scores by condition and age group. The gap between Young and Old widens notably for Adjective, Imagery, and Intention conditions.}
+    \label{fig:boxplot}
+\end{figure}
+
+\noindent\textbf{Observations:}
+\begin{itemize}
+    \item For shallow encoding conditions (Counting, Rhyming), Young and Old perform very similarly ($\bar{Y} \approx 6.5$--$7.6$).
+    \item For deeper encoding conditions (Adjective, Imagery, Intention), Young participants recall substantially more items than Old.
+    \item The lines in Figure~\ref{fig:interaction} \textbf{diverge} as encoding depth increases---a classic disordinal pattern suggesting an interaction. The Young group's recall rises steeply with deeper encoding, while the Old group's rise is more modest.
+\end{itemize}
+
+% ============================================================
+\section{Exploratory Plots: Model Assumptions}
+% ============================================================
+
+The key assumptions of the two-way ANOVA are: (1) normality of errors, (2) homogeneity of variance across cells, and (3) independence of observations. Figure~\ref{fig:diagnostics} presents the diagnostic plots.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{plot_diagnostics.png}
+    \caption{Model diagnostic plots. \textit{Top-left}: Residuals vs.\ Fitted (checks linearity and equal variance). \textit{Top-right}: Normal Q-Q plot (checks normality). \textit{Bottom-left}: Scale-Location plot (checks homoscedasticity). \textit{Bottom-right}: Residuals by cell (checks within-cell variance equality).}
+    \label{fig:diagnostics}
+\end{figure}
+
+\noindent\textbf{Assessment:}
+\begin{itemize}
+    \item \textbf{Normality}: The Q-Q plot shows points tracking the reference line closely, with only minor deviations at the tails. Given that the problem states data are approximately normally distributed, this assumption is satisfied.
+    \item \textbf{Homogeneity of variance}: The Residuals vs.\ Fitted and Scale-Location plots show no pronounced fan pattern. The per-cell boxplot of residuals (bottom-right) indicates reasonably similar spreads across cells. The assumption of equal variances is acceptable.
+    \item \textbf{Independence}: By design, each participant contributed data to only one cell (between-subjects design), so independence is satisfied.
+\end{itemize}
+
+% ============================================================
+\section{Testing the Interaction and Main Effects}
+% ============================================================
+
+\subsection{Hypotheses}
+
+\noindent\textbf{Interaction} ($H_0$: no Age $\times$ Condition interaction):
+\[
+H_0: (\alpha\beta)_{ij} = 0 \; \forall i,j \qquad H_1: \text{at least one } (\alpha\beta)_{ij} \neq 0
+\]
+
+\noindent\textbf{Main effect of Age} ($H_0$: no age difference):
+\[
+H_0: \alpha_1 = \alpha_2 = 0 \qquad H_1: \alpha_i \neq 0 \text{ for some } i
+\]
+
+\noindent\textbf{Main effect of Condition} ($H_0$: all conditions produce equal recall):
+\[
+H_0: \beta_1 = \cdots = \beta_5 = 0 \qquad H_1: \beta_j \neq 0 \text{ for some } j
+\]
+
+\subsection{ANOVA Table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrrrr}
+\toprule
+Source & SS & df & MS & $F$ & $p$-value \\
+\midrule
+Age                    & 240.25  & 1  & 240.25  & 29.94 & $< .001$ \\
+Condition              & 1514.94 & 4  & 378.74  & 47.19 & $< .001$ \\
+Age $\times$ Condition & 190.30  & 4  & 47.58   & 5.93  & $< .001$ \\
+Residual               & 722.30  & 90 & 8.026   &       &          \\
+\midrule
+Total                  & 2667.79 & 99 &         &       &          \\
+\bottomrule
+\end{tabular}
+\caption{Two-Way ANOVA Table (Type II SS). $N = 100$, $a = 2$, $b = 5$, $n = 10$.}
+\label{tab:anova}
+\end{table}
+
+\subsection{Conclusions}
+
+\begin{enumerate}
+    \item \textbf{Interaction} ($F(4, 90) = 5.93$, $p < .001$): We reject $H_0$. There is a statistically significant Age $\times$ Condition interaction. The effect of encoding condition on recall differs between young and old participants.
+
+    \item \textbf{Main effect of Age} ($F(1, 90) = 29.94$, $p < .001$): We reject $H_0$. Young participants recall significantly more items overall ($\bar{Y} = 13.16$) than old participants ($\bar{Y} = 10.06$).
+
+    \item \textbf{Main effect of Condition} ($F(4, 90) = 47.19$, $p < .001$): We reject $H_0$. Recall scores differ significantly across encoding conditions, consistent with levels-of-processing theory.
+\end{enumerate}
+
+\noindent\textit{Note}: Because the interaction is significant, the main effects must be interpreted with caution---the effect of Condition depends on Age, and vice versa.
+
+% ============================================================
+\section{Simple Effects Analysis}
+% ============================================================
+
+Since the interaction is significant, we decompose it by examining the \textbf{simple effect of Condition within each Age group}, and the \textbf{simple effect of Age within each Condition}.
+
+\subsection{Simple Effect of Condition within Each Age Group}
+
+We test $H_0$: all condition means are equal, separately for each age group.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrrrr}
+\toprule
+Age Group & SS$_{\text{Condition}}$ & df & MS & $F$ & $p$-value \\
+\midrule
+Old   & 351.52  & 4 & 87.88  & 9.08  & $< .001$ \\
+Young & 1353.72 & 4 & 338.43 & 53.06 & $< .001$ \\
+\bottomrule
+\end{tabular}
+\caption{Simple effects of Condition within each Age group. Error term: MS$_{\text{Residual}} = 8.026$ ($df = 90$) from the overall model.}
+\end{table}
+
+Both groups show a significant effect of Condition, but the effect is \textbf{much larger for Young participants} ($F = 53.06$) than for Old ($F = 9.08$), corroborating the interaction: young adults benefit far more from deeper encoding.
+
+\subsection{Simple Effect of Age within Each Condition}
+
+We test $H_0$: Young and Old have equal means, separately for each condition.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Condition & $F(1, 90)$ & $p$-value & Conclusion \\
+\midrule
+Counting   & 0.46 & $.505$ & Not significant \\
+Rhyming    & 0.59 & $.454$ & Not significant \\
+Adjective  & 7.85 & $.012$ & Significant ($p < .05$) \\
+Imagery    & 6.54 & $.020$ & Significant ($p < .05$) \\
+Intention  & 25.23 & $< .001$ & Highly significant \\
+\bottomrule
+\end{tabular}
+\caption{Simple effects of Age within each Condition.}
+\end{table}
+
+\noindent\textbf{Interpretation:}
+\begin{itemize}
+    \item For \textbf{Counting} and \textbf{Rhyming} (shallow encoding), young and old participants perform similarly---there is no significant age difference.
+    \item For \textbf{Adjective}, \textbf{Imagery}, and \textbf{Intention} (deeper encoding), young participants recall significantly more than old participants, with the age gap growing as encoding depth increases.
+\end{itemize}
+
+This pattern provides strong support for a \textbf{levels-of-processing interpretation of the interaction}: deeper encoding benefits all participants, but it benefits young adults substantially more. Older adults appear less able to capitalize on elaborate encoding strategies, particularly intentional learning and mental imagery.
+
+% ============================================================
+\section{Summary}
+% ============================================================
+
+\begin{enumerate}
+    \item The two-way factorial ANOVA revealed significant main effects of both Age and Condition, as well as a significant Age $\times$ Condition interaction ($F(4,90) = 5.93$, $p < .001$).
+    \item The interaction indicates that the advantage of deeper encoding over shallow encoding is \textbf{larger for young adults} than for older adults.
+    \item Simple effects analysis confirmed that age differences are absent for Counting and Rhyming, but significant and growing for Adjective, Imagery, and Intention conditions.
+    \item Model assumptions (normality, homoscedasticity, independence) are reasonably satisfied.
+\end{enumerate}
+
+\end{document}
