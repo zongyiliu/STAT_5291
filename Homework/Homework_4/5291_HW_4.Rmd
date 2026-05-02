@@ -1,0 +1,370 @@
+---
+title: "5291_HW_4"
+author: "Zongyi Liu"
+date: "2026-02-23"
+output: html_document
+---
+
+### Problem 1
+
+```{r}
+
+
+library(ggplot2)
+library(dplyr)
+
+data <- read.csv("HW4Problem1.csv")
+
+# (i)
+# Set factor levels explicitly
+data$Age <- factor(data$Age, levels = c("Young", "Old"))
+data$recall_conditions <- factor(data$recall_conditions,
+                                  levels = c("Counting", "Rhyming",
+                                             "Adjective", "Imagery", "Intention"))
+
+# Quick check
+str(data)
+head(data)
+table(data$Age, data$recall_conditions)   # should be 10 per cell
+
+
+# (ii)
+
+# Cell means
+cell_means <- data %>%
+  group_by(Age, recall_conditions) %>%
+  summarise(Mean = mean(y),
+            SD   = sd(y),
+            n    = n(),
+            SE   = sd(y) / sqrt(n()),
+            .groups = "drop")
+
+cat("=== Cell Means ===\n")
+print(cell_means)
+
+# Marginal means
+age_means  <- data %>% group_by(Age) %>%
+  summarise(Marginal_Mean = mean(y), .groups = "drop")
+cond_means <- data %>% group_by(recall_conditions) %>%
+  summarise(Marginal_Mean = mean(y), .groups = "drop")
+grand_mean <- mean(data$y)
+
+cat("\n=== Marginal Means by Age ===\n");       print(age_means)
+cat("\n=== Marginal Means by Condition ===\n"); print(cond_means)
+cat("\nGrand Mean:", grand_mean, "\n")
+
+# --- Estimated interaction effects (alpha*beta)_ij ---
+interaction_effects <- cell_means %>%
+  left_join(age_means,  by = "Age") %>%
+  left_join(cond_means, by = "recall_conditions") %>%
+  mutate(interaction_hat = Mean - Marginal_Mean.x - Marginal_Mean.y + grand_mean)
+
+cat("\n=== Estimated Interaction Effects (alpha*beta)_ij ===\n")
+print(interaction_effects %>% select(Age, recall_conditions, Mean, interaction_hat))
+
+
+# ============================================================
+# (iii) Exploratory Plots: Research Question and Interaction
+# ============================================================
+
+# --- Interaction plot (means +/- SE) ---
+p_interaction <- ggplot(cell_means,
+                        aes(x = recall_conditions, y = Mean,
+                            color = Age, group = Age)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 3.5) +
+  geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE),
+                width = 0.15, linewidth = 0.9) +
+  scale_color_manual(values = c("Young" = "#2196F3", "Old" = "#E91E63")) +
+  labs(title = "Interaction Plot: Mean Recall by Condition and Age",
+       subtitle = "Error bars = ±1 SE",
+       x = "Recall Condition", y = "Mean Recall Score") +
+  theme_bw(base_size = 13) +
+  theme(plot.title = element_text(face = "bold"))
+
+print(p_interaction)
+
+# --- Side-by-side boxplots ---
+p_boxplot <- ggplot(data, aes(x = recall_conditions, y = y, fill = Age)) +
+  geom_boxplot(position = position_dodge(0.8), alpha = 0.75, outlier.shape = 16) +
+  scale_fill_manual(values = c("Young" = "#2196F3", "Old" = "#E91E63")) +
+  labs(title = "Boxplot of Recall by Condition and Age",
+       x = "Recall Condition", y = "Recall Score") +
+  theme_bw(base_size = 13) +
+  theme(plot.title = element_text(face = "bold"))
+
+print(p_boxplot)
+
+
+# ============================================================
+# (iv) Exploratory Plots: Model Assumptions
+# ============================================================
+
+# Fit the full model first (needed for diagnostics)
+model <- aov(y ~ Age * recall_conditions, data = data)
+
+# --- Base-R diagnostic plots (Residuals vs Fitted, Q-Q, Scale-Location, Cook's D) ---
+par(mfrow = c(2, 2))
+plot(model, main = "")
+mtext("Model Diagnostic Plots", outer = TRUE, cex = 1.2, font = 2, line = -1)
+par(mfrow = c(1, 1))
+
+# --- Residuals by cell (homogeneity of variance check) ---
+data$residuals <- residuals(model)
+
+p_resid_cell <- ggplot(data, aes(x = recall_conditions, y = residuals, fill = Age)) +
+  geom_boxplot(position = position_dodge(0.8), alpha = 0.75) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  scale_fill_manual(values = c("Young" = "#2196F3", "Old" = "#E91E63")) +
+  labs(title = "Residuals by Cell (Equal Variance Check)",
+       x = "Recall Condition", y = "Residuals") +
+  theme_bw(base_size = 13)
+
+print(p_resid_cell)
+
+
+# ============================================================
+# (v) Test the Interaction and Main Effects
+# ============================================================
+
+cat("\n=== Two-Way ANOVA Table ===\n")
+print(summary(model))
+
+# Drop1 gives Type II SS (more appropriate when interaction is present)
+cat("\n=== Type II SS ANOVA (via drop1) ===\n")
+model_lm <- lm(y ~ Age * recall_conditions, data = data)
+print(drop1(model_lm, ~., test = "F"))
+
+
+# ============================================================
+# (vi) Simple Effects: Interaction in More Detail
+# ============================================================
+
+# Use pooled error term MS_Residual from full model
+MS_res <- summary(model)[[1]]["Residuals", "Mean Sq"]
+df_res <- summary(model)[[1]]["Residuals", "Df"]
+
+cat("\nPooled MS_Residual =", round(MS_res, 4),
+    "  df_Residual =", df_res, "\n")
+
+# --- Simple effect of Condition within each Age ---
+cat("\n=== Simple Effect of Condition within Old ===\n")
+old_data <- data %>% filter(Age == "Old")
+model_old <- aov(y ~ recall_conditions, data = old_data)
+ss_cond_old <- summary(model_old)[[1]]["recall_conditions", "Sum Sq"]
+df_cond     <- summary(model_old)[[1]]["recall_conditions", "Df"]
+F_old  <- (ss_cond_old / df_cond) / MS_res
+p_old  <- pf(F_old, df_cond, df_res, lower.tail = FALSE)
+cat(sprintf("  SS = %.2f, df = %d, MS = %.2f, F(%d,%d) = %.4f, p = %.4f\n",
+            ss_cond_old, df_cond, ss_cond_old / df_cond,
+            df_cond, df_res, F_old, p_old))
+
+cat("\n=== Simple Effect of Condition within Young ===\n")
+young_data <- data %>% filter(Age == "Young")
+model_young <- aov(y ~ recall_conditions, data = young_data)
+ss_cond_young <- summary(model_young)[[1]]["recall_conditions", "Sum Sq"]
+F_young <- (ss_cond_young / df_cond) / MS_res
+p_young <- pf(F_young, df_cond, df_res, lower.tail = FALSE)
+cat(sprintf("  SS = %.2f, df = %d, MS = %.2f, F(%d,%d) = %.4f, p = %.4f\n",
+            ss_cond_young, df_cond, ss_cond_young / df_cond,
+            df_cond, df_res, F_young, p_young))
+
+# --- Simple effect of Age within each Condition ---
+cat("\n=== Simple Effect of Age within each Condition ===\n")
+conditions <- levels(data$recall_conditions)
+df_age <- 1  # Age has 2 levels
+
+simple_age_results <- data.frame()
+for (cond in conditions) {
+  sub <- data %>% filter(recall_conditions == cond)
+  ss_age <- summary(aov(y ~ Age, data = sub))[[1]]["Age", "Sum Sq"]
+  F_val  <- (ss_age / df_age) / MS_res
+  p_val  <- pf(F_val, df_age, df_res, lower.tail = FALSE)
+  cat(sprintf("  %-12s: SS = %6.2f, F(%d,%d) = %6.4f, p = %.4f  %s\n",
+              cond, ss_age, df_age, df_res, F_val, p_val,
+              ifelse(p_val < .001, "***",
+                     ifelse(p_val < .01, "**",
+                            ifelse(p_val < .05, "*", "ns")))))
+  simple_age_results <- rbind(simple_age_results,
+                               data.frame(Condition = cond, SS = ss_age,
+                                          F = F_val, p = p_val))
+}
+
+# --- Interaction plot coloured by significance of simple Age effect ---
+cell_means2 <- cell_means %>%
+  left_join(simple_age_results %>% select(Condition, p),
+            by = c("recall_conditions" = "Condition")) %>%
+  mutate(sig = ifelse(p < .05, "Significant (p<.05)", "Not Significant"))
+
+p_simple <- ggplot(cell_means,
+                   aes(x = recall_conditions, y = Mean,
+                       color = Age, group = Age)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE),
+                width = 0.15, linewidth = 0.9) +
+  annotate("rect",
+           xmin = 0.5, xmax = 2.5,
+           ymin = -Inf, ymax = Inf,
+           alpha = 0.08, fill = "grey50") +
+  annotate("text", x = 1.5, y = 21,
+           label = "Age effect\nnot significant", size = 3.5, color = "grey40") +
+  annotate("rect",
+           xmin = 2.5, xmax = 5.5,
+           ymin = -Inf, ymax = Inf,
+           alpha = 0.08, fill = "#FF9800") +
+  annotate("text", x = 4, y = 21,
+           label = "Age effect\nsignificant", size = 3.5, color = "#E65100") +
+  scale_color_manual(values = c("Young" = "#2196F3", "Old" = "#E91E63")) +
+  labs(title = "Simple Effects of Age within Each Condition",
+       subtitle = "Shading indicates significance of Age simple effect",
+       x = "Recall Condition", y = "Mean Recall Score") +
+  theme_bw(base_size = 13) +
+  theme(plot.title = element_text(face = "bold"))
+
+print(p_simple)
+```
+
+
+```{r}
+
+# 1. Enter the data
+
+# Rows: Parental Use (No = 0, Yes = 1)
+# Cols: Marijuana Use (No = 0, Yes = 1)
+
+
+# Expand the 2x2 table into individual observations
+parental  <- c(rep(0, 141), rep(0, 94),   # Parental No
+               rep(1,  85), rep(1, 125))  # Parental Yes
+marijuana <- c(rep(0, 141), rep(1, 94),   # Marijuana No/Yes | Parental No
+               rep(0,  85), rep(1, 125))  # Marijuana No/Yes | Parental Yes
+
+df <- data.frame(
+  marijuana = factor(marijuana, levels = c(0, 1), labels = c("No", "Yes")),
+  parental  = factor(parental,  levels = c(0, 1), labels = c("No", "Yes"))
+)
+
+# Confirm the table matches the problem
+cat(" 2x2 Frequency Table \n")
+tab <- table(Parental = df$parental, Marijuana = df$marijuana)
+print(tab)
+cat("Total n =", sum(tab), "\n\n")
+
+
+# 2. Fit the logistic regression model
+model <- glm(marijuana ~ parental, data = df, family = binomial(link = "logit"))
+
+cat(" Logistic Regression Summary \n")
+print(summary(model))
+
+
+# 3. Estimated odds ratio and 95% CI
+beta1    <- coef(model)["parentalYes"]
+OR_hat   <- exp(beta1)
+
+# Wald-based 95% CI for OR
+ci_logit <- confint.default(model)  # uses Wald (normal approx)
+ci_OR    <- exp(ci_logit["parentalYes", ])
+
+cat(" Estimated Odds Ratio \n")
+cat(sprintf("  beta_1 (log-OR) : %.4f\n", beta1))
+cat(sprintf("  OR = exp(beta_1): %.4f\n", OR_hat))
+cat(sprintf("  95%% Wald CI for OR: (%.4f, %.4f)\n\n", ci_OR[1], ci_OR[2]))
+
+# Profile-likelihood based CI (generally preferred)
+ci_OR_prof <- exp(confint(model)["parentalYes", ])
+cat(sprintf("  95%% Profile-Likelihood CI for OR: (%.4f, %.4f)\n\n",
+            ci_OR_prof[1], ci_OR_prof[2]))
+
+
+# 4. Wald Test: H0: beta_1 = 0  <=>  H0: OR = 1
+se_beta1 <- summary(model)$coefficients["parentalYes", "Std. Error"]
+z_wald   <- beta1 / se_beta1
+p_wald   <- 2 * pnorm(abs(z_wald), lower.tail = FALSE)
+
+cat(" Wald Test: H0: beta_1 = 0 (OR = 1) \n")
+cat(sprintf("  z  = %.4f\n", z_wald))
+cat(sprintf("  p  = %.4f\n\n", p_wald))
+
+# 5. Likelihood Ratio Test (LRT): H0: beta_1 = 0
+model_null <- glm(marijuana ~ 1, data = df, family = binomial(link = "logit"))
+lrt        <- anova(model_null, model, test = "LRT")
+
+cat(" Likelihood Ratio Test \n")
+print(lrt)
+
+G2   <- lrt$Deviance[2]
+p_lrt <- lrt$`Pr(>Chi)`[2]
+cat(sprintf("  G^2 = %.4f,  df = 1,  p = %.4f\n\n", G2, p_lrt))
+
+# 6. Manual verification using cell counts
+n11 <- 141; n12 <- 94   # Parental No: Marijuana No, Yes
+n21 <- 85;  n22 <- 125  # Parental Yes: Marijuana No, Yes
+
+OR_manual <- (n11 * n22) / (n12 * n21)
+cat("Manual Odds Ratio Check\n")
+cat(sprintf("  OR = (n11 * n22) / (n12 * n21) = (%d * %d) / (%d * %d) = %.4f\n\n",
+            n11, n22, n12, n21, OR_manual))
+
+
+```
+
+```{r}
+
+
+# Expand 2x2 table into individual observations
+# Parental Use: 0=No, 1=Yes  |  Marijuana: 0=No, 1=Yes
+parental  <- c(rep(0, 141), rep(0, 94), rep(1, 85), rep(1, 125))
+marijuana <- c(rep(0, 141), rep(1, 94), rep(0, 85), rep(1, 125))
+
+y <- marijuana
+X <- cbind(1, parental)   # design matrix: intercept + parental
+n <- length(y)
+
+# Logistic
+logistic <- function(eta) 1 / (1 + exp(-eta))
+
+# Newton's Method
+newton_logistic <- function(X, y, max_iter = 100, tol = 1e-8) {
+  beta <- rep(0, ncol(X))   # initialize at zero
+  
+  cat("Iteration history:\n")
+  cat(sprintf("  iter %2d: beta_0 = %.6f, beta_1 = %.6f\n", 0, beta[1], beta[2]))
+  
+  for (t in 1:max_iter) {
+    p    <- logistic(X %*% beta)          # n x 1 probability vector
+    W    <- diag(as.vector(p * (1 - p))) # diagonal weight matrix
+    grad <- t(X) %*% (y - p)             # gradient: X^T (y - p)
+    H    <- -t(X) %*% W %*% X            # Hessian: -X^T W X
+    step <- solve(-H, grad)              # [X^T W X]^{-1} X^T(y-p)
+    beta <- beta + step
+    
+    cat(sprintf("  iter %2d: beta_0 = %.6f, beta_1 = %.6f\n", t, beta[1], beta[2]))
+    
+    if (max(abs(step)) < tol) {
+      cat(sprintf("Converged at iteration %d\n\n", t))
+      break
+    }
+  }
+  return(beta)
+}
+
+beta_newton <- newton_logistic(X, y)
+
+cat("Newton's Method Result\n")
+cat(sprintf("  beta_0 = %.8f\n", beta_newton[1]))
+cat(sprintf("  beta_1 = %.8f\n", beta_newton[2]))
+
+# Built-in glm for comparison
+df    <- data.frame(marijuana = factor(y), parental = factor(parental))
+model <- glm(marijuana ~ parental, data = df, family = binomial(link = "logit"))
+
+cat("\n Built-in glm Result \n")
+print(coef(model))
+
+cat("\n Difference \n")
+cat(sprintf("  delta beta_0 = %.2e\n", beta_newton[1] - coef(model)[1]))
+cat(sprintf("  delta beta_1 = %.2e\n", beta_newton[2] - coef(model)[2]))
+```
+
