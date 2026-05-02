@@ -39,7 +39,7 @@ cell_means <- data %>%
             SE   = sd(y) / sqrt(n()),
             .groups = "drop")
 
-cat("=== Cell Means ===\n")
+cat(" Cell Means \n")
 print(cell_means)
 
 # Marginal means
@@ -49,25 +49,25 @@ cond_means <- data %>% group_by(recall_conditions) %>%
   summarise(Marginal_Mean = mean(y), .groups = "drop")
 grand_mean <- mean(data$y)
 
-cat("\n=== Marginal Means by Age ===\n");       print(age_means)
-cat("\n=== Marginal Means by Condition ===\n"); print(cond_means)
+cat("\n Marginal Means by Age \n");       print(age_means)
+cat("\n Marginal Means by Condition \n"); print(cond_means)
 cat("\nGrand Mean:", grand_mean, "\n")
 
-# --- Estimated interaction effects (alpha*beta)_ij ---
+# Estimated interaction effects (alpha*beta)_ij
 interaction_effects <- cell_means %>%
   left_join(age_means,  by = "Age") %>%
   left_join(cond_means, by = "recall_conditions") %>%
   mutate(interaction_hat = Mean - Marginal_Mean.x - Marginal_Mean.y + grand_mean)
 
-cat("\n=== Estimated Interaction Effects (alpha*beta)_ij ===\n")
+cat("\n Estimated Interaction Effects (alpha*beta)_ij \n")
 print(interaction_effects %>% select(Age, recall_conditions, Mean, interaction_hat))
 
 
-# ============================================================
+# 
 # (iii) Exploratory Plots: Research Question and Interaction
-# ============================================================
+# 
 
-# --- Interaction plot (means +/- SE) ---
+# Interaction plot (means +/- SE)
 p_interaction <- ggplot(cell_means,
                         aes(x = recall_conditions, y = Mean,
                             color = Age, group = Age)) +
@@ -84,7 +84,7 @@ p_interaction <- ggplot(cell_means,
 
 print(p_interaction)
 
-# --- Side-by-side boxplots ---
+# Side-by-side boxplots
 p_boxplot <- ggplot(data, aes(x = recall_conditions, y = y, fill = Age)) +
   geom_boxplot(position = position_dodge(0.8), alpha = 0.75, outlier.shape = 16) +
   scale_fill_manual(values = c("Young" = "#2196F3", "Old" = "#E91E63")) +
@@ -96,20 +96,20 @@ p_boxplot <- ggplot(data, aes(x = recall_conditions, y = y, fill = Age)) +
 print(p_boxplot)
 
 
-# ============================================================
+# 
 # (iv) Exploratory Plots: Model Assumptions
-# ============================================================
+# 
 
 # Fit the full model first (needed for diagnostics)
 model <- aov(y ~ Age * recall_conditions, data = data)
 
-# --- Base-R diagnostic plots (Residuals vs Fitted, Q-Q, Scale-Location, Cook's D) ---
+# Base-R diagnostic plots (Residuals vs Fitted, Q-Q, Scale-Location, Cook's D)
 par(mfrow = c(2, 2))
 plot(model, main = "")
 mtext("Model Diagnostic Plots", outer = TRUE, cex = 1.2, font = 2, line = -1)
 par(mfrow = c(1, 1))
 
-# --- Residuals by cell (homogeneity of variance check) ---
+# Residuals by cell (homogeneity of variance check)
 data$residuals <- residuals(model)
 
 p_resid_cell <- ggplot(data, aes(x = recall_conditions, y = residuals, fill = Age)) +
@@ -123,22 +123,22 @@ p_resid_cell <- ggplot(data, aes(x = recall_conditions, y = residuals, fill = Ag
 print(p_resid_cell)
 
 
-# ============================================================
+# 
 # (v) Test the Interaction and Main Effects
-# ============================================================
+# 
 
-cat("\n=== Two-Way ANOVA Table ===\n")
+cat("\n Two-Way ANOVA Table \n")
 print(summary(model))
 
 # Drop1 gives Type II SS (more appropriate when interaction is present)
-cat("\n=== Type II SS ANOVA (via drop1) ===\n")
+cat("\n Type II SS ANOVA (via drop1) \n")
 model_lm <- lm(y ~ Age * recall_conditions, data = data)
 print(drop1(model_lm, ~., test = "F"))
 
 
-# ============================================================
+# 
 # (vi) Simple Effects: Interaction in More Detail
-# ============================================================
+# 
 
 # Use pooled error term MS_Residual from full model
 MS_res <- summary(model)[[1]]["Residuals", "Mean Sq"]
@@ -147,8 +147,8 @@ df_res <- summary(model)[[1]]["Residuals", "Df"]
 cat("\nPooled MS_Residual =", round(MS_res, 4),
     "  df_Residual =", df_res, "\n")
 
-# --- Simple effect of Condition within each Age ---
-cat("\n=== Simple Effect of Condition within Old ===\n")
+# Simple effect of Condition within each Age
+cat("\n Simple Effect of Condition within Old \n")
 old_data <- data %>% filter(Age == "Old")
 model_old <- aov(y ~ recall_conditions, data = old_data)
 ss_cond_old <- summary(model_old)[[1]]["recall_conditions", "Sum Sq"]
@@ -159,7 +159,7 @@ cat(sprintf("  SS = %.2f, df = %d, MS = %.2f, F(%d,%d) = %.4f, p = %.4f\n",
             ss_cond_old, df_cond, ss_cond_old / df_cond,
             df_cond, df_res, F_old, p_old))
 
-cat("\n=== Simple Effect of Condition within Young ===\n")
+cat("\n Simple Effect of Condition within Young \n")
 young_data <- data %>% filter(Age == "Young")
 model_young <- aov(y ~ recall_conditions, data = young_data)
 ss_cond_young <- summary(model_young)[[1]]["recall_conditions", "Sum Sq"]
@@ -169,8 +169,8 @@ cat(sprintf("  SS = %.2f, df = %d, MS = %.2f, F(%d,%d) = %.4f, p = %.4f\n",
             ss_cond_young, df_cond, ss_cond_young / df_cond,
             df_cond, df_res, F_young, p_young))
 
-# --- Simple effect of Age within each Condition ---
-cat("\n=== Simple Effect of Age within each Condition ===\n")
+# Simple effect of Age within each Condition
+cat("\n Simple Effect of Age within each Condition \n")
 conditions <- levels(data$recall_conditions)
 df_age <- 1  # Age has 2 levels
 
@@ -190,7 +190,7 @@ for (cond in conditions) {
                                           F = F_val, p = p_val))
 }
 
-# --- Interaction plot coloured by significance of simple Age effect ---
+# Interaction plot coloured by significance of simple Age effect
 cell_means2 <- cell_means %>%
   left_join(simple_age_results %>% select(Condition, p),
             by = c("recall_conditions" = "Condition")) %>%
